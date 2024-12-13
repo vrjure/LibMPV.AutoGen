@@ -12,7 +12,7 @@ void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs
 }
 //https://sourceforge.net/projects/mpv-player-windows/files/
 
-var mpv_outputDir = Path.GetFullPath("../../../../LibMPVSharp");
+var mpv_outputDir = Path.GetFullPath("../../../../../LibMPVSharp");
 var mpv_h_folder = Path.Combine(Environment.CurrentDirectory, "mpv", "include");
 
 var library = new MPVLibrary(mpv_h_folder, mpv_outputDir);
@@ -56,14 +56,3 @@ library.Postprocess(driver, driver.Context.ASTContext);
 //ConsoleDriver.Run(new MPVLibrary(mpv_h_folder, mpv_outputDir));
 
 Console.WriteLine("done!");
-
-static ASTContext Parse(string includesDir)
-{
-    var p = new Parser
-    {
-        IncludeDirs = [includesDir]
-    };
-
-    var headers = Directory.GetFiles(includesDir).Where(f => f.EndsWith(".h")).ToArray();
-    return p.Parse(headers);
-}

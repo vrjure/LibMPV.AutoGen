@@ -44,51 +44,132 @@ namespace LibMPVSharp
             //Client.MpvSetOptionString(_clientHandle, "log-file", logPath);
             //Client.MpvSetOptionString(_clientHandle, "msg-level", "all=v");
             Client.MpvSetOptionString(_clientHandle, "vo", "libmpv");
-            Client.MpvSetOptionString(_clientHandle, "hwdec", "auto");
+            Client.MpvSetOptionString(_clientHandle, "hwdec", "auto-copy");
 
             var error = Client.MpvInitialize(_clientHandle);
             CheckError(error, nameof(Client.MpvInitialize));
 
+            Client.MpvObserveProperty(_clientHandle, 0, "pause", MpvFormat.MPV_FORMAT_STRING);
+            Client.MpvObserveProperty(_clientHandle, 0, "duration", MpvFormat.MPV_FORMAT_DOUBLE);
+            Client.MpvObserveProperty(_clientHandle, 0, "time-pos", MpvFormat.MPV_FORMAT_DOUBLE);
+            Client.MpvObserveProperty(_clientHandle, 0, "volume", MpvFormat.MPV_FORMAT_INT64);
+            Client.MpvObserveProperty(_clientHandle, 0, "mute", MpvFormat.MPV_FORMAT_STRING);
+
             _wakeupCallback = MPVWeakup;
-            Client.MpvSetWakeupCallback(_clientHandle, _wakeupCallback, IntPtr.Zero);
+            Client.MpvSetWakeupCallback(_clientHandle, _wakeupCallback, null);
         }
 
 
         public void Open(Uri uri)
         {
-            CheckClientHandle();
             EnsureRenderContextCreated();
             ExecuteCommand("loadfile", uri.OriginalString);
         }
 
-        public void Play()
-        {
-            CheckClientHandle();
-            var error = Client.MpvSetPropertyString(_clientHandle, "pause", "no");
-            CheckError(error, nameof(Client.MpvSetPropertyString));
-        }
-
-        public void Pause()
-        {
-            CheckClientHandle();
-            var error = Client.MpvSetPropertyString(_clientHandle, "pause", "yes");
-        }
-
-        public unsafe bool IsPlay()
-        {
-            CheckClientHandle();
-            var val = Client.MpvGetPropertyString(_clientHandle, "pause");
-            return val == "no";
-        }
-
         public void SetTime(double value)
         {
-            CheckClientHandle();
             ExecuteCommand("seek", value.ToString(), "absolute");
         }
 
-        private unsafe void ExecuteCommand(params string[] args)
+        public void Stop(bool clearPlayList = false)
         {
+            if (clearPlayList)
+            {
+                ExecuteCommand("stop");
+            }
+            else
+            {
+                ExecuteCommand("stop", "keep-playlist");
+            }
+        }
+
+        private void SetProperty(string name, long value)
+        {
+            CheckClientHandle();
+            var array = new long[] { value };
+            fixed(long* val = array)
+            {
+                var error = Client.MpvSetProperty(_clientHandle, name, MpvFormat.MPV_FORMAT_INT64, val);
+                CheckError(error, nameof(Client.MpvSetProperty), name, value.ToString());
+            }
+        }
+
+        private long GetPropertyLong(string name)
+        {
+            CheckClientHandle();
+            var array = new long[] { 0 };
+            fixed (long* val = array)
+            {
+                var error = Client.MpvGetProperty(_clientHandle, name, MpvFormat.MPV_FORMAT_INT64, val);
+                CheckError(error, nameof(Client.MpvGetProperty), name);
+                return array[0];
+            }
+        }
+
+        private void SetProperty(string name, string value)
+        {
+            CheckClientHandle();
+            var error = Client.MpvSetPropertyString(_clientHandle, name, value);
+            CheckError(error, nameof(Client.MpvSetPropertyString), name, value);
+        }
+
+        private string GetPropertyString(string name)
+        {
+            CheckClientHandle();
+            return Client.MpvGetPropertyString(_clientHandle, name);
+        }
+
+        private bool SetProperty(string name, double value)
+        {
+            CheckClientHandle();
+            var array = new double[] { value };
+            fixed(double* val = array)
+            {
+                var error = Client.MpvSetProperty(_clientHandle, name, MpvFormat.MPV_FORMAT_DOUBLE, val);
+                value = array[0];
+                return error >= 0;
+            }
+        }
+
+        private double GetPropertyDouble(string name)
+        {
+            CheckClientHandle();
+            var array = new double[] { 0 };
+            fixed(double* arrayPtr = array)
+            {
+                var error = Client.MpvGetProperty(_clientHandle, name, MpvFormat.MPV_FORMAT_DOUBLE, arrayPtr);
+                CheckError(error, nameof(Client.MpvGetProperty), name);
+                return array[0];
+            }
+        }
+
+        private void SetProperty(string name, bool value)
+        {
+            CheckClientHandle();
+            int[] array = value ? [1] : [0];
+            fixed(int* val = array)
+            {
+                var error = Client.MpvSetProperty(_clientHandle, name, MpvFormat.MPV_FORMAT_FLAG, val);
+                CheckError(error, nameof(Client.MpvSetProperty), name, value.ToString());
+            }
+        }
+
+        private bool GetPropertyBoolean(string name)
+        {
+            CheckClientHandle();
+            int[] array = [0];
+            fixed(int* arrayptr = array)
+            {
+                var error = Client.MpvGetProperty(_clientHandle, name, MpvFormat.MPV_FORMAT_FLAG, arrayptr);
+                CheckError(error, nameof(Client.MpvGetProperty), name);
+                return array[0] == 1;
+            }
+        }
+
+        private void ExecuteCommand(params string[] args)
+        {
+            CheckClientHandle();
+
             var count = args.Length + 1;
             var arrPtrs = new IntPtr[count];
 

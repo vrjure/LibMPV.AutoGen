@@ -12,6 +12,8 @@ namespace LibMPVSharp
         private MpvRenderContext* _renderContext;
         private void EnsureRenderContextCreated()
         {
+            CheckClientHandle();
+
             if (_options.GetProcAddress == null || _options.UpdateCallback == null) return;
             if (_renderContext == null)
             {
@@ -20,16 +22,16 @@ namespace LibMPVSharp
                 var openglInitParams = new MpvOpenglInitParams
                 {
                     get_proc_address = _options.GetProcAddress,
-                    get_proc_address_ctx = IntPtr.Zero
+                    get_proc_address_ctx = null
                 };
                 var MPV_RENDER_PARAM_OPENGL_INIT_PARAMS_Data = Marshal.AllocHGlobal(Marshal.SizeOf<MpvOpenglInitParams>());
                 Marshal.StructureToPtr(openglInitParams, MPV_RENDER_PARAM_OPENGL_INIT_PARAMS_Data, false);
 
                 var parameters = new MpvRenderParam[]
                 {
-                    new(){ type = MpvRenderParamType.MPV_RENDER_PARAM_API_TYPE, data = MPV_RENDER_PARAM_API_TYPE_Data},
-                    new(){ type = MpvRenderParamType.MPV_RENDER_PARAM_OPENGL_INIT_PARAMS, data = MPV_RENDER_PARAM_OPENGL_INIT_PARAMS_Data},
-                    new(){ type = MpvRenderParamType.MPV_RENDER_PARAM_INVALID, data = IntPtr.Zero}
+                    new(){ type = MpvRenderParamType.MPV_RENDER_PARAM_API_TYPE, data = (void*)MPV_RENDER_PARAM_API_TYPE_Data},
+                    new(){ type = MpvRenderParamType.MPV_RENDER_PARAM_OPENGL_INIT_PARAMS, data = (void*)MPV_RENDER_PARAM_OPENGL_INIT_PARAMS_Data},
+                    new(){ type = MpvRenderParamType.MPV_RENDER_PARAM_INVALID, data = null}
                 };
 
                 try
@@ -42,7 +44,7 @@ namespace LibMPVSharp
                     }
                     _renderContext = content;
 
-                    Render.MpvRenderContextSetUpdateCallback(_renderContext, _options.UpdateCallback, IntPtr.Zero);
+                    Render.MpvRenderContextSetUpdateCallback(_renderContext, _options.UpdateCallback, null);
                 }
                 finally
                 {
@@ -69,9 +71,9 @@ namespace LibMPVSharp
                 {
                     var parameters = new MpvRenderParam[]
                     {
-                        new(){ type = MpvRenderParamType.MPV_RENDER_PARAM_OPENGL_FBO, data = (IntPtr)fboPtr },
-                        new(){ type = MpvRenderParamType.MPV_RENDER_PARAM_FLIP_Y, data = (IntPtr)flipYPtr},
-                        new(){ type = MpvRenderParamType.MPV_RENDER_PARAM_INVALID, data = IntPtr.Zero }
+                        new(){ type = MpvRenderParamType.MPV_RENDER_PARAM_OPENGL_FBO, data = fboPtr },
+                        new(){ type = MpvRenderParamType.MPV_RENDER_PARAM_FLIP_Y, data = flipYPtr},
+                        new(){ type = MpvRenderParamType.MPV_RENDER_PARAM_INVALID, data = null }
                     };
 
                     fixed(MpvRenderParam* renderParamPtr = parameters)

@@ -33,7 +33,7 @@ namespace LibMPVSharp
         /// <summary>
         /// <para>Value passed as ctx parameter to get_proc_address().</para>
         /// </summary>
-        public IntPtr get_proc_address_ctx;
+        public void* get_proc_address_ctx;
     }
     
     /// <summary>

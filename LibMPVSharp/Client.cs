@@ -37,7 +37,7 @@ namespace LibMPVSharp
         /// </param>
         [LibraryImport("libmpv-2", EntryPoint = "mpv_free", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        internal static partial void MpvFree(IntPtr data);
+        internal static partial void MpvFree(void* data);
         
         /// <summary>
         /// <para>Return the name of this client handle. Every client has its own unique</para>
@@ -309,7 +309,7 @@ namespace LibMPVSharp
         /// <returns>error code</returns>
         [LibraryImport("libmpv-2", EntryPoint = "mpv_set_option", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        internal static partial int MpvSetOption(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name, global::LibMPVSharp.MpvFormat format, IntPtr data);
+        internal static partial int MpvSetOption(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name, global::LibMPVSharp.MpvFormat format, void* data);
         
         /// <summary>
         /// <para>Convenience function to set an option to a string value. This is like</para>
@@ -512,7 +512,7 @@ namespace LibMPVSharp
         /// <returns>error code</returns>
         [LibraryImport("libmpv-2", EntryPoint = "mpv_set_property", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        internal static partial int MpvSetProperty(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name, global::LibMPVSharp.MpvFormat format, IntPtr data);
+        internal static partial int MpvSetProperty(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name, global::LibMPVSharp.MpvFormat format, void* data);
         
         /// <summary>
         /// <para>Convenience function to set a property to a string value.</para>
@@ -557,7 +557,7 @@ namespace LibMPVSharp
         /// <returns>error code if sending the request failed</returns>
         [LibraryImport("libmpv-2", EntryPoint = "mpv_set_property_async", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        internal static partial int MpvSetPropertyAsync(global::LibMPVSharp.MpvHandle* ctx, ulong reply_userdata, [MarshalAs(UnmanagedType.LPUTF8Str)]string name, global::LibMPVSharp.MpvFormat format, IntPtr data);
+        internal static partial int MpvSetPropertyAsync(global::LibMPVSharp.MpvHandle* ctx, ulong reply_userdata, [MarshalAs(UnmanagedType.LPUTF8Str)]string name, global::LibMPVSharp.MpvFormat format, void* data);
         
         /// <summary>
         /// <para>Read the value of the given property.</para>
@@ -583,7 +583,7 @@ namespace LibMPVSharp
         /// <returns>error code</returns>
         [LibraryImport("libmpv-2", EntryPoint = "mpv_get_property", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        internal static partial int MpvGetProperty(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name, global::LibMPVSharp.MpvFormat format, IntPtr data);
+        internal static partial int MpvGetProperty(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name, global::LibMPVSharp.MpvFormat format, void* data);
         
         /// <summary>
         /// <para>Return the value of the property with the given name as string. This is</para>
@@ -876,7 +876,7 @@ namespace LibMPVSharp
         /// </param>
         [LibraryImport("libmpv-2", EntryPoint = "mpv_set_wakeup_callback", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        internal static partial void MpvSetWakeupCallback(global::LibMPVSharp.MpvHandle* ctx, MpvSetWakeupCallback_cbCallback cb, IntPtr d);
+        internal static partial void MpvSetWakeupCallback(global::LibMPVSharp.MpvHandle* ctx, MpvSetWakeupCallback_cbCallback cb, void* d);
         
         /// <summary>
         /// <para>Block until all asynchronous requests are done. This affects functions like</para>
@@ -1119,7 +1119,7 @@ namespace LibMPVSharp
         /// <para>Pointer to the data. In what format the data is stored is up to whatever</para>
         /// <para>uses MPV_FORMAT_BYTE_ARRAY.</para>
         /// </summary>
-        public IntPtr data;
+        public void* data;
         /// <summary>
         /// <para>Size of the data pointed to by ptr.</para>
         /// </summary>
@@ -1149,7 +1149,7 @@ namespace LibMPVSharp
         /// <para>Note that this is set to NULL if retrieving the property failed (the</para>
         /// <para>format will be MPV_FORMAT_NONE).</para>
         /// </summary>
-        public IntPtr data;
+        public void* data;
     }
     
     [StructLayout(LayoutKind.Sequential)]
@@ -1326,7 +1326,7 @@ namespace LibMPVSharp
         /// <para>Note: future enhancements might add new event structs for existing or new</para>
         /// <para>event types.</para>
         /// </summary>
-        public IntPtr data;
+        public void* data;
     }
     
     

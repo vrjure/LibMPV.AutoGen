@@ -25,7 +25,7 @@ namespace LibMPVSharp
         /// <returns>error code</returns>
         [LibraryImport("libmpv-2", EntryPoint = "mpv_stream_cb_add_ro", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        internal static partial int MpvStreamCbAddRo(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string protocol, IntPtr user_data, global::LibMPVSharp.MpvStreamCbOpenRoFn open_fn);
+        internal static partial int MpvStreamCbAddRo(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string protocol, void* user_data, global::LibMPVSharp.MpvStreamCbOpenRoFn open_fn);
         
     }
     
@@ -41,7 +41,7 @@ namespace LibMPVSharp
         /// <para>interpreted by mpv. It doesn't even need to be a valid pointer.</para>
         /// <para>The user sets this in the mpv_stream_cb_open_ro_fn callback.</para>
         /// </summary>
-        public IntPtr cookie;
+        public void* cookie;
         /// <summary>
         /// <para>Callbacks set by the user in the mpv_stream_cb_open_ro_fn callback. Some</para>
         /// <para>of them are optional, and can be left unset.</para>
@@ -82,7 +82,7 @@ namespace LibMPVSharp
     /// </returns>
     /// <returns>-1 on error</returns>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate long MpvStreamCbReadFn(IntPtr cookie, string buf, ulong nbytes);
+    public unsafe delegate long MpvStreamCbReadFn(void* cookie, string buf, ulong nbytes);
     
     /// <summary>
     /// <para>Seek callback used to implement a custom stream.</para>
@@ -106,7 +106,7 @@ namespace LibMPVSharp
     /// <para>MPV_ERROR_UNSUPPORTED or MPV_ERROR_GENERIC if the seek failed</para>
     /// </returns>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate long MpvStreamCbSeekFn(IntPtr cookie, long offset);
+    public unsafe delegate long MpvStreamCbSeekFn(void* cookie, long offset);
     
     /// <summary>
     /// <para>Size callback used to implement a custom stream.</para>
@@ -120,7 +120,7 @@ namespace LibMPVSharp
     /// </param>
     /// <returns>the total size in bytes of the stream</returns>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate long MpvStreamCbSizeFn(IntPtr cookie);
+    public unsafe delegate long MpvStreamCbSizeFn(void* cookie);
     
     /// <summary>
     /// <para>Close callback used to implement a custom stream.</para>
@@ -130,7 +130,7 @@ namespace LibMPVSharp
     /// <para>returned from mpv_stream_cb_open_fn</para>
     /// </param>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void MpvStreamCbCloseFn(IntPtr cookie);
+    public unsafe delegate void MpvStreamCbCloseFn(void* cookie);
     
     /// <summary>
     /// <para>Cancel callback used to implement a custom stream.</para>
@@ -145,7 +145,7 @@ namespace LibMPVSharp
     /// <para>returned from mpv_stream_cb_open_fn</para>
     /// </param>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void MpvStreamCbCancelFn(IntPtr cookie);
+    public unsafe delegate void MpvStreamCbCancelFn(void* cookie);
     
     /// <summary>
     /// <para>Open callback used to implement a custom read-only (ro) stream. The user</para>
@@ -170,6 +170,6 @@ namespace LibMPVSharp
     /// </param>
     /// <returns>0 on success, MPV_ERROR_LOADING_FAILED if the URI cannot be opened.</returns>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int MpvStreamCbOpenRoFn(IntPtr user_data, string uri, global::LibMPVSharp.MpvStreamCbInfo* info);
+    public unsafe delegate int MpvStreamCbOpenRoFn(void* user_data, string uri, global::LibMPVSharp.MpvStreamCbInfo* info);
     
 }

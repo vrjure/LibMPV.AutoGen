@@ -1,7 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Security;
 namespace LibMPVSharp
 {
     public unsafe partial class Render
@@ -93,7 +92,7 @@ namespace LibMPVSharp
         [LibraryImport("libmpv-2", EntryPoint = "mpv_render_context_get_info", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvRenderContextGetInfo(global::LibMPVSharp.MpvRenderContext* ctx, global::LibMPVSharp.MpvRenderParam param);
-
+        
         /// <summary>
         /// <para>Set the callback that notifies you when a new video frame is available, or</para>
         /// <para>if the video display configuration somehow changed and requires a redraw.</para>
@@ -113,7 +112,7 @@ namespace LibMPVSharp
         /// </param>
         [LibraryImport("libmpv-2", EntryPoint = "mpv_render_context_set_update_callback", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        internal static partial void MpvRenderContextSetUpdateCallback(global::LibMPVSharp.MpvRenderContext* ctx, global::LibMPVSharp.MpvRenderUpdateFn callback, IntPtr callback_ctx);
+        internal static partial void MpvRenderContextSetUpdateCallback(global::LibMPVSharp.MpvRenderContext* ctx, global::LibMPVSharp.MpvRenderUpdateFn callback, void* callback_ctx);
         
         /// <summary>
         /// <para>The API user is supposed to call this when the update callback was invoked</para>
@@ -236,7 +235,7 @@ namespace LibMPVSharp
     public unsafe struct MpvRenderParam
     {
         public global::LibMPVSharp.MpvRenderParamType type;
-        public IntPtr data;
+        public void* data;
     }
     
     /// <summary>
@@ -270,7 +269,7 @@ namespace LibMPVSharp
     /// <para>mpv_render_context_create().</para>
     /// <para>Also see mpv_render_param for conventions and how to use it.</para>
     /// </summary>
-    public enum MpvRenderParamType : int
+    public enum MpvRenderParamType
     {
         /// <summary>
         /// <para>Not a valid value, but also used to terminate a params array. Its value</para>
@@ -572,10 +571,9 @@ namespace LibMPVSharp
         /// </summary>
         MPV_RENDER_UPDATE_FRAME = 1
     }
-
-
+    
+    
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-
-    public unsafe delegate void MpvRenderUpdateFn(IntPtr cb_ctx);
+    public unsafe delegate void MpvRenderUpdateFn(void* cb_ctx);
     
 }
