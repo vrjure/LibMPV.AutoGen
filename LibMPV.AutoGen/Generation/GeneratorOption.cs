@@ -20,7 +20,8 @@ namespace LibMPV.AutoGen.Generation
             {"__IntPtr", "void*" },
             {"char*", "string" },
             {"global::LibMPVSharp.Delegates.Action___IntPtr", "MpvSetWakeupCallback_cbCallback" },
-            {"global::LibMPVSharp.Delegates.Func___IntPtr___IntPtr_string8", "MpvOpenglInitParams_get_proc_addressCallback" }
+            {"global::LibMPVSharp.Delegates.Func___IntPtr___IntPtr_string8", "MpvOpenglInitParams_get_proc_addressCallback" },
+            {"function_return_type_char*", "byte*" }
         };
 
         public Dictionary<string, IEnumerable<string>> AddOnDelegates { get; } = new Dictionary<string, IEnumerable<string>>()

@@ -4,6 +4,12 @@
              xmlns:local="clr-namespace:LibMPVSharp.WPF.Demo"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/PresentationFramework.Fluent;component/Themes/Fluent.xaml"/>
+                <ResourceDictionary Source="Themes/FontIcons.xaml"/>
+                <ResourceDictionary Source="Themes/ButtonStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

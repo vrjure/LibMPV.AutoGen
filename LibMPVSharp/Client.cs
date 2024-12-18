@@ -601,7 +601,7 @@ namespace LibMPVSharp
         /// </returns>
         [LibraryImport("libmpv-2", EntryPoint = "mpv_get_property_string", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        internal static partial string MpvGetPropertyString(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name);
+        internal static partial byte* MpvGetPropertyString(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name);
         
         /// <summary>
         /// <para>Return the property as "OSD" formatted string. This is the same as</para>
@@ -613,7 +613,7 @@ namespace LibMPVSharp
         /// </returns>
         [LibraryImport("libmpv-2", EntryPoint = "mpv_get_property_osd_string", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        internal static partial string MpvGetPropertyOsdString(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name);
+        internal static partial byte* MpvGetPropertyOsdString(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name);
         
         /// <summary>
         /// <para>Get a property asynchronously. You will receive the result of the operation</para>

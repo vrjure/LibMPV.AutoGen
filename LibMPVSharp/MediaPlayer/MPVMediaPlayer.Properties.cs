@@ -9,8 +9,10 @@ namespace LibMPVSharp
 {
     public partial class MPVMediaPlayer
     {
-        public static readonly double SpeedMin = 0.01d;
-        public static readonly double SpeedMax = 100;
+        public static readonly double SpeedMinValue = 0.01d;
+        public static readonly double SpeedMaxValue = 100;
+        public static readonly long MaxVolumeValue = 1000;
+        public static readonly long DefaultVolumeValue = 130;
 
         public string FileName
         {
@@ -46,7 +48,7 @@ namespace LibMPVSharp
 
         public bool Seeking
         {
-            get => GetPropertyString("seeking") == "yes";
+            get => GetPropertyBoolean("seeking");
         }
 
         public string HwDec
@@ -114,7 +116,7 @@ namespace LibMPVSharp
         public long Volume
         {
             get => GetPropertyLong("volume");
-            set => SetProperty("voume", value);
+            set => SetProperty("volume", value);
         }
 
         public long VolumeMax
@@ -125,14 +127,14 @@ namespace LibMPVSharp
 
         public bool Mute
         {
-            get => GetPropertyString("mute") == "yes";
-            set => SetProperty("mute", value ? "yes" : "no");
+            get => GetPropertyBoolean("mute");
+            set => SetProperty("mute", value);
         }
 
         public bool Pause
         {
-            get => GetPropertyString("pause") == "yes";
-            set => SetProperty("pause", value ? "yse" : "no");
+            get => GetPropertyBoolean("pause");
+            set => SetProperty("pause", value);
         }
 
         public string ScreenshotFormat
@@ -173,8 +175,8 @@ namespace LibMPVSharp
 
         public bool ScreenshotSW
         {
-            get => GetPropertyString("screenshot-sw") == "yes";
-            set => SetProperty("screenshot-sw", value ? "yes" : "no");
+            get => GetPropertyBoolean("screenshot-sw");
+            set => SetProperty("screenshot-sw", value);
         }
 
         public string Cache
@@ -191,8 +193,8 @@ namespace LibMPVSharp
 
         public bool CacheOnDisk
         {
-            get => GetPropertyString("cache-on-disk") == "yes";
-            set => SetProperty("cache-on-disk", value ? "yes" : "no");
+            get => GetPropertyBoolean("cache-on-disk");
+            set => SetProperty("cache-on-disk", value);
         }
 
         public string DemuxerCacheDir
@@ -203,8 +205,8 @@ namespace LibMPVSharp
 
         public bool CachePause
         {
-            get => GetPropertyString("cache-pause") == "yes";
-            set => SetProperty("cache-pause", value ? "yes" : "no");
+            get => GetPropertyBoolean("cache-pause");
+            set => SetProperty("cache-pause", value);
         }
 
         public long CachePauseWait
@@ -215,8 +217,8 @@ namespace LibMPVSharp
 
         public bool CachePauseInitial
         {
-            get => GetPropertyString("cache-pause-initial") == "yes";
-            set => SetProperty("cache-pause-initial", value ? "yes" : "no");
+            get => GetPropertyBoolean("cache-pause-initial");
+            set => SetProperty("cache-pause-initial", value);
         }
 
         public long StreamBufferSize
@@ -233,7 +235,7 @@ namespace LibMPVSharp
 
         public bool Cookies
         {
-            get => GetPropertyString("cookies") == "yes";
+            get => GetPropertyBoolean("cookies");
             set => SetProperty("cookies", value);
         }
 

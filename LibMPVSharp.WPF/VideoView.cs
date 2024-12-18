@@ -12,7 +12,7 @@ using System.Windows.Controls;
 
 namespace LibMPVSharp.WPF
 {
-    public class VideoView : GLControl
+    public unsafe class VideoView : GLControl
     {
         public static readonly DependencyProperty MediaPlayerProperty = DependencyProperty.Register(nameof(MediaPlayer), typeof(MPVMediaPlayer), typeof(VideoView), new FrameworkPropertyMetadata(null, PropertyChagned));
         public MPVMediaPlayer? MediaPlayer
@@ -45,11 +45,6 @@ namespace LibMPVSharp.WPF
             }
         }
 
-        public VideoView()
-        {
-            
-        }
-
         protected override void OnDrawing()
         {
             if (MediaPlayer == null || GLRenderContext?.GL == null) return;
@@ -69,7 +64,7 @@ namespace LibMPVSharp.WPF
             return GLRenderContext.GL.Context.GetProcAddress(name);
         }
 
-        private void OpenGLUpdateCallback(IntPtr ctx)
+        private void OpenGLUpdateCallback(void* ctx)
         {
             Dispatcher.BeginInvoke(DrawFrame, System.Windows.Threading.DispatcherPriority.Background);
         }

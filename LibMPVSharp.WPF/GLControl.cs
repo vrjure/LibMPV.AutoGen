@@ -17,6 +17,7 @@ using Silk.NET.WGL;
 using System.IO;
 using System.Diagnostics;
 using System.Windows.Threading;
+using System.Windows.Controls;
 
 namespace LibMPVSharp.WPF
 {

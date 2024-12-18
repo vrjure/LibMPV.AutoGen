@@ -60,10 +60,9 @@ namespace LibMPV.AutoGen.Generation
 
         protected void WriteLineWithoutIntent(string line) => _textWriter.WriteLineNoTabs(line);
 
-        protected string TypePrint(QualifiedType type, string callbackName = "")
+        protected string TypePrint(QualifiedType type, string callbackName = "", bool isReturnType = false)
         {
-            var typeStr = type.ToString();
-            var name = TypePrint(typeStr, callbackName);
+            var name = TypePrint(type.ToString(), callbackName, isReturnType);
             if (type.Type is PointerType pt && !pt.GetFinalPointee().IsPrimitiveType())
             {
                 name += "*";
@@ -78,7 +77,7 @@ namespace LibMPV.AutoGen.Generation
                 return name;
             }
         }
-        protected string TypePrint(string type, string callbackName = "")
+        protected string TypePrint(string type, string callbackName = "", bool isReturnType = false)
         {
             if (string.IsNullOrEmpty(type)) return type;
 
@@ -87,7 +86,8 @@ namespace LibMPV.AutoGen.Generation
                 _addOnDelegates.AddRange(deldateStr);
             }
 
-            if (_generatorOption.TypeConverters.TryGetValue(type, out var val))
+            var functionReturnType = isReturnType ? $"function_return_type_{type}" : type.ToString();
+            if (_generatorOption.TypeConverters.TryGetValue(functionReturnType, out var val))
             {
                 return val;
             }

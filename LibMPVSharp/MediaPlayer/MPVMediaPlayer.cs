@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,6 +15,8 @@ namespace LibMPVSharp
         private readonly MPVMediaPlayerOptions _options;
         private MpvSetWakeupCallback_cbCallback _wakeupCallback;
         private MpvHandle* _clientHandle;
+        private bool _disposed;
+        private Task _eventLoopTask;
 
         public IntPtr MPVHandle => (IntPtr)_clientHandle;
         public MPVMediaPlayerOptions Options => _options;
@@ -40,30 +43,34 @@ namespace LibMPVSharp
         private void Initialize()
         {
             CheckClientHandle();
-            //var logPath = Path.Combine(Environment.CurrentDirectory, "mpv.log");
-            //Client.MpvSetOptionString(_clientHandle, "log-file", logPath);
-            //Client.MpvSetOptionString(_clientHandle, "msg-level", "all=v");
+#if DEBUG
+            var logPath = System.IO.Path.Combine(Environment.CurrentDirectory, "mpv.log");
+            Client.MpvSetOptionString(_clientHandle, "log-file", logPath);
+            Client.MpvSetOptionString(_clientHandle, "msg-level", "all=v");
+#endif
+
             Client.MpvSetOptionString(_clientHandle, "vo", "libmpv");
-            Client.MpvSetOptionString(_clientHandle, "hwdec", "auto-copy");
+            Client.MpvSetOptionString(_clientHandle, "hwdec", "auto");
 
             var error = Client.MpvInitialize(_clientHandle);
             CheckError(error, nameof(Client.MpvInitialize));
 
-            Client.MpvObserveProperty(_clientHandle, 0, "pause", MpvFormat.MPV_FORMAT_STRING);
+            Client.MpvObserveProperty(_clientHandle, 0, "pause", MpvFormat.MPV_FORMAT_FLAG);
             Client.MpvObserveProperty(_clientHandle, 0, "duration", MpvFormat.MPV_FORMAT_DOUBLE);
             Client.MpvObserveProperty(_clientHandle, 0, "time-pos", MpvFormat.MPV_FORMAT_DOUBLE);
             Client.MpvObserveProperty(_clientHandle, 0, "volume", MpvFormat.MPV_FORMAT_INT64);
             Client.MpvObserveProperty(_clientHandle, 0, "mute", MpvFormat.MPV_FORMAT_STRING);
+            Client.MpvObserveProperty(_clientHandle, 0, "speed", MpvFormat.MPV_FORMAT_DOUBLE);
 
             _wakeupCallback = MPVWeakup;
             Client.MpvSetWakeupCallback(_clientHandle, _wakeupCallback, null);
         }
 
 
-        public void Open(Uri uri)
+        public void Open(string uri)
         {
             EnsureRenderContextCreated();
-            ExecuteCommand("loadfile", uri.OriginalString);
+            ExecuteCommand("loadfile", uri);
         }
 
         public void SetTime(double value)
@@ -116,7 +123,15 @@ namespace LibMPVSharp
         private string GetPropertyString(string name)
         {
             CheckClientHandle();
-            return Client.MpvGetPropertyString(_clientHandle, name);
+            var valuePtr = Client.MpvGetPropertyString(_clientHandle, name);
+            try
+            {
+                return Utf8StringMarshaller.ConvertToManaged(valuePtr);
+            }
+            finally
+            {
+                Client.MpvFree(valuePtr);
+            }
         }
 
         private bool SetProperty(string name, double value)
@@ -146,8 +161,8 @@ namespace LibMPVSharp
         private void SetProperty(string name, bool value)
         {
             CheckClientHandle();
-            int[] array = value ? [1] : [0];
-            fixed(int* val = array)
+            bool[] array = value ? [true] : [false];
+            fixed(bool* val = array)
             {
                 var error = Client.MpvSetProperty(_clientHandle, name, MpvFormat.MPV_FORMAT_FLAG, val);
                 CheckError(error, nameof(Client.MpvSetProperty), name, value.ToString());
@@ -157,12 +172,12 @@ namespace LibMPVSharp
         private bool GetPropertyBoolean(string name)
         {
             CheckClientHandle();
-            int[] array = [0];
-            fixed(int* arrayptr = array)
+            bool[] array = [false];
+            fixed(bool* arrayptr = array)
             {
                 var error = Client.MpvGetProperty(_clientHandle, name, MpvFormat.MPV_FORMAT_FLAG, arrayptr);
                 CheckError(error, nameof(Client.MpvGetProperty), name);
-                return array[0] == 1;
+                return array[0];
             }
         }
 
@@ -200,12 +215,30 @@ namespace LibMPVSharp
 
         private void MPVWeakup(IntPtr ctx)
         {
-            if (ctx == IntPtr.Zero)
+            if (_eventLoopTask == null)
             {
-                return;
+                _eventLoopTask = Task.Factory.StartNew(() =>
+                {
+                    while (!_disposed)
+                    {
+                        try
+                        {
+                            OnMPVEvents(-1);
+                        }
+                        catch (Exception ex)
+                        {
+                            Trace.WriteLine(ex);
+                        }
+                    }
+                }, TaskCreationOptions.LongRunning);
             }
-            var mpvEvent = Marshal.PtrToStructure<MpvEvent>(ctx);
-            switch (mpvEvent.event_id)
+        }
+
+        private void OnMPVEvents(double timeout)
+        {
+            var mpvEvent = Client.MpvWaitEvent(_clientHandle, timeout);
+
+            switch (mpvEvent->event_id)
             {
                 case MpvEventId.MPV_EVENT_NONE:
                     break;
@@ -240,18 +273,20 @@ namespace LibMPVSharp
                 case MpvEventId.MPV_EVENT_PLAYBACK_RESTART:
                     break;
                 case MpvEventId.MPV_EVENT_PROPERTY_CHANGE:
+                    var property = Marshal.PtrToStructure<MpvEventProperty>((IntPtr)mpvEvent->data);
+                    MPVPropertyChanged?.Invoke(ref property);
                     break;
                 case MpvEventId.MPV_EVENT_QUEUE_OVERFLOW:
                     break;
                 case MpvEventId.MPV_EVENT_HOOK:
-                    break;
-                default:
                     break;
             }
         }
 
         public void Dispose()
         {
+            _disposed = true;
+
             if (_renderContext != null)
             {
                 Render.MpvRenderContextFree(_renderContext);

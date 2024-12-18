@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <FontFamily x:Key="remixicon">pack://application:,,,/LibMPVSharp.WPF.Demo;component/Themes/remixicon.ttf#remixicon</FontFamily>
+    
+    <sys:String x:Key="icon-pause">&#xEFD7;</sys:String>
+    <sys:String x:Key="icon-play">&#xF00A;</sys:String>
+    <sys:String x:Key="icon-file-video">&#xF3C9;</sys:String>
+    <sys:String x:Key="icon-volume">&#xF29B;</sys:String>
+    <sys:String x:Key="icon-speed">&#xF176;</sys:String>
+</ResourceDictionary>

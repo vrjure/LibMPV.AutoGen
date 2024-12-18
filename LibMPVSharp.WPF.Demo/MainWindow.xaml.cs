@@ -20,26 +20,7 @@ namespace LibMPVSharp.WPF.Demo
         public MainWindow()
         {
             InitializeComponent();
-            this.Loaded += MainWindow_Loaded;
-        }
-
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            videoView.MediaPlayer ??= new MPVMediaPlayer();
-
-        }
-
-        private void Open_Click(object sender, RoutedEventArgs e)
-        {
-            var openFileDialog = new OpenFileDialog()
-            {
-                Multiselect = false,
-                Filter = "mp4|*.mp4"
-            };
-            if (openFileDialog.ShowDialog() == true)
-            {
-                videoView.MediaPlayer.Open(new Uri(openFileDialog.FileName));
-            }
+            this.DataContext = new MainWindowViewModel();
         }
     }
 }

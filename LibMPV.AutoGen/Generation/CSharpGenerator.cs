@@ -64,7 +64,7 @@ namespace LibMPV.AutoGen.Generation
                 CommentParser.Parse(func.Comment, _textWriter);
                 WriteLine($"[LibraryImport(\"{_option.Modules[1].LibraryName}\", EntryPoint = \"{func.OriginalName}\", StringMarshalling = StringMarshalling.Utf8)]");
                 WriteLine("[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]");
-                Write($"internal static partial {TypePrint(func.ReturnType)} {func.Name}(");
+                Write($"internal static partial {TypePrint(func.ReturnType, isReturnType: true)} {func.Name}(");
 
                 var first = true;
                 foreach (var p in func.Parameters)

@@ -1,0 +1,132 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mpv="clr-namespace:LibMPVSharp.WPF;assembly=LibMPVSharp.WPF"
+                    xmlns:demo="clr-namespace:LibMPVSharp.WPF.Demo">
+    <Style TargetType="demo:MediaPlayerView">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="demo:MediaPlayerView">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <mpv:VideoView Grid.RowSpan="3"
+                                       MediaPlayer="{TemplateBinding MediaPlayer}"/>
+                        
+                        <Border VerticalAlignment="Top"
+                                Grid.Row="0">
+                            <Border.Background>
+                                <SolidColorBrush Color="White" Opacity="0.1"/>
+                            </Border.Background>
+                            <TextBlock Text="{TemplateBinding Title}"
+                                       VerticalAlignment="Center"
+                                       Margin="12,0"/>
+                        </Border>
+                        
+                        <Border VerticalAlignment="Bottom"
+                                Grid.Row="2">
+                            <Border.Background>
+                                <SolidColorBrush Color="White" Opacity="0.1"/>
+                            </Border.Background>
+                            <DockPanel Margin="8,12">
+                                <Button Style="{DynamicResource IconButton}"
+                                        DockPanel.Dock="Left"
+                                        Content="{DynamicResource icon-play}"
+                                        Margin="8,0"
+                                        x:Name="playPause"
+                                        Command="{x:Static demo:MediaPlayerView.PlayPause}"/>
+
+                                <StackPanel Orientation="Horizontal"
+                                            DockPanel.Dock="Right">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Time, StringFormat='{}{0:hh\\:mm\\:ss}'}"
+                                                   Foreground="{TemplateBinding Foreground}"
+                                                   VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=Duration, StringFormat='/{0:hh\\:mm\\:ss}'}"
+                                                   Foreground="{TemplateBinding Foreground}"
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+
+
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="8,0">
+                                        <Button Style="{DynamicResource IconButton}"
+                                                Content="{DynamicResource icon-speed}"
+                                                Command="{x:Static demo:MediaPlayerView.SpeedCmd}"/>
+
+                                        <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Speed, StringFormat=' X{0:N0}'}"
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+
+                                    <Button Style="{DynamicResource IconButton}"
+                                            Content="{DynamicResource icon-volume}"
+                                            Margin="0,0"
+                                            x:Name="volume_button"/>
+
+                                    <Popup PlacementTarget="{Binding ElementName=volume_button}"
+                                           Placement="Top"
+                                           StaysOpen="False"
+                                           AllowsTransparency="True"
+                                           x:Name="volume_popup">
+                                        <Border Padding="0,8,0,6"
+                                                CornerRadius="5">
+                                            <Border.Background>
+                                                <SolidColorBrush Color="White" Opacity="0.9"/>
+                                            </Border.Background>
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Volume}"
+                                                           Foreground="Black"
+                                                           HorizontalAlignment="Center"
+                                                           FontWeight="Bold"/>
+                                                <Slider Orientation="Vertical"
+                                                        Height="120"
+                                                        Maximum="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=MaxVolume}"
+                                                        Minimum="0"
+                                                        IsMoveToPointEnabled="True"
+                                                        Value="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Volume, Mode=TwoWay, Converter={x:Static demo:AutoValueConverters.Instance}}"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Popup>
+
+                                    <Button Style="{DynamicResource IconButton}"
+                                            Content="{DynamicResource icon-file-video}"
+                                            Margin="8,0"
+                                            Command="{x:Static demo:MediaPlayerView.OpenFile}"/>
+                                </StackPanel>
+                                
+                                <Slider VerticalAlignment="Center"
+                                        Minimum="0"
+                                        Maximum="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Duration, Converter={x:Static demo:AutoValueConverters.Instance}}"
+                                        Value="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Time, Converter={x:Static demo:AutoValueConverters.Instance}, Mode=TwoWay}"
+                                        Margin="8,0"
+                                        IsMoveToPointEnabled="True"/>
+                            </DockPanel>
+                        </Border>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Playing" Value="True">
+                            <Setter TargetName="playPause" Property="Content" Value="{DynamicResource icon-pause}"/>
+                        </Trigger>
+                        <EventTrigger SourceName="volume_button" RoutedEvent="MouseEnter">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <BooleanAnimationUsingKeyFrames Storyboard.TargetName="volume_popup" 
+                                                                        Storyboard.TargetProperty="IsOpen">
+                                            <DiscreteBooleanKeyFrame KeyTime="00:00:00" Value="True"/>
+                                        </BooleanAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
