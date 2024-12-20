@@ -69,6 +69,13 @@ namespace LibMPVSharp.WPF.Demo
             set => SetValue(TitleProperty, value);
         }
 
+        public static readonly DependencyProperty AspectRatioProperty = DependencyProperty.Register(nameof(AspectRatio), typeof(string), typeof(MediaPlayerView), new PropertyMetadata("no", PropertyChagned));
+        public string AspectRatio
+        {
+            get => (string)GetValue(AspectRatioProperty);
+            set => SetValue(AspectRatioProperty, value);
+        }
+
         private static void PropertyChagned(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var view = d as MediaPlayerView;
@@ -111,11 +118,20 @@ namespace LibMPVSharp.WPF.Demo
                     view.MediaPlayer.Volume = (long)e.NewValue;
                 }
             }
+            else if (e.Property == AspectRatioProperty)
+            {
+                if (view.MediaPlayer == null) return;
+                view.MediaPlayer.VideoAspectOverride = (string)e.NewValue;
+            }
         }
 
         public static readonly RoutedCommand OpenFile;
         public static readonly RoutedCommand PlayPause;
         public static readonly RoutedCommand SpeedCmd;
+        public static readonly RoutedCommand AspectRatioCmd;
+
+
+        private static Queue<string> _aspectRatio = new Queue<string>();
 
         static MediaPlayerView()
         {
@@ -124,6 +140,11 @@ namespace LibMPVSharp.WPF.Demo
             OpenFile = new RoutedCommand(nameof(OpenFile), typeof(MediaPlayerView));
             PlayPause = new RoutedCommand(nameof(PlayPause), typeof(MediaPlayerView));
             SpeedCmd = new RoutedCommand(nameof(SpeedCmd), typeof(MediaPlayerView));
+            AspectRatioCmd = new RoutedCommand(nameof(AspectRatioCmd), typeof(MediaPlayerView));
+
+            _aspectRatio.Enqueue("no");
+            _aspectRatio.Enqueue("16:9");
+            _aspectRatio.Enqueue("4:3");
         }
 
         public MediaPlayerView()
@@ -131,6 +152,7 @@ namespace LibMPVSharp.WPF.Demo
             this.CommandBindings.Add(new CommandBinding(OpenFile, (s, e) => TryOpenFile()));
             this.CommandBindings.Add(new CommandBinding(PlayPause, (s, e) => TryPlayPause()));
             this.CommandBindings.Add(new CommandBinding(SpeedCmd, (s,e) => TrySwitchSpeed()));
+            this.CommandBindings.Add(new CommandBinding(AspectRatioCmd, (s, e) => TrySwitchAspectRatio()));
         }
 
         private void MPVPropertyChanged(ref MpvEventProperty property)
@@ -208,6 +230,14 @@ namespace LibMPVSharp.WPF.Demo
             {
                 MediaPlayer.Speed = speed;
             }
+        }
+
+        private void TrySwitchAspectRatio()
+        {
+            if (MediaPlayer == null) return;
+            var ratio = _aspectRatio.Dequeue();
+            _aspectRatio.Enqueue(ratio);
+            AspectRatio = ratio;
         }
     }
 }

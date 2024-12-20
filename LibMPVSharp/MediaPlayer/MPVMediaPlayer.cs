@@ -55,12 +55,12 @@ namespace LibMPVSharp
             var error = Client.MpvInitialize(_clientHandle);
             CheckError(error, nameof(Client.MpvInitialize));
 
-            Client.MpvObserveProperty(_clientHandle, 0, "pause", MpvFormat.MPV_FORMAT_FLAG);
-            Client.MpvObserveProperty(_clientHandle, 0, "duration", MpvFormat.MPV_FORMAT_DOUBLE);
-            Client.MpvObserveProperty(_clientHandle, 0, "time-pos", MpvFormat.MPV_FORMAT_DOUBLE);
-            Client.MpvObserveProperty(_clientHandle, 0, "volume", MpvFormat.MPV_FORMAT_INT64);
-            Client.MpvObserveProperty(_clientHandle, 0, "mute", MpvFormat.MPV_FORMAT_STRING);
-            Client.MpvObserveProperty(_clientHandle, 0, "speed", MpvFormat.MPV_FORMAT_DOUBLE);
+            ObservableProperty("pause", MpvFormat.MPV_FORMAT_FLAG);
+            ObservableProperty("duration", MpvFormat.MPV_FORMAT_DOUBLE);
+            ObservableProperty("time-pos", MpvFormat.MPV_FORMAT_DOUBLE);
+            ObservableProperty("volume", MpvFormat.MPV_FORMAT_INT64);
+            ObservableProperty("mute", MpvFormat.MPV_FORMAT_STRING);
+            ObservableProperty("speed", MpvFormat.MPV_FORMAT_DOUBLE);
 
             _wakeupCallback = MPVWeakup;
             Client.MpvSetWakeupCallback(_clientHandle, _wakeupCallback, null);
@@ -89,6 +89,8 @@ namespace LibMPVSharp
                 ExecuteCommand("stop", "keep-playlist");
             }
         }
+
+        public void ObservableProperty(string name, MpvFormat format) => Client.MpvObserveProperty(_clientHandle, 0, name, format);
 
         private void SetProperty(string name, long value)
         {

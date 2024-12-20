@@ -1074,7 +1074,7 @@ namespace LibMPVSharp
         /// <para>MPV_FORMAT_NONE         (no member)</para>
         /// <para>If you encounter a value you don't know, you must not make any</para>
         /// <para>assumptions about the contents of union u.</para>
-        /// </summary>
+        /// </summary> 
         public global::LibMPVSharp.MpvFormat format;
     }
     

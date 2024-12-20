@@ -14,6 +14,7 @@ namespace LibMPVSharp
         public static readonly long MaxVolumeValue = 1000;
         public static readonly long DefaultVolumeValue = 130;
 
+        #region property
         public string FileName
         {
             get => GetPropertyString("filename");
@@ -51,6 +52,26 @@ namespace LibMPVSharp
             get => GetPropertyBoolean("seeking");
         }
 
+        public long Width
+        {
+            get => GetPropertyLong("width");
+        }
+
+        public long Height
+        {
+            get => GetPropertyLong("height");
+        }
+
+        public long DWidth
+        {                  
+            get => GetPropertyLong("dwidth");
+        }
+
+        public long DHeight
+        {
+            get => GetPropertyLong("dheight");
+        }
+
         public string HwDec
         {
             get => GetPropertyString("hwdec");
@@ -76,11 +97,34 @@ namespace LibMPVSharp
         {
             get => GetPropertyString("platform");
         }
+        #endregion
 
+        #region playback control
         public double Speed
         {
             get => GetPropertyDouble("speed");
             set => SetProperty("speed", value);
+        }
+
+        public bool Pause
+        {
+            get => GetPropertyBoolean("pause");
+            set => SetProperty("pause", value);
+        }
+        #endregion
+
+
+        #region Video
+        public string VideoAspectOverride
+        {
+            get => GetPropertyString("video-aspect-override");
+            set => SetProperty("video-aspect-override", value);
+        }
+
+        public string VideoUnscaled
+        {
+            get => GetPropertyString("video-unscaled");
+            set => SetProperty("video-unscaled", value);
         }
 
         public long VideoZoom
@@ -113,6 +157,33 @@ namespace LibMPVSharp
             set => SetProperty("video-align-y", value);
         }
 
+        public double VideoMarginRatioLeft
+        {
+            get => GetPropertyDouble("video-margin-ratio-left");
+            set => SetProperty("video-margin-ratio-left", value);
+        }
+
+        public double VideoMarginRatioRight
+        {
+            get => GetPropertyDouble("video-margin-ratio-right");
+            set => SetProperty("video-margin-ratio-right", value);
+        }
+
+        public double VideoMarginRatioTop
+        {
+            get => GetPropertyDouble("video-margin-ratio-top");
+            set => SetProperty("video-margin-ratio-top", value);
+        }
+
+        public double VideoMarginRatioBottom
+        {
+            get => GetPropertyDouble("video-margin-ratio-bottom");
+            set => SetProperty("video-margin-ratio-bottom", value);
+        }
+
+        #endregion
+
+        #region Audio
         public long Volume
         {
             get => GetPropertyLong("volume");
@@ -130,13 +201,9 @@ namespace LibMPVSharp
             get => GetPropertyBoolean("mute");
             set => SetProperty("mute", value);
         }
+        #endregion
 
-        public bool Pause
-        {
-            get => GetPropertyBoolean("pause");
-            set => SetProperty("pause", value);
-        }
-
+        #region screen shot
         public string ScreenshotFormat
         {
             get => GetPropertyString("screenshot-format");
@@ -178,7 +245,9 @@ namespace LibMPVSharp
             get => GetPropertyBoolean("screenshot-sw");
             set => SetProperty("screenshot-sw", value);
         }
+        #endregion
 
+        #region terminal
         public string Cache
         {
             get => GetPropertyString("cache");
@@ -220,7 +289,10 @@ namespace LibMPVSharp
             get => GetPropertyBoolean("cache-pause-initial");
             set => SetProperty("cache-pause-initial", value);
         }
+        #endregion
 
+
+        #region network
         public long StreamBufferSize
         {
             get => GetPropertyLong("stream-buffer-size");
@@ -262,5 +334,13 @@ namespace LibMPVSharp
             get => GetPropertyLong("network-timeout");
             set => SetProperty("network-timeout", value);
         }
+        #endregion
+
+        #region OSD
+        public long OSDDimensionsW
+        {
+            get => GetPropertyLong("osd-dimensions/w");
+        }
+        #endregion
     }
 }

@@ -21,6 +21,10 @@ namespace LibMPVSharp.WPF.Demo
             {
                 return (double)int64;
             }
+            else if(targetType == typeof(string) && value is double doubleVal)
+            {
+                return DoubleToString(doubleVal, (string)parameter);
+            }
             return "";
         }
 
@@ -33,6 +37,10 @@ namespace LibMPVSharp.WPF.Demo
             else if(targetType == typeof(long) && value is double doubleVal)
             {
                 return System.Convert.ToInt64(doubleVal);
+            }
+            else if (targetType == typeof(double) && value is string strVal)
+            {
+                return StringToDouble(strVal, (string)parameter);
             }
             return "";
         }
@@ -63,6 +71,30 @@ namespace LibMPVSharp.WPF.Demo
                 return TimeSpan.FromDays(value);
 
             return TimeSpan.FromSeconds(value);
+        }
+        
+        private string DoubleToString(double value, string parameter)
+        {
+            if (string.IsNullOrEmpty(parameter)) return value.ToString();
+            else if (parameter == "aspect-ratio")
+            {
+                var n = System.Convert.ToInt32(value);
+                var remain = System.Convert.ToInt32(value % n);
+                return $"{n + 1}:{remain}";
+            }
+            return value.ToString();
+        }
+
+        private double StringToDouble(string value, string parameter)
+        {
+            if (string.IsNullOrEmpty(parameter)) return double.Parse(value);
+            else if(parameter == "aspect-ratio")
+            {
+                var sp = value.Split(':');
+                return double.Parse(sp[0]) / double.Parse(sp[1]);
+            }
+
+            return double.Parse(value);
         }
     }
 }

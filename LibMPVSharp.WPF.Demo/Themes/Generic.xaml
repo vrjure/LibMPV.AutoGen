@@ -51,9 +51,17 @@
                                                    VerticalAlignment="Center"/>
                                     </StackPanel>
 
+                                    <StackPanel Orientation="Horizontal" Margin="8,0,4,0">
+                                        <Button Style="{DynamicResource IconButton}"
+                                                Content="{DynamicResource icon-aspect-ratio}"
+                                                Command="{x:Static demo:MediaPlayerView.AspectRatioCmd}"/>
+                                        <TextBlock VerticalAlignment="Center"
+                                                   Foreground="{TemplateBinding Foreground}"
+                                                   Text="{TemplateBinding AspectRatio}"/>
+                                    </StackPanel>
 
                                     <StackPanel Orientation="Horizontal"
-                                                Margin="8,0">
+                                                Margin="4,0,4,0">
                                         <Button Style="{DynamicResource IconButton}"
                                                 Content="{DynamicResource icon-speed}"
                                                 Command="{x:Static demo:MediaPlayerView.SpeedCmd}"/>
@@ -64,7 +72,7 @@
 
                                     <Button Style="{DynamicResource IconButton}"
                                             Content="{DynamicResource icon-volume}"
-                                            Margin="0,0"
+                                            Margin="4,0,4,0"
                                             x:Name="volume_button"/>
 
                                     <Popup PlacementTarget="{Binding ElementName=volume_button}"
@@ -94,7 +102,7 @@
 
                                     <Button Style="{DynamicResource IconButton}"
                                             Content="{DynamicResource icon-file-video}"
-                                            Margin="8,0"
+                                            Margin="4,0,4,0"
                                             Command="{x:Static demo:MediaPlayerView.OpenFile}"/>
                                 </StackPanel>
                                 
@@ -102,7 +110,7 @@
                                         Minimum="0"
                                         Maximum="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Duration, Converter={x:Static demo:AutoValueConverters.Instance}}"
                                         Value="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Time, Converter={x:Static demo:AutoValueConverters.Instance}, Mode=TwoWay}"
-                                        Margin="8,0"
+                                        Margin="4,0,8,0"
                                         IsMoveToPointEnabled="True"/>
                             </DockPanel>
                         </Border>
