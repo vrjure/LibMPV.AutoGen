@@ -13,10 +13,10 @@ namespace LibMPVSharp
     public unsafe partial class MPVMediaPlayer : IDisposable
     {
         private readonly MPVMediaPlayerOptions _options;
-        private MpvSetWakeupCallback_cbCallback _wakeupCallback;
+        private MpvSetWakeupCallback_cbCallback? _wakeupCallback;
         private MpvHandle* _clientHandle;
         private bool _disposed;
-        private Task _eventLoopTask;
+        private Task? _eventLoopTask;
 
         public IntPtr MPVHandle => (IntPtr)_clientHandle;
         public MPVMediaPlayerOptions Options => _options;
@@ -35,7 +35,7 @@ namespace LibMPVSharp
             Initialize();
         }
 
-        public MPVMediaPlayer(MpvHandle* clientHandle, string name)
+        public MPVMediaPlayer(MpvHandle* clientHandle, string name) :this(new MPVMediaPlayerOptions())
         {
             _clientHandle = Client.MpvCreateClient(clientHandle, name);
         }
@@ -122,7 +122,7 @@ namespace LibMPVSharp
             CheckError(error, nameof(Client.MpvSetPropertyString), name, value);
         }
 
-        private string GetPropertyString(string name)
+        private string? GetPropertyString(string name)
         {
             CheckClientHandle();
             var valuePtr = Client.MpvGetPropertyString(_clientHandle, name);

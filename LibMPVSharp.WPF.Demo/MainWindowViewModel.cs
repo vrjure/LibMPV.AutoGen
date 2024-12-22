@@ -19,30 +19,5 @@ namespace LibMPVSharp.WPF.Demo
 
         [ObservableProperty]
         private MPVMediaPlayer _mediaPlayer;
-
-
-        [RelayCommand]
-        private void PlayPause(string uri)
-        {
-            if (MediaPlayer == null || string.IsNullOrEmpty(uri)) return;
-
-            var path = MediaPlayer.Path;
-            if (string.IsNullOrEmpty(path) || path != uri)
-            {
-                MediaPlayer.Stop();
-                MediaPlayer.Open(uri);
-            }
-            else
-            {
-                MediaPlayer.Pause = !MediaPlayer.Pause;
-            }
-        }
-
-
-        [RelayCommand]
-        private void Stop()
-        {
-            MediaPlayer?.Stop();
-        }
     }
 }

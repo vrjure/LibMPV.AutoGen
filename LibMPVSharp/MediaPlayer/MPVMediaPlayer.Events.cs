@@ -12,6 +12,6 @@ namespace LibMPVSharp
     public unsafe partial class MPVMediaPlayer
     {
         public delegate void PropertyChanged(ref MpvEventProperty property);
-        public event PropertyChanged MPVPropertyChanged;
+        public event PropertyChanged? MPVPropertyChanged;
     }
 }

@@ -1,0 +1,116 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:demo="using:LibMPVSharp.Avalonia.Demo"
+					xmlns:mpv="using:LibMPVSharp.Avalonia">
+  <!-- Add Resources Here -->
+	<Design.PreviewWith>
+		<Border Padding="20">
+			<Border Background="Black">
+				<demo:MediaPlayerView Width="800" Height="400"/>
+			</Border>
+		</Border>
+	</Design.PreviewWith>
+
+	<ControlTheme TargetType="demo:MediaPlayerView" x:Key="{x:Type demo:MediaPlayerView}">
+		<Setter Property="Foreground" Value="White"/>
+		<Setter Property="Template">
+			<ControlTemplate TargetType="demo:MediaPlayerView">
+				<Grid RowDefinitions="auto,*,auto">
+						
+					<mpv:VideoView Grid.RowSpan="3"
+								   MediaPlayer="{TemplateBinding MediaPlayer}"/>
+						
+					<Border Grid.Row="0">
+							
+					</Border>
+
+					<Border Grid.Row="2">
+						<Border.Background>
+							<SolidColorBrush Color="White" Opacity="0.1"/>
+						</Border.Background>
+						<DockPanel Margin="0,8">
+							<Button Theme="{DynamicResource IconButton}"
+									Content="{DynamicResource icon-play}"
+									DockPanel.Dock="Left"
+									VerticalAlignment="Center"
+									Margin="8,0,4,0"
+									Command="{x:Static demo:MediaPlayerView.PlayPauseCmd}"/>
+
+							<StackPanel Orientation="Horizontal"
+										DockPanel.Dock="Right"
+										Margin="4,0,8,0"
+										Spacing="8">
+								<TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Time, StringFormat='{}{0:hh\\:mm\\:ss}'}"
+										   Foreground="{TemplateBinding Foreground}"
+										   VerticalAlignment="Center"/>
+								
+								<TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Duration, StringFormat='/{0:hh\\:mm\\:ss}'}"
+										   Foreground="{TemplateBinding Foreground}"
+										   VerticalAlignment="Center"
+										   Margin="-8,0,0,0"/>
+
+								<StackPanel Orientation="Horizontal"
+											Spacing="8">
+									<Button Theme="{DynamicResource IconButton}"
+											Content="{DynamicResource icon-aspect-ratio}"
+											VerticalAlignment="Center"
+											Command="{x:Static demo:MediaPlayerView.AspectRatioCmd}"/>
+									<TextBlock Text="{TemplateBinding AspectRatio}"
+											   VerticalAlignment="Center"
+											   Margin="-8,0,0,0"/>
+								</StackPanel>
+
+								<StackPanel Orientation="Horizontal"
+											Spacing="8">
+									<Button Theme="{DynamicResource IconButton}"
+											Content="{DynamicResource icon-speed}"
+											VerticalAlignment="Center"
+											Command="{x:Static demo:MediaPlayerView.SpeedCmd}"/>
+									<TextBlock Foreground="{TemplateBinding Foreground}"
+											   Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Speed, StringFormat='X{0:N0}'}"
+											   VerticalAlignment="Center"
+											   Margin="-8,0,0,0"/>
+								</StackPanel>
+
+
+								<Button Theme="{DynamicResource IconButton}"
+										Content="{DynamicResource icon-volume}"
+										VerticalAlignment="Center"
+										x:Name="volume_button"/>
+								<Popup PlacementTarget="{Binding ElementName=volume_button}"
+									   Placement="Top">
+									<Border>
+										<Border.Background>
+											<SolidColorBrush Color="White" Opacity="0.8"/>
+										</Border.Background>
+										<StackPanel Orientation="Vertical">
+											<TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Volume}"
+													   Foreground="Black"
+													   HorizontalAlignment="Center"/>
+											<Slider Orientation="Vertical"
+													Height="120"
+													Maximum="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=MaxVolume}"
+													Minimum="0"
+													Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Volume, Converter={x:Static demo:AutoValueConverters.Instance}, Mode=TwoWay}"/>
+										</StackPanel>
+									</Border>
+								</Popup>
+								
+								<Button Theme="{DynamicResource IconButton}"
+										Content="{DynamicResource icon-file-video}"
+										Command="{x:Static demo:MediaPlayerView.OpenFileCmd}"
+										VerticalAlignment="Center"/>
+							</StackPanel>
+
+							<Slider VerticalAlignment="Center"
+									Margin="4,0,4,0"
+									Maximum="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Duration, Converter={x:Static demo:AutoValueConverters.Instance}}"
+									Minimum="0"
+									Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Time, Converter={x:Static demo:AutoValueConverters.Instance}, Mode=TwoWay}"/>
+						</DockPanel>
+					</Border>
+				</Grid>
+			</ControlTemplate>
+		</Setter>
+	</ControlTheme>
+</ResourceDictionary>

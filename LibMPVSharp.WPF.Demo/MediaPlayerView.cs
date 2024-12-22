@@ -115,7 +115,7 @@ namespace LibMPVSharp.WPF.Demo
                 var value = (long)e.NewValue;
                 if (value != view.MediaPlayer.Volume)
                 {
-                    view.MediaPlayer.Volume = (long)e.NewValue;
+                    view.MediaPlayer.Volume = value;
                 }
             }
             else if (e.Property == AspectRatioProperty)

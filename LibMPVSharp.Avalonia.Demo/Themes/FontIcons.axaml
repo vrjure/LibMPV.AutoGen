@@ -1,0 +1,20 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Design.PreviewWith>
+		<Border Padding="20">
+			<TextBlock FontFamily="{DynamicResource remixicon}"
+					   Text="{DynamicResource icon-pause}"/>
+		</Border>
+	</Design.PreviewWith>
+  <!-- Add Resources Here -->
+	<FontFamily x:Key="remixicon">avares://LibMPVSharp.Avalonia.Demo/Assets/remixicon.ttf#remixicon</FontFamily>
+
+	<x:String x:Key="icon-pause">&#xEFD7;</x:String>
+	<x:String x:Key="icon-play">&#xF00A;</x:String>
+	<x:String x:Key="icon-file-video">&#xF3C9;</x:String>
+	<x:String x:Key="icon-volume">&#xF29B;</x:String>
+	<x:String x:Key="icon-speed">&#xF176;</x:String>
+	<x:String x:Key="icon-aspect-ratio">&#xEA7F;</x:String>
+	<x:String x:Key="icon-fullscreen">&#xED9C;</x:String>
+	<x:String x:Key="icon-fullscreen-exit">&#xED9A;</x:String>
+</ResourceDictionary>
