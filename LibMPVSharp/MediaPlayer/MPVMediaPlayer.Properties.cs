@@ -15,12 +15,12 @@ namespace LibMPVSharp
         public static readonly long DefaultVolumeValue = 130;
 
         #region property
-        public string FileName
+        public string? FileName
         {
             get => GetPropertyString("filename");
         }
 
-        public string Path
+        public string? Path
         {
             get => GetPropertyString("path");
         }
@@ -72,18 +72,18 @@ namespace LibMPVSharp
             get => GetPropertyLong("dheight");
         }
 
-        public string HwDec
+        public string? HwDec
         {
             get => GetPropertyString("hwdec");
             set => SetProperty("hwdec", value);
         }
 
-        public string MPVVersion
+        public string? MPVVersion
         {
             get => GetPropertyString("mpv-version");
         }
 
-        public string FFMpegVersion
+        public string? FFMpegVersion
         {
             get => GetPropertyString("ffmpeg-version");
         }
@@ -93,7 +93,7 @@ namespace LibMPVSharp
             get => GetPropertyLong("libass-version");
         }
 
-        public string Platform
+        public string? Platform
         {
             get => GetPropertyString("platform");
         }
@@ -115,13 +115,13 @@ namespace LibMPVSharp
 
 
         #region Video
-        public string VideoAspectOverride
+        public string? VideoAspectOverride
         {
             get => GetPropertyString("video-aspect-override");
             set => SetProperty("video-aspect-override", value);
         }
 
-        public string VideoUnscaled
+        public string? VideoUnscaled
         {
             get => GetPropertyString("video-unscaled");
             set => SetProperty("video-unscaled", value);
@@ -204,19 +204,19 @@ namespace LibMPVSharp
         #endregion
 
         #region screen shot
-        public string ScreenshotFormat
+        public string? ScreenshotFormat
         {
             get => GetPropertyString("screenshot-format");
             set => SetProperty("screenshot-format", value);
         }
 
-        public string ScreenshotTemplate
+        public string? ScreenshotTemplate
         {
             get => GetPropertyString("screenshot-template");
             set => SetProperty("screenshot-template", value);
         }
 
-        public string ScreenshotDir
+        public string? ScreenshotDir
         {
             get => GetPropertyString("screenshot-dir");
             set => SetProperty("screenshot-dir", value);
@@ -248,7 +248,7 @@ namespace LibMPVSharp
         #endregion
 
         #region terminal
-        public string Cache
+        public string? Cache
         {
             get => GetPropertyString("cache");
             set => SetProperty("cache", value);
@@ -266,7 +266,7 @@ namespace LibMPVSharp
             set => SetProperty("cache-on-disk", value);
         }
 
-        public string DemuxerCacheDir
+        public string? DemuxerCacheDir
         {
             get => GetPropertyString("demuxer-cache-dir");
             set => SetProperty("demuxer-cache-dir", value);
@@ -299,7 +299,7 @@ namespace LibMPVSharp
             set => SetProperty("stream-buffer-size", value);
         }
 
-        public string UserAgent
+        public string? UserAgent
         {
             get => GetPropertyString("user-agent");
             set => SetProperty("user-agent", value);
@@ -311,19 +311,19 @@ namespace LibMPVSharp
             set => SetProperty("cookies", value);
         }
 
-        public string CookiesFile
+        public string? CookiesFile
         {
             get => GetPropertyString("cookies-file");
             set => SetProperty("cookies-file", value);
         }
 
-        public string HttpHeaderFields
+        public string? HttpHeaderFields
         {
             get => GetPropertyString("http-header-fields");
             set => SetProperty("http-header-fields", value);
         }
 
-        public string HttpProxy
+        public string? HttpProxy
         {
             get => GetPropertyString("http-proxy");
             set => SetProperty("http-proxy", value);

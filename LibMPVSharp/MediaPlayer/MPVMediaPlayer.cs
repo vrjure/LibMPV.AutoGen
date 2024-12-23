@@ -115,7 +115,7 @@ namespace LibMPVSharp
             }
         }
 
-        private void SetProperty(string name, string value)
+        private void SetProperty(string name, string? value)
         {
             CheckClientHandle();
             var error = Client.MpvSetPropertyString(_clientHandle, name, value);

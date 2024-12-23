@@ -29,7 +29,7 @@ namespace LibMPVSharp.WPF
         {
             if(!DesignerProperties.GetIsInDesignMode(this))
             {
-                _renderContext = new RenderContext(new Version(2, 0));
+                _renderContext = new RenderContext(new Version(3, 2));
             }
             _drawingVisual = new DrawingVisual();
 

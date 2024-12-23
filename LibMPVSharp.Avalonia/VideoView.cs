@@ -65,6 +65,11 @@ namespace LibMPVSharp.Avalonia
             }
         }
 
+        protected override void OnOpenGlDeinit(GlInterface gl)
+        {
+            base.OnOpenGlDeinit(gl);
+        }
+
         private void OpenGLUpdateCallback(void* ctx)
         {
             Dispatcher.UIThread.InvokeAsync(this.RequestNextFrameRendering, DispatcherPriority.Background);
