@@ -35,11 +35,6 @@ namespace LibMPVSharp
             Initialize();
         }
 
-        public MPVMediaPlayer(MpvHandle* clientHandle, string name) :this(new MPVMediaPlayerOptions())
-        {
-            _clientHandle = Client.MpvCreateClient(clientHandle, name);
-        }
-
         private void Initialize()
         {
             CheckClientHandle();
@@ -212,76 +207,6 @@ namespace LibMPVSharp
                     Marshal.FreeHGlobal(item);
                 }
                 Marshal.FreeHGlobal(rootPtr);
-            }
-        }
-
-        private void MPVWeakup(IntPtr ctx)
-        {
-            if (_eventLoopTask == null)
-            {
-                _eventLoopTask = Task.Factory.StartNew(() =>
-                {
-                    while (!_disposed)
-                    {
-                        try
-                        {
-                            OnMPVEvents(-1);
-                        }
-                        catch (Exception ex)
-                        {
-                            Trace.WriteLine(ex);
-                        }
-                    }
-                }, TaskCreationOptions.LongRunning);
-            }
-        }
-
-        private void OnMPVEvents(double timeout)
-        {
-            var mpvEvent = Client.MpvWaitEvent(_clientHandle, timeout);
-
-            switch (mpvEvent->event_id)
-            {
-                case MpvEventId.MPV_EVENT_NONE:
-                    break;
-                case MpvEventId.MPV_EVENT_SHUTDOWN:
-                    break;
-                case MpvEventId.MPV_EVENT_LOG_MESSAGE:
-                    break;
-                case MpvEventId.MPV_EVENT_GET_PROPERTY_REPLY:
-                    break;
-                case MpvEventId.MPV_EVENT_SET_PROPERTY_REPLY:
-                    break;
-                case MpvEventId.MPV_EVENT_COMMAND_REPLY:
-                    break;
-                case MpvEventId.MPV_EVENT_START_FILE:
-                    break;
-                case MpvEventId.MPV_EVENT_END_FILE:
-                    break;
-                case MpvEventId.MPV_EVENT_FILE_LOADED:
-                    break;
-                case MpvEventId.MPV_EVENT_IDLE:
-                    break;
-                case MpvEventId.MPV_EVENT_TICK:
-                    break;
-                case MpvEventId.MPV_EVENT_CLIENT_MESSAGE:
-                    break;
-                case MpvEventId.MPV_EVENT_VIDEO_RECONFIG:
-                    break;
-                case MpvEventId.MPV_EVENT_AUDIO_RECONFIG:
-                    break;
-                case MpvEventId.MPV_EVENT_SEEK:
-                    break;
-                case MpvEventId.MPV_EVENT_PLAYBACK_RESTART:
-                    break;
-                case MpvEventId.MPV_EVENT_PROPERTY_CHANGE:
-                    var property = Marshal.PtrToStructure<MpvEventProperty>((IntPtr)mpvEvent->data);
-                    MPVPropertyChanged?.Invoke(ref property);
-                    break;
-                case MpvEventId.MPV_EVENT_QUEUE_OVERFLOW:
-                    break;
-                case MpvEventId.MPV_EVENT_HOOK:
-                    break;
             }
         }
 

@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Labs.Input;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Platform.Storage;
@@ -9,6 +10,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -104,14 +106,16 @@ namespace LibMPVSharp.Avalonia.Demo
             _aspectRatio.Enqueue("4:3");
         }
 
+        protected override Type StyleKeyOverride => typeof(MediaPlayerView);
+
         public MediaPlayerView()
         {
             var binds = new[]
             {
-                new CommandBinding(PlayPauseCmd, (s,e) => TryPlayPause()),
-                new CommandBinding(OpenFileCmd, async (s,e) => await TryOpenFile()),
-                new CommandBinding(SpeedCmd, (s,e) => TrySwitchSpeed()),
-                new CommandBinding(AspectRatioCmd, (s, e) => TrySwitchAspectRatio())
+                new CommandBinding(PlayPauseCmd, (s,e) => TryPlayPause(), (s, e) => e.CanExecute = true),
+                new CommandBinding(OpenFileCmd, async (s,e) => await TryOpenFile(), (s, e) => e.CanExecute = true),
+                new CommandBinding(SpeedCmd, (s,e) => TrySwitchSpeed(), (s, e) => e.CanExecute = true),
+                new CommandBinding(AspectRatioCmd, (s, e) => TrySwitchAspectRatio(), (s, e) => e.CanExecute = true)
             };
             CommandManager.SetCommandBindings(this, binds);
         }
@@ -131,14 +135,19 @@ namespace LibMPVSharp.Avalonia.Demo
 
                 if (oldNew.newValue != null)
                 {
-                    oldNew.newValue.MPVPropertyChanged += OldValue_MPVPropertyChanged;
+                    var player = oldNew.newValue;
+                    player.MPVPropertyChanged += OldValue_MPVPropertyChanged;
+                    SetCurrentValue(SpeedProperty, player.Speed);
+                    SetCurrentValue(VolumeProperty, player.Volume);
+                    SetCurrentValue(MaxVolumeProperty, player.VolumeMax);
+
                 }
             }
             else if (change.Property == TimeProperty)
             {
                 if (MediaPlayer == null) return;
                 var oldNew = change.GetOldAndNewValue<TimeSpan>();
-                if (Math.Abs(oldNew.newValue.TotalSeconds - oldNew.newValue.TotalSeconds) > 1)
+                if (Math.Abs(oldNew.newValue.TotalSeconds - oldNew.oldValue.TotalSeconds) > 1)
                 {
                     MediaPlayer.TimePos = oldNew.newValue.TotalSeconds;
                 }
@@ -212,6 +221,7 @@ namespace LibMPVSharp.Avalonia.Demo
             if (files.Count > 0)
             {
                 MediaPlayer.Open(files[0].TryGetLocalPath()!);
+                SetCurrentValue(PlayingProperty, true);
             }
         }
 

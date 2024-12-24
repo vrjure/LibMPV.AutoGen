@@ -29,12 +29,13 @@
 							<SolidColorBrush Color="White" Opacity="0.1"/>
 						</Border.Background>
 						<DockPanel Margin="0,8">
-							<Button Theme="{DynamicResource IconButton}"
-									Content="{DynamicResource icon-play}"
+							<Button Theme="{StaticResource IconButton}"
+									Content="{StaticResource icon-play}"
 									DockPanel.Dock="Left"
 									VerticalAlignment="Center"
 									Margin="8,0,4,0"
-									Command="{x:Static demo:MediaPlayerView.PlayPauseCmd}"/>
+									Command="{x:Static demo:MediaPlayerView.PlayPauseCmd}"
+									x:Name="playpause_button"/>
 
 							<StackPanel Orientation="Horizontal"
 										DockPanel.Dock="Right"
@@ -51,8 +52,8 @@
 
 								<StackPanel Orientation="Horizontal"
 											Spacing="8">
-									<Button Theme="{DynamicResource IconButton}"
-											Content="{DynamicResource icon-aspect-ratio}"
+									<Button Theme="{StaticResource IconButton}"
+											Content="{StaticResource icon-aspect-ratio}"
 											VerticalAlignment="Center"
 											Command="{x:Static demo:MediaPlayerView.AspectRatioCmd}"/>
 									<TextBlock Text="{TemplateBinding AspectRatio}"
@@ -62,8 +63,8 @@
 
 								<StackPanel Orientation="Horizontal"
 											Spacing="8">
-									<Button Theme="{DynamicResource IconButton}"
-											Content="{DynamicResource icon-speed}"
+									<Button Theme="{StaticResource IconButton}"
+											Content="{StaticResource icon-speed}"
 											VerticalAlignment="Center"
 											Command="{x:Static demo:MediaPlayerView.SpeedCmd}"/>
 									<TextBlock Foreground="{TemplateBinding Foreground}"
@@ -72,32 +73,44 @@
 											   Margin="-8,0,0,0"/>
 								</StackPanel>
 
-
-								<Button Theme="{DynamicResource IconButton}"
-										Content="{DynamicResource icon-volume}"
-										VerticalAlignment="Center"
-										x:Name="volume_button"/>
-								<Popup PlacementTarget="{Binding ElementName=volume_button}"
-									   Placement="Top">
-									<Border>
-										<Border.Background>
-											<SolidColorBrush Color="White" Opacity="0.8"/>
-										</Border.Background>
-										<StackPanel Orientation="Vertical">
-											<TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Volume}"
-													   Foreground="Black"
-													   HorizontalAlignment="Center"/>
-											<Slider Orientation="Vertical"
-													Height="120"
-													Maximum="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=MaxVolume}"
-													Minimum="0"
-													Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Volume, Converter={x:Static demo:AutoValueConverters.Instance}, Mode=TwoWay}"/>
-										</StackPanel>
-									</Border>
-								</Popup>
+								<Button Theme="{StaticResource IconButton}"
+										Content="{StaticResource icon-volume}"
+										VerticalAlignment="Center">
+									<Button.Styles>
+										<Style Selector="FlyoutPresenter.bgTansparent">
+											<Setter Property="Background" Value="Transparent"/>
+											<Setter Property="HorizontalContentAlignment" Value="Center"/>
+										</Style>
+									</Button.Styles>
+									<Button.Flyout>
+										<Flyout Placement="Top"
+											    ShowMode="TransientWithDismissOnPointerMoveAway"
+												FlyoutPresenterClasses="bgTansparent">
+											<Border CornerRadius="6"
+													Padding="0,6">
+												<Border.Background>
+													<SolidColorBrush Color="White" Opacity="0.8"/>
+												</Border.Background>
+												<StackPanel Orientation="Vertical"
+															Spacing="6">
+													<TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Volume}"
+															   Foreground="Black"
+															   HorizontalAlignment="Center"
+															   FontWeight="Bold"/>
+													<Slider Orientation="Vertical"
+															HorizontalAlignment="Center"
+															Height="120"
+															Maximum="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=MaxVolume}"
+															Minimum="0"
+															Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Volume, Converter={x:Static demo:AutoValueConverters.Instance}, Mode=TwoWay}"/>
+												</StackPanel>
+											</Border>
+										</Flyout>
+									</Button.Flyout>
+								</Button>								
 								
-								<Button Theme="{DynamicResource IconButton}"
-										Content="{DynamicResource icon-file-video}"
+								<Button Theme="{StaticResource IconButton}"
+										Content="{StaticResource icon-file-video}"
 										Command="{x:Static demo:MediaPlayerView.OpenFileCmd}"
 										VerticalAlignment="Center"/>
 							</StackPanel>
@@ -112,5 +125,10 @@
 				</Grid>
 			</ControlTemplate>
 		</Setter>
+		<Style Selector="^[Playing=True]">
+			<Style Selector="^ /template/ Button#playpause_button">
+				<Setter Property="Content" Value="{DynamicResource icon-pause}"/>
+			</Style>
+		</Style>
 	</ControlTheme>
 </ResourceDictionary>

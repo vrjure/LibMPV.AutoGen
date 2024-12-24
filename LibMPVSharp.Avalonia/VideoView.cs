@@ -53,7 +53,7 @@ namespace LibMPVSharp.Avalonia
 
             var width = Bounds.Width;
             var height = Bounds.Height;
-            MediaPlayer.OpenGLRender((int)width, (int)height, fb);
+            MediaPlayer.OpenGLRender((int)width, (int)height, fb, flipY: 1);
         }
 
         protected override void OnOpenGlInit(GlInterface gl)
@@ -62,12 +62,14 @@ namespace LibMPVSharp.Avalonia
             if (MediaPlayer != null)
             {
                 MediaPlayer.Options.GetProcAddress = _getProcAddress;
+                MediaPlayer.EnsureRenderContextCreated();
             }
         }
 
         protected override void OnOpenGlDeinit(GlInterface gl)
         {
-            base.OnOpenGlDeinit(gl);
+            if (MediaPlayer == null) return;
+            MediaPlayer.ReleaseRenderContext();
         }
 
         private void OpenGLUpdateCallback(void* ctx)

@@ -13,7 +13,7 @@ namespace LibMPVSharp
         private MpvOpenglInitParams_get_proc_addressCallback? _glGetProcAddress;
         private MpvRenderUpdateFn? _mpvRenderUpdate;
 
-        private void EnsureRenderContextCreated()
+        public void EnsureRenderContextCreated()
         {
             CheckClientHandle();
 
@@ -57,6 +57,13 @@ namespace LibMPVSharp
                     Marshal.FreeHGlobal(MPV_RENDER_PARAM_OPENGL_INIT_PARAMS_Data);
                 }
             }
+        }
+
+        public void ReleaseRenderContext()
+        {
+            if (_renderContext == null) return;
+            Render.MpvRenderContextFree(_renderContext);
+            _renderContext = null;
         }
 
         private IntPtr GLGetProcAddress(IntPtr ctx, string name)

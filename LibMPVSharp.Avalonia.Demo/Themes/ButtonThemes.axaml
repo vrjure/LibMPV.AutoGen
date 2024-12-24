@@ -1,10 +1,45 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <!-- Add Resources Here -->
-	<ControlTheme TargetType="Button" x:Key="IconButton">
+	<ControlTheme TargetType="Button" x:Key="IconButton" BasedOn="{StaticResource {x:Type Button}}">
 		<Setter Property="FontFamily" Value="{StaticResource remixicon}"/>
 		<Setter Property="Foreground" Value="White"/>
 		<Setter Property="Background" Value="Transparent"/>
 		<Setter Property="FontSize" Value="30"/>
+	
+		<Style Selector="^:pointerover /template/ ContentPresenter">
+			<Setter Property="Foreground">
+				<SolidColorBrush Color="White" Opacity="0.8"/>
+			</Setter>
+		</Style>
+		<Style Selector="^:disabled /template/ ContentPresenter">
+			<Setter Property="Background" Value="Transparent"/>
+		</Style>
+		<Style Selector="^:pressed /template/ ContentPresenter">
+			<Setter Property="Background" Value="Transparent"/>
+		</Style>
+	</ControlTheme>
+
+	<ControlTheme TargetType="ToggleButton" x:Key="IconToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+		<Setter Property="FontFamily" Value="{StaticResource remixicon}"/>
+		<Setter Property="Foreground" Value="White"/>
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="FontSize" Value="30"/>
+		
+		<Style Selector="^:pointerover /template/ ContentPresenter">
+			<Setter Property="Foreground">
+				<SolidColorBrush Color="White" Opacity="0.8"/>
+			</Setter>
+		</Style>
+		<Style Selector="^:disabled /template/ ContentPresenter">
+			<Setter Property="Background" Value="Transparent"/>
+		</Style>
+		<Style Selector="^:pressed /template/ ContentPresenter">
+			<Setter Property="Background" Value="Transparent"/>
+		</Style>
+		<Style Selector="^:checked /template/ ContentPresenter">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Foreground" Value="White"/>
+		</Style>
 	</ControlTheme>
 </ResourceDictionary>
