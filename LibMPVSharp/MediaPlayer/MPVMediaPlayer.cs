@@ -23,7 +23,7 @@ namespace LibMPVSharp
 
         public MPVMediaPlayer() : this(new MPVMediaPlayerOptions())
         {
-
+            
         }
 
         public MPVMediaPlayer(MPVMediaPlayerOptions options) 

@@ -45,9 +45,22 @@ namespace LibMPVSharp.WPF
             }
         }
 
+        protected override void OnDXGLChanged(DXGLContext dXGLContext)
+        {
+            if (MediaPlayer == null)
+            {
+                return;
+            }
+
+            MediaPlayer.Pause = true;
+            MediaPlayer.ReleaseRenderContext();
+            MediaPlayer.EnsureRenderContextCreated();
+
+        }
+
         protected override void OnDrawing()
         {
-            if (MediaPlayer == null || GLRenderContext?.GL == null) return;
+            if (MediaPlayer == null || GLRenderContext == null) return;
 
             var width = (int)GLRenderContext.Width;
             var height = (int)GLRenderContext.Height;
@@ -56,12 +69,12 @@ namespace LibMPVSharp.WPF
 
         private IntPtr GetProcAddress(IntPtr ctx, string name)
         {
-            if (GLRenderContext?.GL?.Context == null)
+            if (DXGLContext?.GL?.Context == null)
             {
                 return IntPtr.Zero;
             }
             
-            return GLRenderContext.GL.Context.GetProcAddress(name);
+            return DXGLContext.GL.Context.GetProcAddress(name);
         }
 
         private void OpenGLUpdateCallback(void* ctx)

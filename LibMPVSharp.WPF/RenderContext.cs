@@ -17,8 +17,10 @@ namespace LibMPVSharp.WPF
 {
     public unsafe class RenderContext : IDisposable
     {
-        public GL GL { get; }
-        public NVDXInterop NVDXInterop { get; }
+        private readonly DXGLContext _dXGLContext;
+        private GL GL => _dXGLContext.GL;
+        private NVDXInterop NVDXInterop => _dXGLContext.NVDXInterop;
+
         public IDirect3DDevice9Ex* DxDevice { get; }
         public IntPtr GLDevice { get; }
         public Format Format { get; }
@@ -32,8 +34,11 @@ namespace LibMPVSharp.WPF
         private uint _glSharedTexture;
         private uint _glDepthRenderBuffer;
         private IntPtr _dxRegisteredHandle;
-        public RenderContext(Version glVersion)
+
+        public RenderContext(DXGLContext dXGLContext)
         {
+            _dXGLContext = dXGLContext;
+
             IDirect3D9Ex* d3d9DeviceEx;
             D3D9.GetApi(null).Direct3DCreate9Ex(D3D9.SdkVersion, &d3d9DeviceEx);
 
@@ -63,16 +68,6 @@ namespace LibMPVSharp.WPF
             d3d9DeviceEx->CreateDeviceEx(D3D9.AdapterDefault, Devtype.Hal, 0, D3D9.CreateHardwareVertexprocessing | D3D9.CreateMultithreaded | D3D9.CreatePuredevice, ref presentParameters, (Displaymodeex*)IntPtr.Zero, &dxDevice);
 
             DxDevice = dxDevice;
-
-            var windowOptions = WindowOptions.Default;
-            windowOptions.API = new GraphicsAPI(ContextAPI.OpenGL, ContextProfile.Core, ContextFlags.Default, new APIVersion(glVersion));
-            windowOptions.IsVisible = false;
-
-            IWindow window = Window.Create(windowOptions);
-            window.Initialize();
-            GL = window.CreateOpenGL();
-            NVDXInterop = new NVDXInterop(GL.Context);
-
             GLDevice = NVDXInterop.DxopenDevice(dxDevice);
         }
 
@@ -163,8 +158,7 @@ namespace LibMPVSharp.WPF
             if(DxDevice != null)
                 DxDevice->Release();
 
-            GL?.Dispose();
-            NVDXInterop?.Dispose();
+            _dXGLContext.Dispose();
         }
     }
 }

@@ -7,7 +7,14 @@
         mc:Ignorable="d"
         Title="Demo" Height="450" Width="800">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <local:MediaPlayerView Grid.Column="0"
                                MediaPlayer="{Binding MediaPlayer}"/>
+        <local:MediaPlayerView Grid.Column="1"
+                               MediaPlayer="{Binding MediaPlayer2}"/>
+        <GridSplitter Width="1"/>
     </Grid>
 </Window>

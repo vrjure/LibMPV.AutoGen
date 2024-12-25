@@ -15,9 +15,13 @@ namespace LibMPVSharp.WPF.Demo
         public MainWindowViewModel()
         {
             _mediaPlayer = new MPVMediaPlayer();
+            _mediaPlayer2 = new MPVMediaPlayer();
         }
 
         [ObservableProperty]
         private MPVMediaPlayer _mediaPlayer;
+
+        [ObservableProperty]
+        private MPVMediaPlayer _mediaPlayer2;
     }
 }

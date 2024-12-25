@@ -23,14 +23,46 @@ namespace LibMPVSharp.WPF
 {
     public class GLControl: FrameworkElement
     {
-        private readonly RenderContext? _renderContext;
+        public static readonly DependencyProperty GLVersionProperty = DependencyProperty.Register(nameof(GLVersion), typeof(Version), typeof(GLControl), new FrameworkPropertyMetadata(new Version(3,2), PropertyChanged));
+        public Version GLVersion
+        {
+            get => (Version)GetValue(GLVersionProperty);
+            set => SetValue(GLVersionProperty, value);
+        }
+
+        private static void PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var glControl = d as GLControl;
+            if (glControl == null) return;
+
+            if (e.Property == GLVersionProperty)
+            {
+                var oldValue = e.OldValue as Version;
+                var newValue = e.NewValue as Version;
+
+                if (oldValue != null)
+                {
+                    glControl._renderContext?.Dispose();
+                    glControl.DXGLContext?.Dispose();
+                }
+
+                if(newValue != null)
+                {
+                    glControl._dXGLContext = new DXGLContext(newValue);
+                    glControl._renderContext = new RenderContext(glControl._dXGLContext);
+                    glControl.OnDXGLChanged(glControl._dXGLContext);
+                }
+            }
+        }
+
+        private RenderContext? _renderContext;
         private DrawingVisual _drawingVisual;
+
+        private DXGLContext? _dXGLContext;
+        protected DXGLContext? DXGLContext => _dXGLContext;
+
         public GLControl()
         {
-            if(!DesignerProperties.GetIsInDesignMode(this))
-            {
-                _renderContext = new RenderContext(new Version(3, 2));
-            }
             _drawingVisual = new DrawingVisual();
 
             this.Loaded += GLControl_Loaded;
@@ -41,12 +73,28 @@ namespace LibMPVSharp.WPF
         {
             AddVisualChild(_drawingVisual);
             AddLogicalChild(_drawingVisual);
+
+            if (!DesignerProperties.GetIsInDesignMode(this))
+            {
+                if(_dXGLContext == null || _dXGLContext.Disposed)
+                {
+                    _dXGLContext = new DXGLContext(GLVersion);
+                }
+                _renderContext = new RenderContext(_dXGLContext);
+            }
         }
 
         private void GLControl_Unloaded(object sender, RoutedEventArgs e)
         {
             RemoveVisualChild(_drawingVisual);
             RemoveLogicalChild(_drawingVisual);
+
+            if (!DesignerProperties.GetIsInDesignMode(this))
+            {
+                _renderContext?.Dispose();
+                _renderContext = null;
+                _dXGLContext?.Dispose();
+            }
         }
 
         public RenderContext? GLRenderContext => _renderContext;
@@ -72,7 +120,7 @@ namespace LibMPVSharp.WPF
 
         public void DrawFrame()
         {
-            if (DesignerProperties.GetIsInDesignMode(this) || _drawingVisual == null || !(_renderContext?.D3DImage?.IsFrontBufferAvailable == true)) return;
+            if (DesignerProperties.GetIsInDesignMode(this) || _renderContext == null || _drawingVisual == null || !(_renderContext?.D3DImage?.IsFrontBufferAvailable == true)) return;
 
             var drawingContext = _drawingVisual.RenderOpen();
 
@@ -87,6 +135,11 @@ namespace LibMPVSharp.WPF
         protected virtual void OnDrawing()
         {
             
+        }
+
+        protected virtual void OnDXGLChanged(DXGLContext dXGLContext)
+        {
+
         }
     }
 }
