@@ -8,7 +8,7 @@ namespace LibMPVSharp
         /// <summary>
         /// <para>Return the MPV_CLIENT_API_VERSION the mpv source has been compiled with.</para>
         /// </summary>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_client_api_version", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_client_api_version", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial uint MpvClientApiVersion();
         
@@ -23,7 +23,7 @@ namespace LibMPVSharp
         /// <para>A static string describing the error. The string is completely</para>
         /// <para>static, i.e. doesn't need to be deallocated, and is valid forever.</para>
         /// </returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_error_string", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_error_string", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial string MpvErrorString(int error);
         
@@ -35,7 +35,7 @@ namespace LibMPVSharp
         /// <param name='data'>
         /// <para>A valid pointer returned by the API, or NULL.</para>
         /// </param>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_free", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_free", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial void MpvFree(void* data);
         
@@ -47,7 +47,7 @@ namespace LibMPVSharp
         /// <para>The client name. The string is read-only and is valid until the</para>
         /// <para>mpv_handle is destroyed.</para>
         /// </returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_client_name", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_client_name", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial string MpvClientName(global::LibMPVSharp.MpvHandle* ctx);
         
@@ -63,7 +63,7 @@ namespace LibMPVSharp
         /// <para>this manner.</para>
         /// </summary>
         /// <returns>The client ID.</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_client_id", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_client_id", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial long MpvClientId(global::LibMPVSharp.MpvHandle* ctx);
         
@@ -116,7 +116,7 @@ namespace LibMPVSharp
         /// <para>- out of memory</para>
         /// <para>- LC_NUMERIC is not set to "C" (see general remarks)</para>
         /// </returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_create", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_create", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial global::LibMPVSharp.MpvHandle* MpvCreate();
         
@@ -137,7 +137,7 @@ namespace LibMPVSharp
         /// <para>- all encoding mode options</para>
         /// </summary>
         /// <returns>error code</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_initialize", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_initialize", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvInitialize(global::LibMPVSharp.MpvHandle* ctx);
         
@@ -150,7 +150,7 @@ namespace LibMPVSharp
         /// <para>be sent MPV_EVENT_SHUTDOWN. This function may block until these clients</para>
         /// <para>have responded to the shutdown event, and the core is finally destroyed.</para>
         /// </summary>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_destroy", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_destroy", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial void MpvDestroy(global::LibMPVSharp.MpvHandle* ctx);
         
@@ -176,7 +176,7 @@ namespace LibMPVSharp
         /// <para>this function will merely send a quit command and then call</para>
         /// <para>mpv_destroy(), without waiting for the actual shutdown.</para>
         /// </summary>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_terminate_destroy", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_terminate_destroy", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial void MpvTerminateDestroy(global::LibMPVSharp.MpvHandle* ctx);
         
@@ -205,7 +205,7 @@ namespace LibMPVSharp
         /// <para>If NULL, an arbitrary name is automatically chosen.</para>
         /// </param>
         /// <returns>a new handle, or NULL on error</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_create_client", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_create_client", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial global::LibMPVSharp.MpvHandle* MpvCreateClient(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name);
         
@@ -220,7 +220,7 @@ namespace LibMPVSharp
         /// <para>mpv_terminate_destroy() _and_ mpv_destroy() for the last non-weak</para>
         /// <para>mpv_handle will block until all weak mpv_handles are destroyed.</para>
         /// </summary>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_create_weak_client", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_create_weak_client", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial global::LibMPVSharp.MpvHandle* MpvCreateWeakClient(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name);
         
@@ -241,7 +241,7 @@ namespace LibMPVSharp
         /// <para>absolute path to the config file on the local filesystem</para>
         /// </param>
         /// <returns>error code</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_load_config_file", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_load_config_file", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvLoadConfigFile(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string filename);
         
@@ -256,14 +256,14 @@ namespace LibMPVSharp
         /// <para>within wakeup callbacks), as long as the context is valid.</para>
         /// <para>Safe to be called from mpv render API threads.</para>
         /// </summary>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_get_time_ns", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_get_time_ns", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial long MpvGetTimeNs(global::LibMPVSharp.MpvHandle* ctx);
         
         /// <summary>
         /// <para>Same as mpv_get_time_ns but in microseconds.</para>
         /// </summary>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_get_time_us", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_get_time_us", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial long MpvGetTimeUs(global::LibMPVSharp.MpvHandle* ctx);
         
@@ -276,7 +276,7 @@ namespace LibMPVSharp
         /// <para>be called. (This is just a clarification that there's no danger of anything</para>
         /// <para>strange happening in these cases.)</para>
         /// </summary>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_free_node_contents", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_free_node_contents", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial void MpvFreeNodeContents(global::LibMPVSharp.MpvNode* node);
         
@@ -307,7 +307,7 @@ namespace LibMPVSharp
         /// <para>Option value (according to the format).</para>
         /// </param>
         /// <returns>error code</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_set_option", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_set_option", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvSetOption(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name, global::LibMPVSharp.MpvFormat format, void* data);
         
@@ -316,7 +316,7 @@ namespace LibMPVSharp
         /// <para>calling mpv_set_option() with MPV_FORMAT_STRING.</para>
         /// </summary>
         /// <returns>error code</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_set_option_string", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_set_option_string", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvSetOptionString(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name, [MarshalAs(UnmanagedType.LPUTF8Str)]string data);
         
@@ -333,7 +333,7 @@ namespace LibMPVSharp
         /// <para>is the command, and the following items are arguments.</para>
         /// </param>
         /// <returns>error code</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_command", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_command", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvCommand(global::LibMPVSharp.MpvHandle* ctx, char** args);
         
@@ -370,7 +370,7 @@ namespace LibMPVSharp
         /// <para>Not many commands actually use this at all.</para>
         /// </param>
         /// <returns>error code (the result parameter is not set on error)</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_command_node", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_command_node", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvCommandNode(global::LibMPVSharp.MpvHandle* ctx, global::LibMPVSharp.MpvNode* args, global::LibMPVSharp.MpvNode* result);
         
@@ -390,7 +390,7 @@ namespace LibMPVSharp
         /// <para>Not many commands actually use this at all.</para>
         /// </param>
         /// <returns>error code (the result parameter is not set on error)</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_command_ret", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_command_ret", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvCommandRet(global::LibMPVSharp.MpvHandle* ctx, char** args, global::LibMPVSharp.MpvNode* result);
         
@@ -400,7 +400,7 @@ namespace LibMPVSharp
         /// <para>need quoting/escaping.</para>
         /// <para>This also has OSD and string expansion enabled by default.</para>
         /// </summary>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_command_string", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_command_string", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvCommandString(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string args);
         
@@ -424,7 +424,7 @@ namespace LibMPVSharp
         /// <para>NULL-terminated list of strings (see mpv_command())</para>
         /// </param>
         /// <returns>error code (if parsing or queuing the command fails)</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_command_async", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_command_async", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvCommandAsync(global::LibMPVSharp.MpvHandle* ctx, ulong reply_userdata, char** args);
         
@@ -443,7 +443,7 @@ namespace LibMPVSharp
         /// <para>as in mpv_command_node()</para>
         /// </param>
         /// <returns>error code (if parsing or queuing the command fails)</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_command_node_async", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_command_node_async", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvCommandNodeAsync(global::LibMPVSharp.MpvHandle* ctx, ulong reply_userdata, global::LibMPVSharp.MpvNode* args);
         
@@ -473,7 +473,7 @@ namespace LibMPVSharp
         /// <param name='reply_userdata'>
         /// <para>ID of the request to be aborted (see above)</para>
         /// </param>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_abort_async_command", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_abort_async_command", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial void MpvAbortAsyncCommand(global::LibMPVSharp.MpvHandle* ctx, ulong reply_userdata);
         
@@ -510,7 +510,7 @@ namespace LibMPVSharp
         /// <para>Option value.</para>
         /// </param>
         /// <returns>error code</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_set_property", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_set_property", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvSetProperty(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name, global::LibMPVSharp.MpvFormat format, void* data);
         
@@ -518,7 +518,7 @@ namespace LibMPVSharp
         /// <para>Convenience function to set a property to a string value.</para>
         /// <para>This is like calling mpv_set_property() with MPV_FORMAT_STRING.</para>
         /// </summary>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_set_property_string", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_set_property_string", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvSetPropertyString(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name, [MarshalAs(UnmanagedType.LPUTF8Str)]string data);
         
@@ -530,7 +530,7 @@ namespace LibMPVSharp
         /// <para>The property name. See input.rst for a list of properties.</para>
         /// </param>
         /// <returns>error code</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_del_property", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_del_property", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvDelProperty(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name);
         
@@ -555,7 +555,7 @@ namespace LibMPVSharp
         /// <para>will never be modified by the client API.</para>
         /// </param>
         /// <returns>error code if sending the request failed</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_set_property_async", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_set_property_async", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvSetPropertyAsync(global::LibMPVSharp.MpvHandle* ctx, ulong reply_userdata, [MarshalAs(UnmanagedType.LPUTF8Str)]string name, global::LibMPVSharp.MpvFormat format, void* data);
         
@@ -581,7 +581,7 @@ namespace LibMPVSharp
         /// <para>mpv_free_node_contents() (MPV_FORMAT_NODE).</para>
         /// </param>
         /// <returns>error code</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_get_property", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_get_property", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvGetProperty(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name, global::LibMPVSharp.MpvFormat format, void* data);
         
@@ -599,7 +599,7 @@ namespace LibMPVSharp
         /// <para>Property value, or NULL if the property can't be retrieved. Free</para>
         /// <para>the string with mpv_free().</para>
         /// </returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_get_property_string", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_get_property_string", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial byte* MpvGetPropertyString(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name);
         
@@ -611,7 +611,7 @@ namespace LibMPVSharp
         /// <para>Property value, or NULL if the property can't be retrieved. Free</para>
         /// <para>the string with mpv_free().</para>
         /// </returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_get_property_osd_string", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_get_property_osd_string", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial byte* MpvGetPropertyOsdString(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string name);
         
@@ -631,7 +631,7 @@ namespace LibMPVSharp
         /// <para>see enum mpv_format.</para>
         /// </param>
         /// <returns>error code if sending the request failed</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_get_property_async", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_get_property_async", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvGetPropertyAsync(global::LibMPVSharp.MpvHandle* ctx, ulong reply_userdata, [MarshalAs(UnmanagedType.LPUTF8Str)]string name, global::LibMPVSharp.MpvFormat format);
         
@@ -686,7 +686,7 @@ namespace LibMPVSharp
         /// <para>from the change events.</para>
         /// </param>
         /// <returns>error code (usually fails only on OOM or unsupported format)</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_observe_property", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_observe_property", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvObserveProperty(global::LibMPVSharp.MpvHandle* mpv, ulong reply_userdata, [MarshalAs(UnmanagedType.LPUTF8Str)]string name, global::LibMPVSharp.MpvFormat format);
         
@@ -702,7 +702,7 @@ namespace LibMPVSharp
         /// <para>negative value is an error code, >=0 is number of removed properties</para>
         /// <para>on success (includes the case when 0 were removed)</para>
         /// </returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_unobserve_property", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_unobserve_property", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvUnobserveProperty(global::LibMPVSharp.MpvHandle* mpv, ulong registered_reply_userdata);
         
@@ -722,7 +722,7 @@ namespace LibMPVSharp
         /// <para>The string is completely static, i.e. doesn't need to be deallocated,</para>
         /// <para>and is valid forever.</para>
         /// </returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_event_name", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_event_name", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial string MpvEventName(global::LibMPVSharp.MpvEventId @event);
         
@@ -749,7 +749,7 @@ namespace LibMPVSharp
         /// <para>prejudice of the C version of const).</para>
         /// </param>
         /// <returns>error code (MPV_ERROR_NOMEM only, if at all)</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_event_to_node", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_event_to_node", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvEventToNode(global::LibMPVSharp.MpvNode* dst, global::LibMPVSharp.MpvEvent* src);
         
@@ -767,7 +767,7 @@ namespace LibMPVSharp
         /// <para>1 to enable receiving this event, 0 to disable it.</para>
         /// </param>
         /// <returns>error code</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_request_event", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_request_event", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvRequestEvent(global::LibMPVSharp.MpvHandle* ctx, global::LibMPVSharp.MpvEventId @event, int enable);
         
@@ -786,7 +786,7 @@ namespace LibMPVSharp
         /// <para>Also see mpv_log_level.</para>
         /// </param>
         /// <returns>error code</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_request_log_messages", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_request_log_messages", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvRequestLogMessages(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string min_level);
         
@@ -821,7 +821,7 @@ namespace LibMPVSharp
         /// <para>released by the API on the next mpv_wait_event() call, or when the</para>
         /// <para>context is destroyed. The return value is never NULL.</para>
         /// </returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_wait_event", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_wait_event", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial global::LibMPVSharp.MpvEvent* MpvWaitEvent(global::LibMPVSharp.MpvHandle* ctx, double timeout);
         
@@ -836,7 +836,7 @@ namespace LibMPVSharp
         /// <para>is woken up at all.</para>
         /// <para>Safe to be called from mpv render API threads.</para>
         /// </summary>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_wakeup", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_wakeup", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial void MpvWakeup(global::LibMPVSharp.MpvHandle* ctx);
         
@@ -874,7 +874,7 @@ namespace LibMPVSharp
         /// <param name='d'>
         /// <para>arbitrary userdata passed to cb</para>
         /// </param>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_set_wakeup_callback", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_set_wakeup_callback", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial void MpvSetWakeupCallback(global::LibMPVSharp.MpvHandle* ctx, MpvSetWakeupCallback_cbCallback cb, void* d);
         
@@ -888,7 +888,7 @@ namespace LibMPVSharp
         /// <para>In case you called mpv_suspend() before, this will also forcibly reset the</para>
         /// <para>suspend counter of the given handle.</para>
         /// </summary>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_wait_async_requests", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_wait_async_requests", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial void MpvWaitAsyncRequests(global::LibMPVSharp.MpvHandle* ctx);
         
@@ -927,7 +927,7 @@ namespace LibMPVSharp
         /// <para>See remarks above. Use 0 as a neutral default.</para>
         /// </param>
         /// <returns>error code (usually fails only on OOM)</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_hook_add", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_hook_add", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvHookAdd(global::LibMPVSharp.MpvHandle* ctx, ulong reply_userdata, [MarshalAs(UnmanagedType.LPUTF8Str)]string name, int priority);
         
@@ -946,7 +946,7 @@ namespace LibMPVSharp
         /// <para>corresponding MPV_EVENT_HOOK.</para>
         /// </param>
         /// <returns>error code</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_hook_continue", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_hook_continue", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvHookContinue(global::LibMPVSharp.MpvHandle* ctx, ulong id);
         
@@ -1011,7 +1011,7 @@ namespace LibMPVSharp
         /// <para>A UNIX FD of the read end of the wakeup pipe, or -1 on error.</para>
         /// <para>On MS Windows/MinGW, this will always return -1.</para>
         /// </returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_get_wakeup_pipe", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_get_wakeup_pipe", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvGetWakeupPipe(global::LibMPVSharp.MpvHandle* ctx);
         
@@ -1074,7 +1074,7 @@ namespace LibMPVSharp
         /// <para>MPV_FORMAT_NONE         (no member)</para>
         /// <para>If you encounter a value you don't know, you must not make any</para>
         /// <para>assumptions about the contents of union u.</para>
-        /// </summary> 
+        /// </summary>
         public global::LibMPVSharp.MpvFormat format;
     }
     

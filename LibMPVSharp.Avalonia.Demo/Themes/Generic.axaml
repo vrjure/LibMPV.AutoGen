@@ -112,14 +112,16 @@
 								<Button Theme="{StaticResource IconButton}"
 										Content="{StaticResource icon-file-video}"
 										Command="{x:Static demo:MediaPlayerView.OpenFileCmd}"
-										VerticalAlignment="Center"/>
+										VerticalAlignment="Center"
+										IsEnabled="True"/>
 							</StackPanel>
 
 							<Slider VerticalAlignment="Center"
 									Margin="4,0,4,0"
 									Maximum="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Duration, Converter={x:Static demo:AutoValueConverters.Instance}}"
 									Minimum="0"
-									Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Time, Converter={x:Static demo:AutoValueConverters.Instance}, Mode=TwoWay}"/>
+									Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Time, Converter={x:Static demo:AutoValueConverters.Instance}, Mode=TwoWay}"
+									x:Name="PART_TimeBar"/>
 						</DockPanel>
 					</Border>
 				</Grid>

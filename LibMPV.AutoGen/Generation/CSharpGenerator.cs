@@ -62,7 +62,7 @@ namespace LibMPV.AutoGen.Generation
             foreach (var func in functions)
             {
                 CommentParser.Parse(func.Comment, _textWriter);
-                WriteLine($"[LibraryImport(\"{_option.Modules[1].LibraryName}\", EntryPoint = \"{func.OriginalName}\", StringMarshalling = StringMarshalling.Utf8)]");
+                WriteLine($"[LibraryImport(LibraryName.Name, EntryPoint = \"{func.OriginalName}\", StringMarshalling = StringMarshalling.Utf8)]");
                 WriteLine("[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]");
                 Write($"internal static partial {TypePrint(func.ReturnType, isReturnType: true)} {func.Name}(");
 

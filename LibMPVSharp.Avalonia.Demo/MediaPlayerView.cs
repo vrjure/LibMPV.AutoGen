@@ -83,10 +83,10 @@ namespace LibMPVSharp.Avalonia.Demo
             set => SetValue(AspectRatioProperty, value);
         }
 
-        public static RoutedCommand PlayPauseCmd { get; private set; }
-        public static RoutedCommand OpenFileCmd { get; private set; }
-        public static RoutedCommand SpeedCmd { get; private set; }
-        public static RoutedCommand AspectRatioCmd { get; private set; }
+        public static readonly RoutedCommand PlayPauseCmd = new RoutedCommand(nameof(PlayPauseCmd));
+        public static readonly RoutedCommand OpenFileCmd = new RoutedCommand(nameof(OpenFileCmd));
+        public static readonly RoutedCommand SpeedCmd = new RoutedCommand(nameof(SpeedCmd));
+        public static readonly RoutedCommand AspectRatioCmd = new RoutedCommand(nameof(AspectRatioCmd));
 
         private static Queue<string> _aspectRatio = new Queue<string>();
         static MediaPlayerView()
@@ -95,11 +95,6 @@ namespace LibMPVSharp.Avalonia.Demo
             TimeProperty.Changed.AddClassHandler<MediaPlayerView>((s, e) => s.OnPropertyChanged(e));
             VolumeProperty.Changed.AddClassHandler<MediaPlayerView>((s, e) => s.OnPropertyChanged(e));
             AspectRatioProperty.Changed.AddClassHandler<MediaPlayerView>((s, e) => s.OnPropertyChanged(e));
-
-            PlayPauseCmd = new RoutedCommand(nameof(PlayPauseCmd));
-            OpenFileCmd = new RoutedCommand(nameof(OpenFileCmd));
-            SpeedCmd = new RoutedCommand(nameof(SpeedCmd));
-            AspectRatioCmd = new RoutedCommand(nameof(AspectRatioCmd));
 
             _aspectRatio.Enqueue("no");
             _aspectRatio.Enqueue("16:9");
@@ -112,12 +107,19 @@ namespace LibMPVSharp.Avalonia.Demo
         {
             var binds = new[]
             {
-                new CommandBinding(PlayPauseCmd, (s,e) => TryPlayPause(), (s, e) => e.CanExecute = true),
-                new CommandBinding(OpenFileCmd, async (s,e) => await TryOpenFile(), (s, e) => e.CanExecute = true),
-                new CommandBinding(SpeedCmd, (s,e) => TrySwitchSpeed(), (s, e) => e.CanExecute = true),
-                new CommandBinding(AspectRatioCmd, (s, e) => TrySwitchAspectRatio(), (s, e) => e.CanExecute = true)
+                new CommandBinding(PlayPauseCmd, (s,e) => TryPlayPause()),
+                new CommandBinding(OpenFileCmd, async (s,e) => await TryOpenFile()),
+                new CommandBinding(SpeedCmd, (s,e) => TrySwitchSpeed()),
+                new CommandBinding(AspectRatioCmd, (s, e) => TrySwitchAspectRatio())
             };
             CommandManager.SetCommandBindings(this, binds);
+        }
+
+        protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+        {
+            base.OnApplyTemplate(e);
+            var slider = e.NameScope.Get<Slider>("PART_TimeBar");
+            slider.Focus();
         }
 
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -212,7 +214,7 @@ namespace LibMPVSharp.Avalonia.Demo
                     {
                         Patterns = ["*.mp4"],
                         AppleUniformTypeIdentifiers = ["public.mpeg-4"],
-                        MimeTypes = ["application/mp4"]
+                        MimeTypes = ["video/mp4"]
                     }
                 ],
                 AllowMultiple = false
@@ -220,7 +222,9 @@ namespace LibMPVSharp.Avalonia.Demo
 
             if (files.Count > 0)
             {
-                MediaPlayer.Open(files[0].TryGetLocalPath()!);
+                var file =  files[0];
+                var path = App.Instance?.UriResolver?.GetRealPath(file.Path);
+                MediaPlayer.Open(path);
                 SetCurrentValue(PlayingProperty, true);
             }
         }

@@ -18,6 +18,10 @@ class Program
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
-            .LogToTrace();
+            .LogToTrace()
+        .AfterSetup(builder =>
+        {
+            (builder.Instance as App).UriResolver = new UriResolver();
+        });
 
 }

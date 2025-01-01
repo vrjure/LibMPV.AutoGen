@@ -23,7 +23,7 @@ namespace LibMPVSharp
         /// <para>callback.</para>
         /// </param>
         /// <returns>error code</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_stream_cb_add_ro", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_stream_cb_add_ro", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvStreamCbAddRo(global::LibMPVSharp.MpvHandle* ctx, [MarshalAs(UnmanagedType.LPUTF8Str)]string protocol, void* user_data, global::LibMPVSharp.MpvStreamCbOpenRoFn open_fn);
         

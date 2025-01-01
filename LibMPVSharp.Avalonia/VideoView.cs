@@ -51,8 +51,9 @@ namespace LibMPVSharp.Avalonia
         {
             if (MediaPlayer == null) return;
 
-            var width = Bounds.Width;
-            var height = Bounds.Height;
+            var scale = VisualRoot?.RenderScaling ?? 1d;
+            var width = Bounds.Width * scale;
+            var height = Bounds.Height * scale;
             MediaPlayer.OpenGLRender((int)width, (int)height, fb, flipY: 1);
         }
 

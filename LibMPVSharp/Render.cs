@@ -43,7 +43,7 @@ namespace LibMPVSharp
         /// <para>MPV_ERROR_INVALID_PARAMETER: at least one of the provided parameters was</para>
         /// <para>not valid.</para>
         /// </returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_render_context_create", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_render_context_create", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvRenderContextCreate(global::LibMPVSharp.MpvRenderContext** res, global::LibMPVSharp.MpvHandle* mpv, global::LibMPVSharp.MpvRenderParam* @params);
         
@@ -62,7 +62,7 @@ namespace LibMPVSharp
         /// <para>success, otherwise an error code depending on the parameter type</para>
         /// <para>and situation.</para>
         /// </returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_render_context_set_parameter", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_render_context_set_parameter", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvRenderContextSetParameter(global::LibMPVSharp.MpvRenderContext* ctx, global::LibMPVSharp.MpvRenderParam param);
         
@@ -89,7 +89,7 @@ namespace LibMPVSharp
         /// <para>and situation. MPV_ERROR_NOT_IMPLEMENTED is used for unknown</para>
         /// <para>param.type, or if retrieving it is not supported.</para>
         /// </returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_render_context_get_info", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_render_context_get_info", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvRenderContextGetInfo(global::LibMPVSharp.MpvRenderContext* ctx, global::LibMPVSharp.MpvRenderParam param);
         
@@ -110,7 +110,7 @@ namespace LibMPVSharp
         /// <param name='callback_ctx'>
         /// <para>opaque argument to the callback</para>
         /// </param>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_render_context_set_update_callback", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_render_context_set_update_callback", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial void MpvRenderContextSetUpdateCallback(global::LibMPVSharp.MpvRenderContext* ctx, global::LibMPVSharp.MpvRenderUpdateFn callback, void* callback_ctx);
         
@@ -135,7 +135,7 @@ namespace LibMPVSharp
         /// <para>to the API user are set, or if the return value is 0, nothing needs</para>
         /// <para>to be done.</para>
         /// </returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_render_context_update", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_render_context_update", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial ulong MpvRenderContextUpdate(global::LibMPVSharp.MpvRenderContext* ctx);
         
@@ -171,7 +171,7 @@ namespace LibMPVSharp
         /// <para>happens with unknown parameters.</para>
         /// </param>
         /// <returns>error code</returns>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_render_context_render", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_render_context_render", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int MpvRenderContextRender(global::LibMPVSharp.MpvRenderContext* ctx, global::LibMPVSharp.MpvRenderParam* @params);
         
@@ -185,7 +185,7 @@ namespace LibMPVSharp
         /// <param name='ctx'>
         /// <para>a valid render context</para>
         /// </param>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_render_context_report_swap", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_render_context_report_swap", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial void MpvRenderContextReportSwap(global::LibMPVSharp.MpvRenderContext* ctx);
         
@@ -198,7 +198,7 @@ namespace LibMPVSharp
         /// <para>a valid render context. After this function returns, this is not</para>
         /// <para>a valid pointer anymore. NULL is also allowed and does nothing.</para>
         /// </param>
-        [LibraryImport("libmpv-2", EntryPoint = "mpv_render_context_free", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(LibraryName.Name, EntryPoint = "mpv_render_context_free", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial void MpvRenderContextFree(global::LibMPVSharp.MpvRenderContext* ctx);
         
