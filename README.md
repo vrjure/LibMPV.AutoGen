@@ -8,6 +8,14 @@ Provide a wpf control for the MPV (`VideoView`). Rendered using OpenGL. So it do
 
 ![wpfdemo](imgs/wpfdemo.png)
 
-## Avalonia
+## LibMPVSharp.Avalonia
 
-TODO...
+Provide an avalonia control for the MPV (`VideoView`). Rendered using OpenGL.
+
+### Windows
+
+![avalonia-windows](imgs/avalonia-windows-demo.png)
+
+### Android
+
+![avalonia-andorid](imgs/avalonia-android-demo.jpg)
