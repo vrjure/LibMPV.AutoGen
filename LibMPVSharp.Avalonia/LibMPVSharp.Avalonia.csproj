@@ -5,8 +5,24 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <Platforms>AnyCPU;x64;ARM64</Platforms>
+    <Platforms>AnyCPU;x64</Platforms>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>1.0.0</Version>
+    <Authors>vrjure</Authors>
+    <Description>mpv avalonia control</Description>
+    <Copyright>Copyright © 2025 vrjure</Copyright>
+    <PackageProjectUrl>https://github.com/vrjure/LibMPV.AutoGen</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/vrjure/LibMPV.AutoGen</RepositoryUrl>
+    <PackageTags>tag</PackageTags>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.2.3" />

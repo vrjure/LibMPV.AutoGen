@@ -2,7 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0-android</TargetFramework>
-    <Platforms>AnyCPU;x64;ARM64</Platforms>
+    <Platforms>AnyCPU;x64</Platforms>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>0.39.20241116</Version>
+    <Authors>vrjure</Authors>
+    <Description>mpv android native library</Description>
+    <Copyright>Copyright © 2025 vrjure</Copyright>
+    <PackageProjectUrl>https://github.com/vrjure/LibMPV.AutoGen</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/vrjure/LibMPV.AutoGen</RepositoryUrl>
+    <PackageTags>mpv</PackageTags>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+    <RepositoryType>https://github.com/vrjure/LibMPV.AutoGen</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -28,4 +40,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 </Project>

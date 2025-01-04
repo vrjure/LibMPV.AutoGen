@@ -3,7 +3,26 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
 	  <Nullable>disable</Nullable>
+	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	  <Authors>vrjure</Authors>
+	  <Copyright>Copyright © 2025 vrjure</Copyright>
+	  <Description>mpv desktop native library</Description>
+	  <RepositoryUrl>https://github.com/vrjure/LibMPV.AutoGen</RepositoryUrl>
+	  <PackageReadmeFile></PackageReadmeFile>
+	  <PackageTags>mpv</PackageTags>
+	  <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+	  <PackageProjectUrl>https://github.com/vrjure/LibMPV.AutoGen</PackageProjectUrl>
+	  <Version>0.39.20241222</Version>
+	  <AssemblyVersion>1.0.0</AssemblyVersion>
+	  <FileVersion>1.0.0</FileVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <None Update="runtimes\win-x64\native\libmpv-2.dll">
