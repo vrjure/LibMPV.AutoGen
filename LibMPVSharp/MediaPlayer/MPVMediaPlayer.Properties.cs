@@ -99,11 +99,118 @@ namespace LibMPVSharp
         }
         #endregion
 
+        #region track selection
+
+        public string? ALang
+        {
+            get => GetPropertyString("alang");
+            set => SetProperty("alang", value);
+        }
+
+        public string? SLang
+        {
+            get => GetPropertyString("slang");
+            set => SetProperty("slang", value);
+        }
+
+        public string? VLang
+        {
+            get => GetPropertyString("vlang");
+            set => SetProperty("vlang", value);
+        }
+
+        public string? AId
+        {
+            get => GetPropertyString("aid");
+            set => SetProperty("aid", value);
+        }
+
+        public string? SId
+        {
+            get => GetPropertyString("sid");
+            set => SetProperty("sid", value);
+        }
+
+        public string? VId
+        {
+            get => GetPropertyString("vid");
+            set => SetProperty("vid", value);
+        }
+
+        public string? Edition
+        {
+            get => GetPropertyString("edition");
+            set => SetProperty("edition", value);
+        }
+
+        public bool TrackAutoSelection
+        {
+            get => GetPropertyBoolean("track-auto-selection");
+            set => SetProperty("track-auto-selection", value);
+        }
+
+        public string? SubsWithMatchingAudio
+        {
+            get => GetPropertyString("subs-with-matching-audio");
+            set => SetProperty("subs-with-matching-audio", value);
+        }
+
+        public bool SubsMatchOsLanguage
+        {
+            get => GetPropertyBoolean("subs-match-os-language");
+            set => SetProperty("subs-match-os-language", value);
+        }
+
+        public string? SubsFallback
+        {
+            get => GetPropertyString("subs-fallback");
+            set => SetProperty("subs-fallback", value);
+        }
+
+        public string? SubsFallbackForced
+        {
+            get => GetPropertyString("subs-fallback-forced");
+            set => SetProperty("subs-fallback-forced", value);
+        }
+
+        #endregion
+
         #region playback control
+
+        public string? Start
+        {
+            get => GetPropertyString("start");
+            set => SetProperty("start", value);
+        }
+
+        public string? End
+        {
+            get => GetPropertyString("end");
+            set => SetProperty("end", value);
+        }
+
+        public string? Length
+        {
+            get => GetPropertyString("length");
+            set => SetProperty("length", value);
+        }
+
+        public bool RebaseStartTime
+        {
+            get => GetPropertyBoolean("rebase-start-time");
+            set => SetProperty("rebase-start-time", value);
+        }
+
         public double Speed
         {
             get => GetPropertyDouble("speed");
             set => SetProperty("speed", value);
+        }
+
+        public double Pitch
+        {
+            get => GetPropertyDouble("pitch");
+            set => SetProperty("pitch", value);
         }
 
         public bool Pause
@@ -111,8 +218,299 @@ namespace LibMPVSharp
             get => GetPropertyBoolean("pause");
             set => SetProperty("pause", value);
         }
+
+        public bool Shuffle
+        {
+            get => GetPropertyBoolean("shuffle");
+            set => SetProperty("shuffle", value);
+        }
+
+        public string? PlaylistStart
+        {
+            get => GetPropertyString("playlist-start");
+            set => SetProperty("playlist-start", value);
+        }
+
+        public string? Playlist
+        {
+            get => GetPropertyString("playlist");
+            set => SetProperty("playlist", value);
+        }
+
+        public long ChapterMergeThreshold
+        {
+            get => GetPropertyLong("chapter-merge-threshold");
+            set => SetProperty("chapter-merge-threshold", value);
+        }
+
+        public double ChapterSeekThreshold
+        {
+            get => GetPropertyDouble("chapter-seek-threshold");
+            set => SetProperty("chatper-seek-threshold", value);
+        }
+
+        public string? HrSeek
+        {
+            get => GetPropertyString("hr-seek");
+            set => SetProperty("hr-seek", value);
+        }
+
+        public double HrSeekDemuxerOffset
+        {
+            get => GetPropertyDouble("hr-seek-demuxer-offset");
+            set => SetProperty("hr-seek-demuxer-offset", value);
+        }
+
+        public bool HrSeekFramedrop
+        {
+            get => GetPropertyBoolean("hr-seek-framedrop");
+            set => SetProperty("hr-seek=framedrop", value);
+        }
+
+        public bool LoadUnsafePlaylists
+        {
+            get => GetPropertyBoolean("load-unsafe-playlists");
+            set => SetProperty("load-unsafe-playlists", value);
+        }
+
+        public bool AccessReferences
+        {
+            get => GetPropertyBoolean("access-references");
+            set => SetProperty("access-references", value);
+        }
+
+        public string? LoopPlaylist
+        {
+            get => GetPropertyString("loop-playlist");
+            set => SetProperty("loop-playlist", value);
+        }
+
+        public string? LoopFile
+        {
+            get => GetPropertyString("loop-file");
+            set => SetProperty("loop-file", value);
+        }
+
+        public long ABLoopA
+        {
+            get => GetPropertyLong("ab-loop-a");
+            set => SetProperty("ab-loop-b", value);
+        }
+
+        public long ABLoopB
+        {
+            get => GetPropertyLong("ab-loop-b");
+            set => SetProperty("ab-loop-b", value);
+        }
+
+        public string? ABLoopCount
+        {
+            get => GetPropertyString("ab-loop-count");
+            set => SetProperty("ab-loop-count", value);
+        }
+
+        public bool OrderedChapters
+        {
+            get => GetPropertyBoolean("ordered-chapters");
+            set => SetProperty("ordered-chapters", value);
+        }
+
+        public string? OrderedChaptersFiles
+        {
+            get => GetPropertyString("ordered-chapters-files");
+            set => SetProperty("ordered-chapters-files", value);
+        }
+
+        public string? ChaptersFile
+        {
+            get => GetPropertyString("chapters-file");
+            set => SetProperty("chapters-file", value);
+        }
+
+        public double SStep
+        {
+            get => GetPropertyDouble("sstep");
+            set => SetProperty("sstep", value);
+        }
+
+        public bool StopPlaybackOnInitFailure
+        {
+            get => GetPropertyBoolean("stop-playback-on-init-failure");
+            set => SetProperty("stop-playback-init-failure", value);
+        }
+
+        public string? PlayDirection
+        {
+            get => GetPropertyString("play-direction");
+            set => SetProperty("play-direction", value);
+        }
+
+        public long VideoReversalBuffer
+        {
+            get => GetPropertyLong("video-reversal-buffer");
+            set => SetProperty("video-reversal-buffer", value);
+        }
+
+        public long AudioReversalBuffer
+        {
+            get => GetPropertyLong("audio-reversal-buffer");
+            set => SetProperty("audio-reversal-buffer", value);
+        }
+
+        public string? VideoBackwardOverlap
+        {
+            get => GetPropertyString("video-backward-overlap");
+            set => SetProperty("video-backward-overlap", value);
+        }
+
+        public string? AudioBackwardOverlap
+        {
+            get => GetPropertyString("audio-backward-overlap");
+            set => SetProperty("audio-backward-overlap", value);
+        }
+
+        public long VideoBackwardBatch
+        {
+            get => GetPropertyLong("video-backward-batch");
+            set => SetProperty("video-backward-batch", value);
+        }
+
+        public long AudioBackwardBatch
+        {
+            get => GetPropertyLong("audio-backward-batch");
+            set => SetProperty("audio-backward-batch", value);
+        }
+
+        public long DemuxerBackwardPlaybackStep
+        {
+            get => GetPropertyLong("demuxer-backward-playback-step");
+            set => SetProperty("demuxer-backward-playback-stop", value);
+        }
         #endregion
 
+        #region program behavior
+
+        public string? LogFile
+        {
+            get => GetPropertyString("log-file");
+            set => SetProperty("log-file", value);
+        }
+
+        public string? ConfigDir
+        {
+            get => GetPropertyString("config-dir");
+            set => SetProperty("config-dir", value);
+        }
+
+        public string? DumpStats
+        {
+            get => GetPropertyString("dump-stats");
+            set => SetProperty("dump-stats", value);
+        }
+
+        public string? Idle
+        {
+            get => GetPropertyString("idle");
+            set => SetProperty("idle", value);
+        }
+
+        public string? Include
+        {
+            get => GetPropertyString("include");
+            set => SetProperty("include", value);
+        }
+
+        public bool LoadScripts
+        {
+            get => GetPropertyBoolean("load-scripts");
+            set => SetProperty("load-scripts", value);
+        }
+
+        public string? Script
+        {
+            get => GetPropertyString("script");
+            set => SetProperty("script", value);
+        }
+
+        public string? Scripts
+        {
+            get => GetPropertyString("scripts");
+            set => SetProperty("scripts", value);
+        }
+
+        public string? ScriptOpt
+        {
+            get => GetPropertyString("script-opt");
+            set => SetProperty("script-opt", value);
+        }
+
+        public string? ScriptOpts
+        {
+            get => GetPropertyString("script-opts");
+            set => SetProperty("script-opts", value);
+        }
+
+        public string? Profile
+        {
+            get => GetPropertyString("profile");
+            set => SetProperty("profile", value);
+        }
+
+        public string? ResetOnNextFile
+        {
+            get => GetPropertyString("reset-on-next-file");
+            set => SetProperty("reset-on-next-file", value);
+        }
+
+        public bool Ytdl
+        {
+            get => GetPropertyBoolean("ytdl");
+            set => SetProperty("ytdl", value);
+        }
+
+        public string? YtdlFormat
+        {
+            get => GetPropertyString("ytdl-format");
+            set => SetProperty("ytdl-format", value);
+        }
+
+        public string? YtdlRawOptions
+        {
+            get => GetPropertyString("ytdl-raw-options");
+            set => SetProperty("ytdl-raw-options", value);
+        }
+
+        public bool JsMemoryReport
+        {
+            get => GetPropertyBoolean("js-memory-report");
+            set => SetProperty("js-memory-report", value);
+        }
+
+        public bool LoadStatsOverlay
+        {
+            get => GetPropertyBoolean("load-stats-overlay");
+            set => SetProperty("load-stats-overlay", value);
+        }
+
+        public string? LoadAutoProfiles
+        {
+            get => GetPropertyString("load-auto-profiles");
+            set => SetProperty("load-auto-profiles", value);
+        }
+
+        public bool LoadSelect
+        {
+            get => GetPropertyBoolean("load-select");
+            set => SetProperty("load-select", value);
+        }
+
+        public string? PlayerOperationMode
+        {
+            get => GetPropertyString("player-operation-mode");
+            set => SetProperty("player-operation-mode", value);
+        }
+
+        #endregion
 
         #region Video
         public string? VideoAspectOverride
