@@ -87,7 +87,7 @@ namespace LibMPVSharp
 
         public void ObservableProperty(string name, MpvFormat format) => Client.MpvObserveProperty(_clientHandle, 0, name, format);
 
-        private void SetProperty(string name, long value)
+        public void SetProperty(string name, long value)
         {
             CheckClientHandle();
             var array = new long[] { value };
@@ -98,7 +98,7 @@ namespace LibMPVSharp
             }
         }
 
-        private long GetPropertyLong(string name)
+        public long GetPropertyLong(string name)
         {
             CheckClientHandle();
             var array = new long[] { 0 };
@@ -110,14 +110,14 @@ namespace LibMPVSharp
             }
         }
 
-        private void SetProperty(string name, string? value)
+        public void SetProperty(string name, string? value)
         {
             CheckClientHandle();
             var error = Client.MpvSetPropertyString(_clientHandle, name, value);
             CheckError(error, nameof(Client.MpvSetPropertyString), name, value);
         }
 
-        private string? GetPropertyString(string name)
+        public string? GetPropertyString(string name)
         {
             CheckClientHandle();
             var valuePtr = Client.MpvGetPropertyString(_clientHandle, name);
@@ -131,7 +131,7 @@ namespace LibMPVSharp
             }
         }
 
-        private bool SetProperty(string name, double value)
+        public bool SetProperty(string name, double value)
         {
             CheckClientHandle();
             var array = new double[] { value };
@@ -143,7 +143,7 @@ namespace LibMPVSharp
             }
         }
 
-        private double GetPropertyDouble(string name)
+        public double GetPropertyDouble(string name)
         {
             CheckClientHandle();
             var array = new double[] { 0 };
@@ -155,7 +155,7 @@ namespace LibMPVSharp
             }
         }
 
-        private void SetProperty(string name, bool value)
+        public void SetProperty(string name, bool value)
         {
             CheckClientHandle();
             bool[] array = value ? [true] : [false];
@@ -166,7 +166,7 @@ namespace LibMPVSharp
             }
         }
 
-        private bool GetPropertyBoolean(string name)
+        public bool GetPropertyBoolean(string name)
         {
             CheckClientHandle();
             bool[] array = [false];
@@ -178,7 +178,7 @@ namespace LibMPVSharp
             }
         }
 
-        private void ExecuteCommand(params string[] args)
+        public void ExecuteCommand(params string[] args)
         {
             CheckClientHandle();
 
