@@ -25,9 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="runtimes\win-x64\native\libmpv-2.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Folder Include="runtimes\win-x64\native\" />
   </ItemGroup>
 
 </Project>

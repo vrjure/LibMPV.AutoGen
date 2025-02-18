@@ -53,7 +53,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LibMPVSharp.Avalonia.Demo\LibMPVSharp.Avalonia.Demo.csproj" />
-    <ProjectReference Include="..\LibMPVSharp.Native.Android\LibMPVSharp.Native.Android.csproj" />
     <ProjectReference Include="..\LibMPVSharp\LibMPVSharp.csproj" />
   </ItemGroup>
 </Project>
