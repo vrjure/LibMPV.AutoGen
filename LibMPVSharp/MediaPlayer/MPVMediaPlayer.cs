@@ -40,12 +40,12 @@ namespace LibMPVSharp
             CheckClientHandle();
 #if DEBUG
             var logPath = System.IO.Path.Combine(Environment.CurrentDirectory, "mpv.log");
-            Client.MpvSetOptionString(_clientHandle, "log-file", logPath);
-            Client.MpvSetOptionString(_clientHandle, "msg-level", "all=v");
+            LogFile = logPath;
+            SetProperty("log-file", logPath);
+            SetProperty("msg-level", "all=v");
 #endif
-
-            Client.MpvSetOptionString(_clientHandle, "vo", "libmpv");
-            Client.MpvSetOptionString(_clientHandle, "hwdec", "auto");
+            SetProperty("vo", "libmpv");
+            SetProperty("hwdec", "auto");
 
             var error = Client.MpvInitialize(_clientHandle);
             CheckError(error, nameof(Client.MpvInitialize));
@@ -85,7 +85,12 @@ namespace LibMPVSharp
             }
         }
 
-        public void ObservableProperty(string name, MpvFormat format) => Client.MpvObserveProperty(_clientHandle, 0, name, format);
+        public void ObservableProperty(string name, MpvFormat format)
+        {
+            CheckClientHandle();
+            var err = Client.MpvObserveProperty(_clientHandle, 0, name, format);
+            CheckError(err, nameof(Client.MpvObserveProperty), name, format.ToString());
+        }
 
         public void SetProperty(string name, long value)
         {
@@ -176,6 +181,11 @@ namespace LibMPVSharp
                 CheckError(error, nameof(Client.MpvGetProperty), name);
                 return array[0];
             }
+        }
+
+        public void SetPropertyNode(string name, MpvNodeList node)
+        {
+
         }
 
         public void ExecuteCommand(params string[] args)

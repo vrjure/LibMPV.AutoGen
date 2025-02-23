@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace LibMPVSharp
 {
+    /// <summary>
+    /// <see cref="https://mpv.io/manual/master/#options"/>
+    /// </summary>
     public partial class MPVMediaPlayer
     {
         public static readonly double SpeedMinValue = 0.01d;
@@ -70,12 +73,6 @@ namespace LibMPVSharp
         public long DHeight
         {
             get => GetPropertyLong("dheight");
-        }
-
-        public string? HwDec
-        {
-            get => GetPropertyString("hwdec");
-            set => SetProperty("hwdec", value);
         }
 
         public string? MPVVersion
@@ -512,17 +509,146 @@ namespace LibMPVSharp
 
         #endregion
 
-        #region Video
+        #region watch later
+
+        public string? WatchLaterDir
+        {
+            get => GetPropertyString("watch-later-dir");
+            set => SetProperty("watch-later-dir", value);
+        }
+
+        public bool ResumePlayback
+        {
+            get => GetPropertyBoolean("resume-playback");
+            set => SetProperty("resume-playback", value);
+        }
+
+        public bool ResumePlaybackCheckMtime
+        {
+            get => GetPropertyBoolean("resume-playback-check-mtime");
+            set => SetProperty("resume-playback-check-mtime", value);
+        }
+
+        public string? WatchLaterOptions
+        {
+            get => GetPropertyString("watch-later-options");
+            set => SetProperty("watch-later-options", value);
+        }
+        #endregion
+
+        #region video
+        public string? VO
+        {
+            get => GetPropertyString("vo");
+            set => SetProperty("vo", value);
+        }
+
+        public string? VD
+        {
+            get => GetPropertyString("vd");
+            set => SetProperty("vd", value);
+        }
+
+        public string? VF
+        {
+            get => GetPropertyString("vf");
+            set => SetProperty("vf", value);
+        }
+
+        public string? FrameDrop
+        {
+            get => GetPropertyString("frame-drop");
+            set => SetProperty("frame-drop", value);
+        }
+
+        public bool VideoLatencyHacks
+        {
+            get => GetPropertyBoolean("video-latency-hacks");
+            set => SetProperty("video-latency-hacks", value);
+        }
+
+        public string? Hwdec
+        {
+            get => GetPropertyString("hwdec");
+            set => SetProperty("hwdec", value);
+        }
+
+        public string? GpuHwdecInterop
+        {
+            get => GetPropertyString("gpu-hwdec-interop");
+            set => SetProperty("gpu-hwdec-interop", value);
+        }
+
+        public long HwdecExtraFrames
+        {
+            get => GetPropertyLong("hwdec-extra-frames");
+            set => SetProperty("hwdec-extra-frames", value);
+        }
+
+        public string? HwdecImageFormat
+        {
+            get => GetPropertyString("hwdec-image-format");
+            set => SetProperty("hwdec-image-format", value);
+        }
+
+        public string? CudaDecodeDevice
+        {
+            get => GetPropertyString("cuda-decode-device");
+            set => SetProperty("cuda-decode-device", value);
+        }
+
+        public string? VaapiDevice
+        {
+            get => GetPropertyString("vaapi-device");
+            set => SetProperty("vaapi-device", value);
+        }
+
+        public double Panscan
+        {
+            get => GetPropertyDouble("panscan");
+            set => SetProperty("panscan", value);
+        }
+
         public string? VideoAspectOverride
         {
             get => GetPropertyString("video-aspect-override");
             set => SetProperty("video-aspect-override", value);
         }
 
+        public string? VideoAspectMethod
+        {
+            get => GetPropertyString("video-aspect-method");
+            set => SetProperty("video-aspect-method", value);
+        }
+
         public string? VideoUnscaled
         {
             get => GetPropertyString("video-unscaled");
             set => SetProperty("video-unscaled", value);
+        }
+
+        public double VideoPanX
+        {
+            get => GetPropertyDouble("video-pan-x");
+            set => SetProperty("video-pan-x", value);
+        }
+
+        public double VideoPanY
+        {
+            get => GetPropertyDouble("video-pan-y");
+            set => SetProperty("video-pan-y", value);
+        }
+
+        public long VideoRotate
+        {
+            get => GetPropertyLong("video-rotate");
+            set => SetProperty("video-rotate", value);
+        }
+
+        public string? VideoCrop
+        {
+            get => GetPropertyString("video-crop");
+            set => SetProperty("video-crop", value);
         }
 
         public long VideoZoom
@@ -555,6 +681,12 @@ namespace LibMPVSharp
             set => SetProperty("video-align-y", value);
         }
 
+        public bool VideoRecenter
+        {
+            get => GetPropertyBoolean("video-recenter");
+            set => SetProperty("video-recenter", value);
+        }
+
         public double VideoMarginRatioLeft
         {
             get => GetPropertyDouble("video-margin-ratio-left");
@@ -579,9 +711,159 @@ namespace LibMPVSharp
             set => SetProperty("video-margin-ratio-bottom", value);
         }
 
+        public bool CorrectPts
+        {
+            get => GetPropertyBoolean("correct-pts");
+            set => SetProperty("correct-pts", value);
+        }
+
+        public string? Deinterlace
+        {
+            get => GetPropertyString("deinterlace");
+            set => SetProperty("deinterlace", value);
+        }
+
+        public string? DeinterlaceFieldParity
+        {
+            get => GetPropertyString("deinterlace-field-parity");
+            set => SetProperty("deinterlace-field-parity", value);
+        }
+
+        public string? VideoOutputLevels
+        {
+            get => GetPropertyString("video-output-levels");
+            set => SetProperty("video-output-levels", value);
+        }
+
+        public string? HwdecCodecs
+        {
+            get => GetPropertyString("hwdec-codecs");
+            set => SetProperty("hwdec-codecs", value);
+        }
+
+        public bool VdLavcCheckHwProfile
+        {
+            get => GetPropertyBoolean("vd-lavc-check-hw-profile");
+            set => SetProperty("vd-lavc-check-hw-profile", value);
+        }
+
+        public bool VdLavcSoftwareFallback
+        {
+            get => GetPropertyBoolean("vd-lavc-software-fallback");
+            set => SetProperty("vd-lavc-software-fallback", value);
+        }
+
+        public string? VdLavcFilmGrain
+        {
+            get => GetPropertyString("vd-lavc-film-grain");
+            set => SetProperty("vd-lavc-film-grain", value);
+        }
+
+        public string? VdLavcDr
+        {
+            get => GetPropertyString("vd-lavc-dr");
+            set => SetProperty("vd-lavc-dr", value);
+        }
+
+        public string? VdLavcO
+        {
+            get => GetPropertyString("vd-lavc-o");
+            set => SetProperty("vd-lavc-o", value);
+        }
+
+        public bool VdLavcShowAll
+        {
+            get => GetPropertyBoolean("vd-lavc-show-all");
+            set => SetProperty("vd-lavc-show-all", value);
+        }
+
+        public string? VdLavcSkiploopfilter
+        {
+            get => GetPropertyString("vd-lavc-skiploopfilter");
+            set => SetProperty("vd-lavc-skiploopfilter", value);
+        }
+
+        public string? VdLavcSkipidct
+        {
+            get => GetPropertyString("vd-lavc-skip-idct");
+            set => SetProperty("vd-lavc-skip-idct", value);
+        }
+
+        public string? VdLavcSkipframe
+        {
+            get => GetPropertyString("vd-lavc-skipframe");
+            set => SetProperty("vd-lavc-skipframe", value);
+        }
+
+        public string? VdLavcFramedrop
+        {
+            get => GetPropertyString("vd-lavc-framedrop");
+            set => SetProperty("vd-lavc-framedrop", value);
+        }
+
+        public long VdLavcThreads
+        {
+            get => GetPropertyLong("vd-lavc-threads");
+            set => SetProperty("vd-lavc-threads", value);
+        }
+
+        public bool VdLavcAssumeOldX264
+        {
+            get => GetPropertyBoolean("vd-lavc-assume-old-x264");
+            set => SetProperty("vd-lavc-assume-old-x264", value);
+        }
+
+        public long SwapchainDepth
+        {
+            get => GetPropertyLong("swapchain-depth");
+            set => SetProperty("swapchain-depth", value);
+        }
         #endregion
 
-        #region Audio
+        #region audio
+
+        public bool AudioPitchCorrection
+        {
+            get => GetPropertyBoolean("audio-pitch-correction");
+            set => SetProperty("audio-pitch-correction", value);
+        }
+
+        public string? AudioDevice
+        {
+            get => GetPropertyString("audio-device");
+            set => SetProperty("audio-device", value);
+        }
+
+        public bool AudioExclusive
+        {
+            get => GetPropertyBoolean("audio-exclusive");
+            set => SetProperty("audio-exclusive", value);
+        }
+
+        public bool AudioFallbackToNull
+        {
+            get => GetPropertyBoolean("audio-fallback-to-null");
+            set => SetProperty("audio-fallback-to-null", value);
+        }
+
+        public string? AO
+        {
+            get => GetPropertyString("ao");
+            set => SetProperty("ao", value);
+        }
+
+        public string? AF
+        {
+            get => GetPropertyString("af");
+            set => SetProperty("af", value);
+        }
+
+        public string? AD
+        {
+            get => GetPropertyString("ad");
+            set => SetProperty("ad", value);
+        }
+
         public long Volume
         {
             get => GetPropertyLong("volume");
@@ -594,11 +876,452 @@ namespace LibMPVSharp
             set => SetProperty("volume-max", value);
         }
 
+        public double VolumeGain
+        {
+            get => GetPropertyDouble("volume-gain");
+            set => SetProperty("volume-gain", value);
+        }
+
+        public double VolumeGainMax
+        {
+            get => GetPropertyDouble("volume-gain-max");
+            set => SetProperty("volume-gain-max", value);
+        }
+
+        public string? Replaygain
+        {
+            get => GetPropertyString("replaygain");
+            set => SetProperty("replaygain", value);
+        }
+
+        public string? ReplaygainPreamp
+        {
+            get => GetPropertyString("replaygain-preamp");
+            set => SetProperty("replaygain-preamp", value);
+        }
+
+        public bool ReplaygainClip
+        {
+            get => GetPropertyBoolean("replaygain-clip");
+            set => SetProperty("replaygain-clip", value);
+        }
+
+        public double ReplaygainFallback
+        {
+            get => GetPropertyDouble("replaygain-fallback");
+            set => SetProperty("replaygain-fallback", value);
+        }
+
+        public double AudioDelay
+        {
+            get => GetPropertyDouble("audio-delay");
+            set => SetProperty("audio-delay", value);
+        }
+
         public bool Mute
         {
             get => GetPropertyBoolean("mute");
             set => SetProperty("mute", value);
         }
+
+        public string? AudioDemuxer
+        {
+            get => GetPropertyString("audio-demuxer");
+            set => SetProperty("audio-demuxer", value);
+        }
+
+        public long AdLavcAc3drc
+        {
+            get => GetPropertyLong("ad-lavc-ac3drc");
+            set => SetProperty("ad-lavc-ac3drc", value);
+        }
+
+        public bool AdLavcDownmix
+        {
+            get => GetPropertyBoolean("ad-lavc-downmix");
+            set => SetProperty("ad-lavc-downmix", value);
+        }
+
+        public long AdLavcThreads
+        {
+            get => GetPropertyLong("ad-lavc-threads");
+            set => SetProperty("ad-lavc-threads", value);
+        }
+
+        public string? AdLavcO
+        {
+            get => GetPropertyString("ad-lavc-o");
+            set => SetProperty("ad-lavc-o", value);
+        }
+
+        public string? AudioSpdif
+        {
+            get => GetPropertyString("audio-spdif");
+            set => SetProperty("audio-spdif", value);
+        }
+
+        public string? AudioChannels
+        {
+            get => GetPropertyString("audio-channels");
+            set => SetProperty("audio-channels", value);
+        }
+
+        public string? AudioDisplay
+        {
+            get => GetPropertyString("audio-display");
+            set => SetProperty("audio-display", value);
+        }
+
+        public string? AudioFiles
+        {
+            get => GetPropertyString("audio-files");
+            set => SetProperty("audio-files", value);
+        }
+
+        public string? AudioFile
+        {
+            get => GetPropertyString("audio-file");
+            set => SetProperty("audio-file", value);
+        }
+
+        public string? AudioFormat
+        {
+            get => GetPropertyString("audio-format");
+            set => SetProperty("audio-format", value);
+        }
+
+        public double AudioSamplerate
+        {
+            get => GetPropertyDouble("audio-samplerate");
+            set => SetProperty("audio-samplerate", value);
+        }
+
+        public string? GaplessAudio
+        {
+            get => GetPropertyString("gapless-audio");
+            set => SetProperty("gapless-audio", value);
+        }
+
+        public bool InitialAudioSync
+        {
+            get => GetPropertyBoolean("initial-audio-sync");
+            set => SetProperty("initial-audio-sync", value);
+        }
+
+        public string? AudioFileAuto
+        {
+            get => GetPropertyString("audio-file-auto");
+            set => SetProperty("audio-file-auto", value);
+        }
+
+        public string? AudioExts
+        {
+            get => GetPropertyString("audio-exts");
+            set => SetProperty("audio-exts", value);
+        }
+
+        public string? AudioFilePaths
+        {
+            get => GetPropertyString("audio-file-paths");
+            set => SetProperty("audio-file-paths", value);
+        }
+
+        public string? AudioClientName
+        {
+            get => GetPropertyString("audio-client-name");
+            set => SetProperty("audio-client-name", value);
+        }
+
+        public double AudioBuffer
+        {
+            get => GetPropertyDouble("audio-buffer");
+            set => SetProperty("audio-buffer", value);
+        }
+
+        public bool AudioStreamSilence
+        {
+            get => GetPropertyBoolean("audio-stream-silence");
+            set => SetProperty("audio-stream-silence", value);
+        }
+
+        public double AudioWaitOpen
+        {
+            get => GetPropertyDouble("audio-wait-open");
+            set => SetProperty("audio-wait-open", value);
+        }
+        #endregion
+
+        #region subtitles
+        public string? SubDemuxer
+        {
+            get => GetPropertyString("sub-demuxer");
+            set => SetProperty("sub-demuxer", value);
+        }
+
+        public string? SubLavcO
+        {
+            get => GetPropertyString("sub-lavc-o");
+            set => SetProperty("sub-lavc-o", value);
+        }
+
+        public double SubDelay
+        {
+            get => GetPropertyDouble("sub-delay");
+            set => SetProperty("sub-delay", value);
+        }
+
+        public double SecondarySubDelay
+        {
+            get => GetPropertyDouble("secondary-sub-delay");
+            set => SetProperty("secondary-sub-delay", value);
+        }
+
+        public string? SubFiles
+        {
+            get => GetPropertyString("sub-files");
+            set => SetProperty("sub-files", value);
+        }
+
+        public string? SubFile
+        {
+            get => GetPropertyString("sub-file");
+            set => SetProperty("sub-file", value);
+        }
+
+        public string? SecondarySid
+        {
+            get => GetPropertyString("secondary-sid");
+            set => SetProperty("secondary-sid", value);
+        }
+
+        public long SubScale
+        {
+            get => GetPropertyLong("sub-scale");
+            set => SetProperty("sub-scale", value);
+        }
+
+        public bool SubScaleSigns
+        {
+            get => GetPropertyBoolean("sub-scale-signs");
+            set => SetProperty("sub-scale-signs", value);
+        }
+
+        public bool SubScaleByWindow
+        {
+            get => GetPropertyBoolean("sub-scale-by-window");
+            set => SetProperty("sub-scale-by-window", value);
+        }
+
+        public bool SubScaleWithWindow
+        {
+            get => GetPropertyBoolean("sub-scale-with-window");
+            set => SetProperty("sub-scale-with-window", value);
+        }
+
+        public bool SubAssScaleWithWindow
+        {
+            get => GetPropertyBoolean("sub-ass-scale-with-window");
+            set => SetProperty("sub-ass-scale-with-window", value);
+        }
+
+        public bool Embeddedfonts
+        {
+            get => GetPropertyBoolean("embeddedfonts");
+            set => SetProperty("embeddedfonts", value);
+        }
+
+        public long SubPos
+        {
+            get => GetPropertyLong("sub-pos");
+            set => SetProperty("sub-pos", value);
+        }
+
+        public long SecondarySubPos
+        {
+            get => GetPropertyLong("secondary-sub-pos");
+            set => SetProperty("secondary-sub-pos", value);
+        }
+
+        public double SubSpeed
+        {
+            get => GetPropertyDouble("sub-speed");
+            set => SetProperty("sub-speed", value);
+        }
+
+        public string? SubAssStyleOverrides
+        {
+            get => GetPropertyString("sub-ass-style-overrides");
+            set => SetProperty("sub-ass-style-overrides", value);
+        }
+
+        public string? SubHinting
+        {
+            get => GetPropertyString("sub-hinting");
+            set => SetProperty("sub-hinting", value);
+        }
+
+        public double SubLineSpacing
+        {
+            get => GetPropertyDouble("sub-line-spacing");
+            set => SetProperty("sub-line-spacing", value);
+        }
+
+        public string? SubShaper
+        {
+            get => GetPropertyString("sub-shaper");
+            set => SetProperty("sub-shaper", value);
+        }
+
+        public double SubAssPruneDelay
+        {
+            get => GetPropertyDouble("sub-ass-prune-delay");
+            set => SetProperty("sub-ass-prune-delay", value);
+        }
+
+        public string? SubAssStyles
+        {
+            get => GetPropertyString("sub-ass-styles");
+            set => SetProperty("sub-ass-styles", value);
+        }
+
+        public string? SubAssOverride
+        {
+            get => GetPropertyString("sub-ass-override");
+            set => SetProperty("sub-ass-override", value);
+        }
+
+        public string? SecondarySubAssOverride
+        {
+            get => GetPropertyString("secondary-sub-ass-override");
+            set => SetProperty("secondary-sub-ass-override", value);
+        }
+
+        public bool SubAssForceMargins
+        {
+            get => GetPropertyBoolean("sub-ass-force-margins");
+            set => SetProperty("sub-ass-force-margins", value);
+        }
+
+        public bool SubUseMargins
+        {
+            get => GetPropertyBoolean("sub-use-margins");
+            set => SetProperty("sub-use-margins", value);
+        }
+
+        public string? SubAssUseVideoData
+        {
+            get => GetPropertyString("sub-ass-use-video-data");
+            set => SetProperty("sub-ass-use-video-data", value);
+        }
+
+        public string? SubAssVideoAspectOverride
+        {
+            get => GetPropertyString("sub-ass-use-video-data");
+            set => SetProperty("sub-ass-use-video-data", value);
+        }
+
+        public bool SubVsfilterBidiCompat
+        {
+            get => GetPropertyBoolean("sub-vsfilter-bidi-compat");
+            set => SetProperty("sub-vsfilter-bidi-compat", value);
+        }
+
+        public string? SubAssVsfilterColorCompat
+        {
+            get => GetPropertyString("sub-ass-vsfilter-color-compat");
+            set => SetProperty("sub-ass-vsfilter-color-compat", value);
+        }
+
+        public bool StretchDvdSubs
+        {
+            get => GetPropertyBoolean("stretch-dvd-subs");
+            set => SetProperty("stretch-dvd-subs", value);
+        }
+
+        public bool StretchImageSubsToScreen
+        {
+            get => GetPropertyBoolean("stretch-image-subs-to-screen");
+            set => SetProperty("stretch-image-subs-to-screen", value);
+        }
+
+        public bool ImageSubsVideoResolution
+        {
+            get => GetPropertyBoolean("image-subs-video-resolution");
+            set => SetProperty("image-subs-video-resolution", value);
+        }
+
+        public bool SubAss
+        {
+            get => GetPropertyBoolean("sub-ass");
+            set => SetProperty("sub-ass", value);
+        }
+
+        public string? SubAuto
+        {
+            get => GetPropertyString("sub-auto");
+            set => SetProperty("sub-auto", value);
+        }
+
+        public string? SubAutoExts
+        {
+            get => GetPropertyString("sub-auto-exts");
+            set => SetProperty("sub-auto-exts", value);
+        }
+
+        public string? SubCodepage
+        {
+            get => GetPropertyString("sub-codepage");
+            set => SetProperty("sub-codepage", value);
+        }
+
+        public bool SubStretchDurations
+        {
+            get => GetPropertyBoolean("sub-stretch-durations");
+            set => SetProperty("sub-stretch-durations", value);
+        }
+
+        public bool SubFixTiming
+        {
+            get => GetPropertyBoolean("sub-fix-timing");
+            set => SetProperty("sub-fix-timing", value);
+        }
+
+        public bool SubForcedEventsOnly
+        {
+            get => GetPropertyBoolean("sub-forced-events-only");
+            set => SetProperty("sub-forced-events-only", value);
+        }
+
+        public double SubFps
+        {
+            get => GetPropertyDouble("sub-fps");
+            set => SetProperty("sub-fps", value);
+        }
+
+        public double SubGauss
+        {
+            get => GetPropertyDouble("sub-gauss");
+            set => SetProperty("sub-gauss", value);
+        }
+
+        public bool SubGray
+        {
+            get => GetPropertyBoolean("sub-gray");
+            set => SetProperty("sub-gray", value);
+        }
+
+        public string? SubFilePaths
+        {
+            get => GetPropertyString("sub-file-paths");
+            set => SetProperty("sub-file-paths", value);
+        }
+
+        public bool SubVisibility
+        {
+            get => GetPropertyBoolean("sub-visibility");
+            set => SetProperty("sub-visibility", value);
+        }
+
         #endregion
 
         #region screen shot
@@ -688,7 +1411,6 @@ namespace LibMPVSharp
             set => SetProperty("cache-pause-initial", value);
         }
         #endregion
-
 
         #region network
         public long StreamBufferSize
