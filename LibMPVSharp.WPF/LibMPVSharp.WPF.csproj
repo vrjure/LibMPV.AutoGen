@@ -33,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LibMPVSharp.Native.Desktop\LibMPVSharp.Native.Desktop.csproj" />
     <ProjectReference Include="..\LibMPVSharp\LibMPVSharp.csproj" />
   </ItemGroup>
 

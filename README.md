@@ -19,3 +19,15 @@ Provide an avalonia control for the MPV (`VideoView`). Rendered using OpenGL.
 ### Android
 
 ![avalonia-andorid](imgs/avalonia-android-demo.jpg)
+
+### Mac(test on mac mini m4)
+
+![avalonia-macm4](imgs/macdemo.png)
+
+## Native Libraries
+
+The repository do not contain native libraries. Here are some repositories can be used.
+
+- [mpv player (windows)](https://sourceforge.net/projects/mpv-player-windows/files/)
+- [mpv-mac](https://github.com/eko5624/mpv-mac)
+- [mpv-android](https://github.com/mpv-android/mpv-android)

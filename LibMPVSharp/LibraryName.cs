@@ -10,6 +10,8 @@ namespace LibMPVSharp
     {
 #if ANDROID
         public const string Name = "libmpv.so";
+#elif MACOS
+        public const string Name = "libmpv.2.dylib";
 #else
         public const string Name = "libmpv-2";
 #endif

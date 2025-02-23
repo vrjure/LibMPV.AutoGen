@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0-macos</TargetFramework>
+        <Nullable>enable</Nullable>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <UseAppHost>true</UseAppHost>
+        <ApplicationId>libmpvsharp.avalonia.demo</ApplicationId>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.2.3"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.2.3"/>
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.3"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\LibMPVSharp.Avalonia.Demo\LibMPVSharp.Avalonia.Demo.csproj" />
+      <ProjectReference Include="..\LibMPVSharp.Avalonia\LibMPVSharp.Avalonia.csproj" />
+      <ProjectReference Include="..\LibMPVSharp\LibMPVSharp.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="libluajit-5.1.2.dylib">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="libmpv.2.dylib">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+</Project>

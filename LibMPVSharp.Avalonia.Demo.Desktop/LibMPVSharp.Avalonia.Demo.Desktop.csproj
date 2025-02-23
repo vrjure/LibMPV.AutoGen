@@ -20,6 +20,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LibMPVSharp.Avalonia.Demo\LibMPVSharp.Avalonia.Demo.csproj" />
-    <ProjectReference Include="..\LibMPVSharp.Native.Desktop\LibMPVSharp.Native.Desktop.csproj" />
   </ItemGroup>
 </Project>
