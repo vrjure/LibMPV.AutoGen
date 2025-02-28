@@ -1032,34 +1032,7 @@ namespace LibMPVSharp
     [StructLayout(LayoutKind.Sequential)]
     public unsafe struct MpvNode
     {
-        [StructLayout(LayoutKind.Sequential)]
-        public unsafe struct U
-        {
-            public string @string;
-            /// <summary>
-            /// <para>valid if format==MPV_FORMAT_STRING</para>
-            /// </summary>
-            public int flag;
-            /// <summary>
-            /// <para>valid if format==MPV_FORMAT_FLAG</para>
-            /// </summary>
-            public long int64;
-            /// <summary>
-            /// <para>valid if format==MPV_FORMAT_INT64</para>
-            /// </summary>
-            public double double_;
-            /// <summary>
-            /// <para>valid if format==MPV_FORMAT_DOUBLE</para>
-            /// <para>valid if format==MPV_FORMAT_NODE_ARRAY</para>
-            /// <para>or if format==MPV_FORMAT_NODE_MAP</para>
-            /// </summary>
-            public global::LibMPVSharp.MpvNodeList* list;
-            /// <summary>
-            /// <para>valid if format==MPV_FORMAT_BYTE_ARRAY</para>
-            /// </summary>
-            public global::LibMPVSharp.MpvByteArray* ba;
-        }
-        public global::LibMPVSharp.MpvNode.U u;
+        public void* u;
         /// <summary>
         /// <para>Type of the data stored in this struct. This value rules what members in</para>
         /// <para>the given union can be accessed. The following formats are currently</para>

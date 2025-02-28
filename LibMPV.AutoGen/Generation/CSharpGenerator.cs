@@ -101,6 +101,7 @@ namespace LibMPV.AutoGen.Generation
             var classes = unit.Classes;
             foreach (var @class in classes)
             {
+                if (_generatorOption.SkipClasses.Contains(@class.Name)) continue;
                 GenerateClass(@class);
                 WriteLine();
             }
@@ -119,6 +120,7 @@ namespace LibMPV.AutoGen.Generation
                 {
                     foreach (var item in @class.Classes)
                     {
+                        if (_generatorOption.SkipClasses.Contains(item.Name)) continue;
                         GenerateClass(item);
                     }
                 }

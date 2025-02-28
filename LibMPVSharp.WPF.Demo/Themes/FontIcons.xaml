@@ -11,4 +11,5 @@
     <sys:String x:Key="icon-aspect-ratio">&#xEA7F;</sys:String>
     <sys:String x:Key="icon-fullscreen">&#xED9C;</sys:String>
     <sys:String x:Key="icon-fullscreen-exit">&#xED9A;</sys:String>
+    <sys:String x:Key="icon-ri-information-line">&#xEE59;</sys:String>
 </ResourceDictionary>

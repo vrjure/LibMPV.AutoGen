@@ -9,8 +9,10 @@ using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -83,6 +85,13 @@ namespace LibMPVSharp.Avalonia.Demo
             set => SetValue(AspectRatioProperty, value);
         }
 
+        public static readonly StyledProperty<string> VideoParamsProperty = AvaloniaProperty.Register<MediaPlayerView, string>(nameof(VideoParams), "");
+        public string VideoParams
+        {
+            get => GetValue(VideoParamsProperty);
+            set => SetValue(VideoParamsProperty, value);
+        }
+
         public static readonly RoutedCommand PlayPauseCmd = new RoutedCommand(nameof(PlayPauseCmd));
         public static readonly RoutedCommand OpenFileCmd = new RoutedCommand(nameof(OpenFileCmd));
         public static readonly RoutedCommand SpeedCmd = new RoutedCommand(nameof(SpeedCmd));
@@ -132,13 +141,16 @@ namespace LibMPVSharp.Avalonia.Demo
 
                 if (oldNew.oldValue != null)
                 {
-                    oldNew.oldValue.MPVPropertyChanged -= OldValue_MPVPropertyChanged;
+                    oldNew.oldValue.MpvPropertyChanged -= MpvPropertyChanged;
+                    oldNew.oldValue.MpvFiledLoaded -= MpvFiledLoaded;
                 }
 
                 if (oldNew.newValue != null)
                 {
                     var player = oldNew.newValue;
-                    player.MPVPropertyChanged += OldValue_MPVPropertyChanged;
+                    player.MpvPropertyChanged += MpvPropertyChanged;
+                    player.MpvFiledLoaded += MpvFiledLoaded;
+                    
                     SetCurrentValue(SpeedProperty, player.Speed);
                     SetCurrentValue(VolumeProperty, player.Volume);
                     SetCurrentValue(MaxVolumeProperty, player.VolumeMax);
@@ -170,7 +182,7 @@ namespace LibMPVSharp.Avalonia.Demo
             }
         }
 
-        private void OldValue_MPVPropertyChanged(ref MpvEventProperty property)
+        private void MpvPropertyChanged(object sender, MpvEventProperty property)
         {
             if (property.name == "duration")
             {
@@ -193,7 +205,12 @@ namespace LibMPVSharp.Avalonia.Demo
                 DispatchSetCurrentValue(SpeedProperty, property.ReadDoubleValue());
             }
         }
-
+        
+        private void MpvFiledLoaded(object? sender, EventArgs e)
+        {
+            Dispatcher.UIThread.InvokeAsync(TryGetVideoParams);
+        }
+        
         private void DispatchSetCurrentValue(AvaloniaProperty property, object value)
         {
             Dispatcher.UIThread.InvokeAsync(() => SetCurrentValue(property, value));
@@ -224,7 +241,9 @@ namespace LibMPVSharp.Avalonia.Demo
             {
                 var file =  files[0];
                 var path = App.Instance?.UriResolver?.GetRealPath(file.Path);
-                MediaPlayer.Open(path);
+                
+                MediaPlayer.EnsureRenderContextCreated();
+                MediaPlayer.ExecuteCommand("loadfile", path);
                 SetCurrentValue(PlayingProperty, true);
             }
         }
@@ -257,6 +276,20 @@ namespace LibMPVSharp.Avalonia.Demo
             var ratio = _aspectRatio.Dequeue();
             _aspectRatio.Enqueue(ratio);
             AspectRatio = ratio;
+        }
+
+        private void TryGetVideoParams()
+        {
+            if (MediaPlayer == null) return;
+            var node = MediaPlayer.GetPropertyNode("video-params");
+            using var sw = new StringWriter();
+            using var writer = new IndentedTextWriter(sw);
+            node.Node.ReadToWriter(writer);
+            writer.Flush();
+            MediaPlayer.FreeNode(node);
+            var vp = sw.ToString();
+            Debug.WriteLine(vp);
+            DispatchSetCurrentValue(VideoParamsProperty, vp);
         }
     }
 }

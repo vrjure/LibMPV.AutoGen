@@ -1,6 +1,9 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -76,6 +79,13 @@ namespace LibMPVSharp.WPF.Demo
             set => SetValue(AspectRatioProperty, value);
         }
 
+        public static readonly DependencyProperty VideoParamsProperty = DependencyProperty.Register(nameof(VideoParams), typeof(string), typeof(MediaPlayerView), new PropertyMetadata(""));
+        public string VideoParams
+        {
+            get => (string)GetValue(VideoParamsProperty);
+            set => SetValue(VideoParamsProperty, value);
+        }
+
         private static void PropertyChagned(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var view = d as MediaPlayerView;
@@ -88,12 +98,15 @@ namespace LibMPVSharp.WPF.Demo
 
                 if (oldValue != null)
                 {
-                    oldValue.MPVPropertyChanged -= view.MPVPropertyChanged;
+                    oldValue.MpvPropertyChanged -= view.MPVPropertyChanged;
+                    newVlaue.MpvFiledLoaded -= view.MpvFiledLoaded;
                 }
 
                 if (newVlaue != null)
                 {
-                    newVlaue.MPVPropertyChanged += view.MPVPropertyChanged;
+                    newVlaue.MpvPropertyChanged += view.MPVPropertyChanged;
+                    newVlaue.MpvFiledLoaded += view.MpvFiledLoaded;
+
                     view.SetCurrentValue(VolumeProperty, newVlaue.Volume);
                     view.SetCurrentValue(MaxVolumeProperty, newVlaue.VolumeMax);
                     view.SetCurrentValue(SpeedProperty, newVlaue.Speed);
@@ -155,7 +168,7 @@ namespace LibMPVSharp.WPF.Demo
             this.CommandBindings.Add(new CommandBinding(AspectRatioCmd, (s, e) => TrySwitchAspectRatio()));
         }
 
-        private void MPVPropertyChanged(ref MpvEventProperty property)
+        private void MPVPropertyChanged(object? sender, MpvEventProperty property)
         {
             if (property.name == "duration")
             {
@@ -177,6 +190,11 @@ namespace LibMPVSharp.WPF.Demo
             {
                 DispatchSetCurrentValue(SpeedProperty, property.ReadDoubleValue());
             }
+        }
+
+        private void MpvFiledLoaded(object? sender, EventArgs e)
+        {
+            Dispatcher.BeginInvoke(TryGetVideoParams);
         }
 
         private void DispatchSetCurrentValue(DependencyProperty property, object value)
@@ -202,7 +220,8 @@ namespace LibMPVSharp.WPF.Demo
                 var file = dialog.FileName;
                 try
                 {
-                    MediaPlayer.Open(file);
+                    MediaPlayer.EnsureRenderContextCreated();
+                    MediaPlayer.ExecuteCommand("loadfile", file);
                 }
                 finally
                 {
@@ -238,6 +257,20 @@ namespace LibMPVSharp.WPF.Demo
             var ratio = _aspectRatio.Dequeue();
             _aspectRatio.Enqueue(ratio);
             AspectRatio = ratio;
+        }
+
+        private void TryGetVideoParams()
+        {
+            if (MediaPlayer == null) return;
+            var node = MediaPlayer.GetPropertyNode("video-params");
+            using var sw = new StringWriter();
+            using var writer = new IndentedTextWriter(sw);
+            node.Node.ReadToWriter(writer);
+            writer.Flush();
+            MediaPlayer.FreeNode(node);
+            var vp = sw.ToString();
+            Debug.WriteLine(vp);
+            SetCurrentValue(VideoParamsProperty, vp);
         }
     }
 }

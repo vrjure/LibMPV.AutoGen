@@ -12,8 +12,11 @@ namespace LibMPVSharp
 {
     public unsafe partial class MPVMediaPlayer
     {
-        public delegate void PropertyChanged(ref MpvEventProperty property);
-        public event PropertyChanged? MPVPropertyChanged;
+        public event EventHandler<MpvEventProperty>? MpvPropertyChanged;
+
+        public event EventHandler? MpvFiledLoaded;
+        public event EventHandler<MpvEventStartFile>? MpvFileStarted;
+        public event EventHandler<MpvEventEndFile>? MpvFileEnded;
 
         private void MPVWeakup(IntPtr ctx)
         {
@@ -55,10 +58,13 @@ namespace LibMPVSharp
                 case MpvEventId.MPV_EVENT_COMMAND_REPLY:
                     break;
                 case MpvEventId.MPV_EVENT_START_FILE:
+                    OnFileStarted(mpvEvent);
                     break;
                 case MpvEventId.MPV_EVENT_END_FILE:
+                    OnFileEnded(mpvEvent);
                     break;
                 case MpvEventId.MPV_EVENT_FILE_LOADED:
+                    OnFileLoaded();
                     break;
                 case MpvEventId.MPV_EVENT_IDLE:
                     break;
@@ -75,14 +81,36 @@ namespace LibMPVSharp
                 case MpvEventId.MPV_EVENT_PLAYBACK_RESTART:
                     break;
                 case MpvEventId.MPV_EVENT_PROPERTY_CHANGE:
-                    var property = Marshal.PtrToStructure<MpvEventProperty>((IntPtr)mpvEvent->data);
-                    MPVPropertyChanged?.Invoke(ref property);
+                    OnPropertyChanged(mpvEvent);
                     break;
                 case MpvEventId.MPV_EVENT_QUEUE_OVERFLOW:
                     break;
                 case MpvEventId.MPV_EVENT_HOOK:
                     break;
             }
+        }
+
+        protected void OnFileLoaded()
+        {
+            MpvFiledLoaded?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected void OnFileStarted(MpvEvent* mpvEvent)
+        {
+            var startFile = Marshal.PtrToStructure<MpvEventStartFile>((IntPtr)mpvEvent->data);
+            MpvFileStarted?.Invoke(this, startFile);
+        }
+
+        protected void OnFileEnded(MpvEvent* mpvEvent)
+        {
+            var endFile = Marshal.PtrToStructure<MpvEventEndFile>((IntPtr)mpvEvent->data);
+            MpvFileEnded?.Invoke(this, endFile);
+        }
+
+        protected void OnPropertyChanged(MpvEvent* mpvEvent)
+        {
+            var property = Marshal.PtrToStructure<MpvEventProperty>((IntPtr)mpvEvent->data);
+            MpvPropertyChanged?.Invoke(this, property);
         }
     }
 }

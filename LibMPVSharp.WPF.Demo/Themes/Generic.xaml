@@ -22,9 +22,36 @@
                             <Border.Background>
                                 <SolidColorBrush Color="White" Opacity="0.1"/>
                             </Border.Background>
-                            <TextBlock Text="{TemplateBinding Title}"
-                                       VerticalAlignment="Center"
-                                       Margin="12,0"/>
+                            <DockPanel>
+                                <TextBlock Text="{TemplateBinding Title}"
+                                           VerticalAlignment="Center"
+                                           Margin="12,0"
+                                           DockPanel.Dock="Left"/>
+                                <Button Style="{DynamicResource IconButton}"
+                                        Content="{DynamicResource icon-ri-information-line}"
+                                        x:Name="btn_videoInfo"
+                                        DockPanel.Dock="Right"/>
+                                
+                                <Popup PlacementTarget="{Binding ElementName=btn_videoInfo}"
+                                       StaysOpen="False"   
+                                       AllowsTransparency="True"
+                                       x:Name="popup_videoInfo">
+                                    <Border Padding="12"
+                                            CornerRadius="5"
+                                            Width="297"
+                                            Height="450">
+                                        <Border.Background>
+                                            <SolidColorBrush Color="Black" Opacity="0.28"/>
+                                        </Border.Background>
+                                        <TextBlock Text="{TemplateBinding VideoParams}"
+                                                   TextWrapping="Wrap"/>
+                                    </Border>
+                                </Popup>
+                                
+                                
+                                <Border/>
+                            </DockPanel>
+
                         </Border>
                         
                         <Border VerticalAlignment="Bottom"
@@ -120,11 +147,24 @@
                         <Trigger Property="Playing" Value="True">
                             <Setter TargetName="playPause" Property="Content" Value="{DynamicResource icon-pause}"/>
                         </Trigger>
-                        <EventTrigger SourceName="volume_button" RoutedEvent="MouseEnter">
+                        <EventTrigger SourceName="volume_button" RoutedEvent="PreviewMouseLeftButtonUp">
                             <EventTrigger.Actions>
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <BooleanAnimationUsingKeyFrames Storyboard.TargetName="volume_popup" 
+                                                                        Storyboard.TargetProperty="IsOpen">
+                                            <DiscreteBooleanKeyFrame KeyTime="00:00:00" Value="True"/>
+                                        </BooleanAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+
+                        <EventTrigger SourceName="btn_videoInfo" RoutedEvent="PreviewMouseLeftButtonUp">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <BooleanAnimationUsingKeyFrames Storyboard.TargetName="popup_videoInfo"
                                                                         Storyboard.TargetProperty="IsOpen">
                                             <DiscreteBooleanKeyFrame KeyTime="00:00:00" Value="True"/>
                                         </BooleanAnimationUsingKeyFrames>
