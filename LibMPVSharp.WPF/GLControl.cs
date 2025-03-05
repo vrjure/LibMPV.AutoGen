@@ -55,18 +55,28 @@ namespace LibMPVSharp.WPF
             }
         }
 
+        private TimeSpan _lastRenderTime;
+        private long _frameUpdated;
+
         private RenderContext? _renderContext;
         private DrawingVisual _drawingVisual;
-
         private DXGLContext? _dXGLContext;
         protected DXGLContext? DXGLContext => _dXGLContext;
 
         public GLControl()
         {
             _drawingVisual = new DrawingVisual();
-
+            
             this.Loaded += GLControl_Loaded;
             this.Unloaded += GLControl_Unloaded;
+        }
+
+        public RenderContext? GLRenderContext => _renderContext;
+
+        protected override int VisualChildrenCount => _drawingVisual == null ? 0 : 1;
+        protected override Visual GetVisualChild(int index)
+        {
+            return _drawingVisual;
         }
 
         private void GLControl_Loaded(object sender, RoutedEventArgs e)
@@ -76,7 +86,7 @@ namespace LibMPVSharp.WPF
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                if(_dXGLContext == null || _dXGLContext.Disposed)
+                if (_dXGLContext == null || _dXGLContext.Disposed)
                 {
                     _dXGLContext = new DXGLContext(GLVersion);
                 }
@@ -94,41 +104,62 @@ namespace LibMPVSharp.WPF
                 _renderContext?.Dispose();
                 _renderContext = null;
                 _dXGLContext?.Dispose();
+
             }
         }
 
-        public RenderContext? GLRenderContext => _renderContext;
-
-        protected override int VisualChildrenCount => _drawingVisual == null ? 0 : 1;
-        protected override Visual GetVisualChild(int index)
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            return _drawingVisual;
-        }
+            base.OnPropertyChanged(e);
 
-        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
-        {
-            base.OnRenderSizeChanged(sizeInfo);
-            if (DesignerProperties.GetIsInDesignMode(this) || _renderContext == null)
+            if (e.Property == IsVisibleProperty)
             {
-                return;
+                if ((bool)e.NewValue)
+                {
+                    CompositionTarget.Rendering += CompositionTarget_Rendering;
+                }
+                else
+                {
+                    CompositionTarget.Rendering -= CompositionTarget_Rendering;
+                }
             }
-            
-            _renderContext.DXGLBinding((uint)sizeInfo.NewSize.Width, (uint)sizeInfo.NewSize.Height);
-            DrawFrame();
+        }
+
+        private void CompositionTarget_Rendering(object? sender, EventArgs e)
+        {
+            var args = (RenderingEventArgs)e;
+            var frameUpdated = Interlocked.Read(ref _frameUpdated);
+            Debug.WriteLine($"FrameUpdate = {frameUpdated}");
+            if (_lastRenderTime != args.RenderingTime && frameUpdated > 0)
+            {
+                _lastRenderTime = args.RenderingTime;
+                Interlocked.Decrement(ref _frameUpdated);
+
+                FrameUpdate();
+            }
         }
 
 
-        public void DrawFrame()
+        public void RequestFrameUpdate()
         {
-            if (DesignerProperties.GetIsInDesignMode(this) || _renderContext == null || _drawingVisual == null || !(_renderContext?.D3DImage?.IsFrontBufferAvailable == true)) return;
+            Interlocked.Increment(ref _frameUpdated);
+        }
+
+        public void FrameUpdate()
+        {
+            if (DesignerProperties.GetIsInDesignMode(this) || _renderContext == null || _drawingVisual == null) return;
 
             var drawingContext = _drawingVisual.RenderOpen();
 
-            _renderContext.BeginRender();
-            OnDrawing();
-            _renderContext.EndRender();
+            var width = Math.Max(0, this.ActualWidth);
+            var height = Math.Max(0, this.ActualHeight);
+            if (_renderContext.BeginRender((uint)width, (uint)height))
+            {
+                OnDrawing();
+                _renderContext.EndRender();
+            }
 
-            drawingContext.DrawImage(_renderContext.D3DImage, new Rect(0, 0, _renderContext.Width, _renderContext.Height));
+            drawingContext.DrawImage(_renderContext.D3DImage, new Rect(0, 0, _renderContext.FrameBufferWidth, _renderContext.FrameBufferHeight));
             drawingContext.Close();
         }
 
