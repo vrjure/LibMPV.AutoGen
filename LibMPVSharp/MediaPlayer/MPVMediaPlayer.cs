@@ -176,7 +176,7 @@ namespace LibMPVSharp
         {
             CheckClientHandle();
 
-            var rootPtr = GetStringArrayPointer(args);
+            var rootPtr = GetStringArrayPointer(args, out var disposable);
 
             try
             {
@@ -185,7 +185,7 @@ namespace LibMPVSharp
             }
             finally
             {
-                Marshal.FreeHGlobal(rootPtr);
+                disposable?.Dispose();
             }
         }
 
@@ -219,7 +219,7 @@ namespace LibMPVSharp
         {
             CheckClientHandle();
 
-            var rootPtr = GetStringArrayPointer(args);
+            var rootPtr = GetStringArrayPointer(args, out var disposable);
 
             try
             {
@@ -242,7 +242,7 @@ namespace LibMPVSharp
             }
             finally
             {
-                Marshal.FreeHGlobal(rootPtr);
+                disposable.Dispose();
             }
         }
 
@@ -273,7 +273,7 @@ namespace LibMPVSharp
 
         }
 
-        private IntPtr GetStringArrayPointer(string[] args)
+        private IntPtr GetStringArrayPointer(string[] args, out IDisposable disposable)
         {
             var count = args.Length + 1;
             var arrPtrs = new IntPtr[count];
@@ -289,11 +289,15 @@ namespace LibMPVSharp
 
             Marshal.Copy(arrPtrs, 0, rootPtr, count);
 
-            foreach (var item in arrPtrs)
+            disposable = new DisposableObject(() =>
             {
-                Marshal.FreeHGlobal(item);
-            }
+                foreach (var item in arrPtrs)
+                {
+                    Marshal.FreeHGlobal(item);
+                }
 
+                Marshal.FreeHGlobal(rootPtr);
+            });
             return rootPtr;
         }
 
