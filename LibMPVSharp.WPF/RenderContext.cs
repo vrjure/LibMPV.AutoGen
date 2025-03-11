@@ -25,8 +25,8 @@ namespace LibMPVSharp.WPF
         public IntPtr GLDevice { get; }
         public Format Format { get; }
         public D3DImage? D3DImage { get; private set; }
-        public uint Width { get; private set; }
-        public uint Height { get; private set; }
+        public uint FrameBufferWidth { get; private set; }
+        public uint FrameBufferHeight { get; private set; }
         public uint GLFrameBuffer => _glFrameBuffer;
 
         private IDirect3DSurface9* _dxSurface;
@@ -72,15 +72,15 @@ namespace LibMPVSharp.WPF
         }
 
 
-        public void DXGLBinding(uint width, uint height)
+        private void DXGLBindingIfNeed(uint width, uint height)
         {
-            if (this.Width == width && this.Height == height)
+            if (D3DImage != null && this.FrameBufferWidth == width && this.FrameBufferHeight == height)
             {
                 return;
             }
 
-            this.Width = width;
-            this.Height = height;
+            this.FrameBufferWidth = width;
+            this.FrameBufferHeight = height;
 
             void* shareHandle = (void*)IntPtr.Zero;
             IDirect3DSurface9* surface;
@@ -106,11 +106,7 @@ namespace LibMPVSharp.WPF
 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, _glFrameBuffer);
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, _glSharedTexture, 0);
-
-            D3DImage = new D3DImage();
-            D3DImage.Lock();
-            D3DImage.SetBackBuffer(D3DResourceType.IDirect3DSurface9, (IntPtr)surface);
-            D3DImage.Unlock();
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
             if (_dxSurface != null)
             {
@@ -118,23 +114,31 @@ namespace LibMPVSharp.WPF
             }
             _dxSurface = surface;
 
+            D3DImage ??= new D3DImage();
         }
 
-        public void BeginRender()
+        public bool BeginRender(uint width, uint height)
         {
-            if (D3DImage == null || _dxSurface == null) return;
+            DXGLBindingIfNeed(width, height);
+
+            if (D3DImage == null || _dxSurface == null || !D3DImage.IsFrontBufferAvailable) return false;
+
             D3DImage.Lock();
+            D3DImage.SetBackBuffer(D3DResourceType.IDirect3DSurface9, (IntPtr)_dxSurface);
+
             NVDXInterop.DxlockObjects(GLDevice, 1, [_dxRegisteredHandle]);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, _glFrameBuffer);
-            GL.Viewport(new Rectangle<int>(0, 0, (int)Width, (int)Height));
+            GL.Viewport(new Rectangle<int>(0, 0, (int)FrameBufferWidth, (int)FrameBufferHeight));
+            return true;
         }
 
         public void EndRender()
         {
-            if (D3DImage == null || _dxSurface == null) return;
+            if (D3DImage == null || _dxSurface == null || !D3DImage.IsFrontBufferAvailable) return;
 
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             NVDXInterop.DxunlockObjects(GLDevice, 1, [_dxRegisteredHandle]);
-            D3DImage.AddDirtyRect(new System.Windows.Int32Rect(0, 0, (int)Width, (int)Height));
+            D3DImage.AddDirtyRect(new System.Windows.Int32Rect(0, 0, (int)FrameBufferWidth, (int)FrameBufferHeight));
             D3DImage.Unlock();
         }
 
