@@ -55,37 +55,24 @@ namespace LibMPVSharp.WPF
             }
         }
 
-        private TimeSpan _lastRenderTime;
         private long _frameUpdated;
 
         private RenderContext? _renderContext;
-        private DrawingVisual _drawingVisual;
         private DXGLContext? _dXGLContext;
         protected DXGLContext? DXGLContext => _dXGLContext;
 
         public GLControl()
         {
-            _drawingVisual = new DrawingVisual();
-            
             this.Loaded += GLControl_Loaded;
             this.Unloaded += GLControl_Unloaded;
         }
 
         public RenderContext? GLRenderContext => _renderContext;
 
-        protected override int VisualChildrenCount => _drawingVisual == null ? 0 : 1;
-        protected override Visual GetVisualChild(int index)
-        {
-            return _drawingVisual;
-        }
-
         private void GLControl_Loaded(object sender, RoutedEventArgs e)
         {
-            AddVisualChild(_drawingVisual);
-            AddLogicalChild(_drawingVisual);
-
             if (!DesignerProperties.GetIsInDesignMode(this))
-            {
+            {   
                 if (_dXGLContext == null || _dXGLContext.Disposed)
                 {
                     _dXGLContext = new DXGLContext(GLVersion);
@@ -96,8 +83,6 @@ namespace LibMPVSharp.WPF
 
         private void GLControl_Unloaded(object sender, RoutedEventArgs e)
         {
-            RemoveVisualChild(_drawingVisual);
-            RemoveLogicalChild(_drawingVisual);
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
@@ -108,59 +93,21 @@ namespace LibMPVSharp.WPF
             }
         }
 
-        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        protected override void OnRender(DrawingContext drawingContext)
         {
-            base.OnPropertyChanged(e);
-
-            if (e.Property == IsVisibleProperty)
+            if (!DesignerProperties.GetIsInDesignMode(this) &&  _renderContext != null)
             {
-                if ((bool)e.NewValue)
+                var width = Math.Max(0, this.ActualWidth);
+                var height = Math.Max(0, this.ActualHeight);
+                if (_renderContext.BeginRender((uint)width, (uint)height))
                 {
-                    CompositionTarget.Rendering += CompositionTarget_Rendering;
+                    OnDrawing();
+                    _renderContext.EndRender();
                 }
-                else
-                {
-                    CompositionTarget.Rendering -= CompositionTarget_Rendering;
-                }
-            }
-        }
-
-        private void CompositionTarget_Rendering(object? sender, EventArgs e)
-        {
-            var args = (RenderingEventArgs)e;
-            var frameUpdated = Interlocked.Read(ref _frameUpdated);
-            Debug.WriteLine($"FrameUpdate = {frameUpdated}");
-            if (_lastRenderTime != args.RenderingTime && frameUpdated > 0)
-            {
-                _lastRenderTime = args.RenderingTime;
-                Interlocked.Decrement(ref _frameUpdated);
-
-                FrameUpdate();
-            }
-        }
-
-
-        public void RequestFrameUpdate()
-        {
-            Interlocked.Increment(ref _frameUpdated);
-        }
-
-        public void FrameUpdate()
-        {
-            if (DesignerProperties.GetIsInDesignMode(this) || _renderContext == null || _drawingVisual == null) return;
-
-            var drawingContext = _drawingVisual.RenderOpen();
-
-            var width = Math.Max(0, this.ActualWidth);
-            var height = Math.Max(0, this.ActualHeight);
-            if (_renderContext.BeginRender((uint)width, (uint)height))
-            {
-                OnDrawing();
-                _renderContext.EndRender();
+                drawingContext.DrawImage(_renderContext.D3DImage, new Rect(0, 0, _renderContext.FrameBufferWidth, _renderContext.FrameBufferHeight));
             }
 
-            drawingContext.DrawImage(_renderContext.D3DImage, new Rect(0, 0, _renderContext.FrameBufferWidth, _renderContext.FrameBufferHeight));
-            drawingContext.Close();
+            base.OnRender(drawingContext);
         }
 
         protected virtual void OnDrawing()
@@ -171,6 +118,11 @@ namespace LibMPVSharp.WPF
         protected virtual void OnDXGLChanged(DXGLContext dXGLContext)
         {
 
+        }
+
+        public void RequestFrameUpdate()
+        {
+            Dispatcher.BeginInvoke(InvalidateVisual, DispatcherPriority.Background);
         }
     }
 }

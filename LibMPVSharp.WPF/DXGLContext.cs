@@ -30,19 +30,16 @@ namespace LibMPVSharp.WPF
             NVDXInterop = new NVDXInterop(GL.Context);
         }
 
-        public void ReferenceIncrement()
-        {
-            Interlocked.Increment(ref _referenceCount);
-        }
 
         public void Dispose()
         {
-            if (Interlocked.Decrement(ref _referenceCount) <= 0)
+            if (!Disposed)
             {
+                Disposed = true;
                 GL.Dispose();
                 NVDXInterop.Dispose();
-                Disposed = true;
             }
+
 
         }
     }

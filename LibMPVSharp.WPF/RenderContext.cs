@@ -122,6 +122,7 @@ namespace LibMPVSharp.WPF
             DXGLBindingIfNeed(width, height);
 
             if (D3DImage == null || _dxSurface == null || !D3DImage.IsFrontBufferAvailable) return false;
+
             D3DImage.Lock();
             D3DImage.SetBackBuffer(D3DResourceType.IDirect3DSurface9, (IntPtr)_dxSurface);
 

@@ -55,7 +55,6 @@ namespace LibMPVSharp.WPF
             MediaPlayer.Pause = true;
             MediaPlayer.ReleaseRenderContext();
             MediaPlayer.EnsureRenderContextCreated();
-
         }
 
         protected override void OnDrawing()
@@ -79,7 +78,6 @@ namespace LibMPVSharp.WPF
         private void OpenGLUpdateCallback(void* ctx)
         {
             RequestFrameUpdate();
-            //Dispatcher.InvokeAsync(FrameUpdate, System.Windows.Threading.DispatcherPriority.Background);
         }
     }
 }
