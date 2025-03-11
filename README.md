@@ -4,7 +4,11 @@ A CSharp binding repository for [MPV](https://github.com/mpv-player/mpv). Use [C
 
 ## LibMPVSharp.WPF
 
-Provide a wpf control for the MPV (`VideoView`). Rendered using OpenGL. So it doesn't have airspace problems.
+Provide a wpf control for the MPV (`VideoView`). Rendered using OpenGL(OpenGL &#8594; D3D by [Silk.net](https://github.com/dotnet/Silk.Net)). So it doesn't have airspace problems.
+
+### Known issues
+
+- [ ] On some devices, the screen goes black when resizing
 
 ![wpfdemo](imgs/wpfdemo.png)
 
