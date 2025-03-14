@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LibMPVSharp.Wraps;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -175,19 +176,8 @@ namespace LibMPVSharp
         {
             CheckClientHandle();
 
-            var count = args.Length + 1;
-            var arrPtrs = new IntPtr[count];
+            var rootPtr = GetStringArrayPointer(args, out var disposable);
 
-            var rootPtr = Marshal.AllocHGlobal(IntPtr.Size * count);
-            for (int i = 0; i < args.Length; i++)
-            {
-                var buffer = Encoding.UTF8.GetBytes(args[i] + '\0');
-                var ptr = Marshal.AllocHGlobal(buffer.Length);
-                Marshal.Copy(buffer, 0, ptr, buffer.Length);
-                arrPtrs[i] = ptr;
-            }
-
-            Marshal.Copy(arrPtrs, 0, rootPtr, count);
             try
             {
                 var err = Client.MpvCommand(_clientHandle, (char**)rootPtr);
@@ -195,11 +185,7 @@ namespace LibMPVSharp
             }
             finally
             {
-                foreach (var item in arrPtrs)
-                {
-                    Marshal.FreeHGlobal(item);
-                }
-                Marshal.FreeHGlobal(rootPtr);
+                disposable?.Dispose();
             }
         }
 
@@ -233,19 +219,8 @@ namespace LibMPVSharp
         {
             CheckClientHandle();
 
-            var count = args.Length + 1;
-            var arrPtrs = new IntPtr[count];
+            var rootPtr = GetStringArrayPointer(args, out var disposable);
 
-            var rootPtr = Marshal.AllocHGlobal(IntPtr.Size * count);
-            for (int i = 0; i < args.Length; i++)
-            {
-                var buffer = Encoding.UTF8.GetBytes(args[i] + '\0');
-                var ptr = Marshal.AllocHGlobal(buffer.Length);
-                Marshal.Copy(buffer, 0, ptr, buffer.Length);
-                arrPtrs[i] = ptr;
-            }
-
-            Marshal.Copy(arrPtrs, 0, rootPtr, count);
             try
             {
                 if (result.HasValue)
@@ -267,11 +242,7 @@ namespace LibMPVSharp
             }
             finally
             {
-                foreach (var item in arrPtrs)
-                {
-                    Marshal.FreeHGlobal(item);
-                }
-                Marshal.FreeHGlobal(rootPtr);
+                disposable.Dispose();
             }
         }
 
@@ -300,6 +271,34 @@ namespace LibMPVSharp
                 _clientHandle = null;
             }
 
+        }
+
+        private IntPtr GetStringArrayPointer(string[] args, out IDisposable disposable)
+        {
+            var count = args.Length + 1;
+            var arrPtrs = new IntPtr[count];
+            var rootPtr = Marshal.AllocHGlobal(IntPtr.Size * count);
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                var buffer = Encoding.UTF8.GetBytes(args[i] + '\0');
+                var ptr = Marshal.AllocHGlobal(buffer.Length);
+                Marshal.Copy(buffer, 0, ptr, buffer.Length);
+                arrPtrs[i] = ptr;
+            }
+
+            Marshal.Copy(arrPtrs, 0, rootPtr, count);
+
+            disposable = new DisposableObject(() =>
+            {
+                foreach (var item in arrPtrs)
+                {
+                    Marshal.FreeHGlobal(item);
+                }
+
+                Marshal.FreeHGlobal(rootPtr);
+            });
+            return rootPtr;
         }
 
         private void CheckError(int errorCode, string function, params string[] args)

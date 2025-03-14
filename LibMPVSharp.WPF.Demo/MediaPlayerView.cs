@@ -1,10 +1,12 @@
-﻿using Microsoft.Win32;
+﻿using LibMPVSharp.Extensions;
+using Microsoft.Win32;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -98,14 +100,12 @@ namespace LibMPVSharp.WPF.Demo
 
                 if (oldValue != null)
                 {
-                    oldValue.MpvPropertyChanged -= view.MPVPropertyChanged;
-                    newVlaue.MpvFiledLoaded -= view.MpvFiledLoaded;
+                    oldValue.MpvEvent -= view.OnMpvEvent;
                 }
 
                 if (newVlaue != null)
                 {
-                    newVlaue.MpvPropertyChanged += view.MPVPropertyChanged;
-                    newVlaue.MpvFiledLoaded += view.MpvFiledLoaded;
+                    newVlaue.MpvEvent += view.OnMpvEvent;
 
                     view.SetCurrentValue(VolumeProperty, newVlaue.Volume);
                     view.SetCurrentValue(MaxVolumeProperty, newVlaue.VolumeMax);
@@ -168,8 +168,60 @@ namespace LibMPVSharp.WPF.Demo
             this.CommandBindings.Add(new CommandBinding(AspectRatioCmd, (s, e) => TrySwitchAspectRatio()));
         }
 
+
+        private void OnMpvEvent(object? sender, MpvEvent mpvEvent)
+        {
+            switch (mpvEvent.event_id)
+            {
+                case MpvEventId.MPV_EVENT_NONE:
+                    break;
+                case MpvEventId.MPV_EVENT_SHUTDOWN:
+                    break;
+                case MpvEventId.MPV_EVENT_LOG_MESSAGE:
+                    break;
+                case MpvEventId.MPV_EVENT_GET_PROPERTY_REPLY:
+                    break;
+                case MpvEventId.MPV_EVENT_SET_PROPERTY_REPLY:
+                    break;
+                case MpvEventId.MPV_EVENT_COMMAND_REPLY:
+                    break;
+                case MpvEventId.MPV_EVENT_START_FILE:
+                    break;
+                case MpvEventId.MPV_EVENT_END_FILE:
+                    break;
+                case MpvEventId.MPV_EVENT_FILE_LOADED:
+                    MpvFiledLoaded(sender);
+                    break;
+                case MpvEventId.MPV_EVENT_IDLE:
+                    break;
+                case MpvEventId.MPV_EVENT_TICK:
+                    break;
+                case MpvEventId.MPV_EVENT_CLIENT_MESSAGE:
+                    break;
+                case MpvEventId.MPV_EVENT_VIDEO_RECONFIG:
+                    break;
+                case MpvEventId.MPV_EVENT_AUDIO_RECONFIG:
+                    break;
+                case MpvEventId.MPV_EVENT_SEEK:
+                    break;
+                case MpvEventId.MPV_EVENT_PLAYBACK_RESTART:
+                    break;
+                case MpvEventId.MPV_EVENT_PROPERTY_CHANGE:
+                    MPVPropertyChanged(sender, mpvEvent.ReadData<MpvEventProperty>());
+                    break;
+                case MpvEventId.MPV_EVENT_QUEUE_OVERFLOW:
+                    break;
+                case MpvEventId.MPV_EVENT_HOOK:
+                    break;
+                default:
+                    break;
+            }
+        }
+
         private void MPVPropertyChanged(object? sender, MpvEventProperty property)
         {
+            if (property.format == MpvFormat.MPV_FORMAT_NONE) return;
+
             if (property.name == "duration")
             {
                 DispatchSetCurrentValue(DurationProperty, TimeSpan.FromSeconds(property.ReadDoubleValue()));
@@ -192,7 +244,7 @@ namespace LibMPVSharp.WPF.Demo
             }
         }
 
-        private void MpvFiledLoaded(object? sender, EventArgs e)
+        private void MpvFiledLoaded(object? sender)
         {
             Dispatcher.BeginInvoke(TryGetVideoParams);
         }

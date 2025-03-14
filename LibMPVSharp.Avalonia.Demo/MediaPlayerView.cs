@@ -8,6 +8,7 @@ using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
+using LibMPVSharp.Extensions;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
@@ -141,15 +142,13 @@ namespace LibMPVSharp.Avalonia.Demo
 
                 if (oldNew.oldValue != null)
                 {
-                    oldNew.oldValue.MpvPropertyChanged -= MpvPropertyChanged;
-                    oldNew.oldValue.MpvFiledLoaded -= MpvFiledLoaded;
+                    oldNew.oldValue.MpvEvent -= MpvEvent;
                 }
 
                 if (oldNew.newValue != null)
                 {
                     var player = oldNew.newValue;
-                    player.MpvPropertyChanged += MpvPropertyChanged;
-                    player.MpvFiledLoaded += MpvFiledLoaded;
+                    player.MpvEvent += MpvEvent;
                     
                     SetCurrentValue(SpeedProperty, player.Speed);
                     SetCurrentValue(VolumeProperty, player.Volume);
@@ -182,7 +181,56 @@ namespace LibMPVSharp.Avalonia.Demo
             }
         }
 
-        private void MpvPropertyChanged(object sender, MpvEventProperty property)
+        private void MpvEvent(object? sender, MpvEvent mpvEvent)
+        {
+            switch (mpvEvent.event_id)
+            {
+                case MpvEventId.MPV_EVENT_NONE:
+                    break;
+                case MpvEventId.MPV_EVENT_SHUTDOWN:
+                    break;
+                case MpvEventId.MPV_EVENT_LOG_MESSAGE:
+                    break;
+                case MpvEventId.MPV_EVENT_GET_PROPERTY_REPLY:
+                    break;
+                case MpvEventId.MPV_EVENT_SET_PROPERTY_REPLY:
+                    break;
+                case MpvEventId.MPV_EVENT_COMMAND_REPLY:
+                    break;
+                case MpvEventId.MPV_EVENT_START_FILE:
+                    break;
+                case MpvEventId.MPV_EVENT_END_FILE:
+                    break;
+                case MpvEventId.MPV_EVENT_FILE_LOADED:
+                    MpvFiledLoaded(sender);
+                    break;
+                case MpvEventId.MPV_EVENT_IDLE:
+                    break;
+                case MpvEventId.MPV_EVENT_TICK:
+                    break;
+                case MpvEventId.MPV_EVENT_CLIENT_MESSAGE:
+                    break;
+                case MpvEventId.MPV_EVENT_VIDEO_RECONFIG:
+                    break;
+                case MpvEventId.MPV_EVENT_AUDIO_RECONFIG:
+                    break;
+                case MpvEventId.MPV_EVENT_SEEK:
+                    break;
+                case MpvEventId.MPV_EVENT_PLAYBACK_RESTART:
+                    break;
+                case MpvEventId.MPV_EVENT_PROPERTY_CHANGE:
+                    MpvPropertyChanged(sender, mpvEvent.ReadData<MpvEventProperty>());
+                    break;
+                case MpvEventId.MPV_EVENT_QUEUE_OVERFLOW:
+                    break;
+                case MpvEventId.MPV_EVENT_HOOK:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void MpvPropertyChanged(object? sender, MpvEventProperty property)
         {
             if (property.name == "duration")
             {
@@ -206,7 +254,7 @@ namespace LibMPVSharp.Avalonia.Demo
             }
         }
         
-        private void MpvFiledLoaded(object? sender, EventArgs e)
+        private void MpvFiledLoaded(object? sender)
         {
             Dispatcher.UIThread.InvokeAsync(TryGetVideoParams);
         }

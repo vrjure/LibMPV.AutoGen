@@ -55,15 +55,13 @@ namespace LibMPVSharp.WPF
             MediaPlayer.Pause = true;
             MediaPlayer.ReleaseRenderContext();
             MediaPlayer.EnsureRenderContextCreated();
-
         }
 
         protected override void OnDrawing()
         {
             if (MediaPlayer == null || GLRenderContext == null) return;
-
-            var width = (int)GLRenderContext.Width;
-            var height = (int)GLRenderContext.Height;
+            var width = (int)GLRenderContext.FrameBufferWidth;
+            var height = (int)GLRenderContext.FrameBufferHeight;
             MediaPlayer.OpenGLRender(width, height, (int)GLRenderContext.GLFrameBuffer, (int)GLRenderContext.Format);
         }
 
@@ -79,7 +77,7 @@ namespace LibMPVSharp.WPF
 
         private void OpenGLUpdateCallback(void* ctx)
         {
-            Dispatcher.BeginInvoke(DrawFrame, System.Windows.Threading.DispatcherPriority.Background);
+            RequestFrameUpdate();
         }
     }
 }

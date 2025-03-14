@@ -55,28 +55,25 @@ namespace LibMPVSharp.WPF
             }
         }
 
-        private RenderContext? _renderContext;
-        private DrawingVisual _drawingVisual;
+        private long _frameUpdated;
 
+        private RenderContext? _renderContext;
         private DXGLContext? _dXGLContext;
         protected DXGLContext? DXGLContext => _dXGLContext;
 
         public GLControl()
         {
-            _drawingVisual = new DrawingVisual();
-
             this.Loaded += GLControl_Loaded;
             this.Unloaded += GLControl_Unloaded;
         }
 
+        public RenderContext? GLRenderContext => _renderContext;
+
         private void GLControl_Loaded(object sender, RoutedEventArgs e)
         {
-            AddVisualChild(_drawingVisual);
-            AddLogicalChild(_drawingVisual);
-
             if (!DesignerProperties.GetIsInDesignMode(this))
-            {
-                if(_dXGLContext == null || _dXGLContext.Disposed)
+            {   
+                if (_dXGLContext == null || _dXGLContext.Disposed)
                 {
                     _dXGLContext = new DXGLContext(GLVersion);
                 }
@@ -86,50 +83,31 @@ namespace LibMPVSharp.WPF
 
         private void GLControl_Unloaded(object sender, RoutedEventArgs e)
         {
-            RemoveVisualChild(_drawingVisual);
-            RemoveLogicalChild(_drawingVisual);
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 _renderContext?.Dispose();
                 _renderContext = null;
                 _dXGLContext?.Dispose();
+
             }
         }
 
-        public RenderContext? GLRenderContext => _renderContext;
-
-        protected override int VisualChildrenCount => _drawingVisual == null ? 0 : 1;
-        protected override Visual GetVisualChild(int index)
+        protected override void OnRender(DrawingContext drawingContext)
         {
-            return _drawingVisual;
-        }
-
-        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
-        {
-            base.OnRenderSizeChanged(sizeInfo);
-            if (DesignerProperties.GetIsInDesignMode(this) || _renderContext == null)
+            if (!DesignerProperties.GetIsInDesignMode(this) &&  _renderContext != null)
             {
-                return;
+                var width = Math.Max(0, this.ActualWidth);
+                var height = Math.Max(0, this.ActualHeight);
+                if (_renderContext.BeginRender((uint)width, (uint)height))
+                {
+                    OnDrawing();
+                    _renderContext.EndRender();
+                }
+                drawingContext.DrawImage(_renderContext.D3DImage, new Rect(0, 0, _renderContext.FrameBufferWidth, _renderContext.FrameBufferHeight));
             }
-            
-            _renderContext.DXGLBinding((uint)sizeInfo.NewSize.Width, (uint)sizeInfo.NewSize.Height);
-            DrawFrame();
-        }
 
-
-        public void DrawFrame()
-        {
-            if (DesignerProperties.GetIsInDesignMode(this) || _renderContext == null || _drawingVisual == null || !(_renderContext?.D3DImage?.IsFrontBufferAvailable == true)) return;
-
-            var drawingContext = _drawingVisual.RenderOpen();
-
-            _renderContext.BeginRender();
-            OnDrawing();
-            _renderContext.EndRender();
-
-            drawingContext.DrawImage(_renderContext.D3DImage, new Rect(0, 0, _renderContext.Width, _renderContext.Height));
-            drawingContext.Close();
+            base.OnRender(drawingContext);
         }
 
         protected virtual void OnDrawing()
@@ -140,6 +118,11 @@ namespace LibMPVSharp.WPF
         protected virtual void OnDXGLChanged(DXGLContext dXGLContext)
         {
 
+        }
+
+        public void RequestFrameUpdate()
+        {
+            Dispatcher.BeginInvoke(InvalidateVisual, DispatcherPriority.Background);
         }
     }
 }

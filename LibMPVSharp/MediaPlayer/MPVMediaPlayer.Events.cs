@@ -12,11 +12,7 @@ namespace LibMPVSharp
 {
     public unsafe partial class MPVMediaPlayer
     {
-        public event EventHandler<MpvEventProperty>? MpvPropertyChanged;
-
-        public event EventHandler? MpvFiledLoaded;
-        public event EventHandler<MpvEventStartFile>? MpvFileStarted;
-        public event EventHandler<MpvEventEndFile>? MpvFileEnded;
+        public event EventHandler<MpvEvent> MpvEvent;
 
         private void MPVWeakup(IntPtr ctx)
         {
@@ -43,74 +39,7 @@ namespace LibMPVSharp
         {
             var mpvEvent = Client.MpvWaitEvent(_clientHandle, timeout);
 
-            switch (mpvEvent->event_id)
-            {
-                case MpvEventId.MPV_EVENT_NONE:
-                    break;
-                case MpvEventId.MPV_EVENT_SHUTDOWN:
-                    break;
-                case MpvEventId.MPV_EVENT_LOG_MESSAGE:
-                    break;
-                case MpvEventId.MPV_EVENT_GET_PROPERTY_REPLY:
-                    break;
-                case MpvEventId.MPV_EVENT_SET_PROPERTY_REPLY:
-                    break;
-                case MpvEventId.MPV_EVENT_COMMAND_REPLY:
-                    break;
-                case MpvEventId.MPV_EVENT_START_FILE:
-                    OnFileStarted(mpvEvent);
-                    break;
-                case MpvEventId.MPV_EVENT_END_FILE:
-                    OnFileEnded(mpvEvent);
-                    break;
-                case MpvEventId.MPV_EVENT_FILE_LOADED:
-                    OnFileLoaded();
-                    break;
-                case MpvEventId.MPV_EVENT_IDLE:
-                    break;
-                case MpvEventId.MPV_EVENT_TICK:
-                    break;
-                case MpvEventId.MPV_EVENT_CLIENT_MESSAGE:
-                    break;
-                case MpvEventId.MPV_EVENT_VIDEO_RECONFIG:
-                    break;
-                case MpvEventId.MPV_EVENT_AUDIO_RECONFIG:
-                    break;
-                case MpvEventId.MPV_EVENT_SEEK:
-                    break;
-                case MpvEventId.MPV_EVENT_PLAYBACK_RESTART:
-                    break;
-                case MpvEventId.MPV_EVENT_PROPERTY_CHANGE:
-                    OnPropertyChanged(mpvEvent);
-                    break;
-                case MpvEventId.MPV_EVENT_QUEUE_OVERFLOW:
-                    break;
-                case MpvEventId.MPV_EVENT_HOOK:
-                    break;
-            }
-        }
-
-        protected void OnFileLoaded()
-        {
-            MpvFiledLoaded?.Invoke(this, EventArgs.Empty);
-        }
-
-        protected void OnFileStarted(MpvEvent* mpvEvent)
-        {
-            var startFile = Marshal.PtrToStructure<MpvEventStartFile>((IntPtr)mpvEvent->data);
-            MpvFileStarted?.Invoke(this, startFile);
-        }
-
-        protected void OnFileEnded(MpvEvent* mpvEvent)
-        {
-            var endFile = Marshal.PtrToStructure<MpvEventEndFile>((IntPtr)mpvEvent->data);
-            MpvFileEnded?.Invoke(this, endFile);
-        }
-
-        protected void OnPropertyChanged(MpvEvent* mpvEvent)
-        {
-            var property = Marshal.PtrToStructure<MpvEventProperty>((IntPtr)mpvEvent->data);
-            MpvPropertyChanged?.Invoke(this, property);
+            MpvEvent?.Invoke(this, *mpvEvent);
         }
     }
 }
