@@ -46,7 +46,7 @@ namespace LibMPVSharp.WPF.Demo
             set => SetValue(VolumeProperty, value);
         }
 
-        public static readonly DependencyProperty MaxVolumeProperty = DependencyProperty.Register(nameof(MaxVolume), typeof(long), typeof(MediaPlayerView), new FrameworkPropertyMetadata(MPVMediaPlayer.DefaultVolumeValue));
+        public static readonly DependencyProperty MaxVolumeProperty = DependencyProperty.Register(nameof(MaxVolume), typeof(long), typeof(MediaPlayerView), new FrameworkPropertyMetadata(1000L));
         public long MaxVolume
         {
             get => (long)GetValue(MaxVolumeProperty);
@@ -107,9 +107,9 @@ namespace LibMPVSharp.WPF.Demo
                 {
                     newVlaue.MpvEvent += view.OnMpvEvent;
 
-                    view.SetCurrentValue(VolumeProperty, newVlaue.Volume);
-                    view.SetCurrentValue(MaxVolumeProperty, newVlaue.VolumeMax);
-                    view.SetCurrentValue(SpeedProperty, newVlaue.Speed);
+                    view.SetCurrentValue(VolumeProperty, newVlaue.GetPropertyLong(MPVMediaPlayer.AudioOpts.Volume));
+                    view.SetCurrentValue(MaxVolumeProperty, newVlaue.GetPropertyLong(MPVMediaPlayer.AudioOpts.VolumeMax));
+                    view.SetCurrentValue(SpeedProperty, newVlaue.GetPropertyDouble(MPVMediaPlayer.PlaybackControlOpts.Speed));
                 }
             }
             else if (e.Property == TimeProperty)
@@ -119,22 +119,22 @@ namespace LibMPVSharp.WPF.Demo
                 var newValue = (TimeSpan)e.NewValue;
                 if (Math.Abs(newValue.TotalSeconds -  oldValue.TotalSeconds) > 1)
                 {
-                    view.MediaPlayer.TimePos = newValue.TotalSeconds;
+                    view.MediaPlayer.SetProperty(MPVMediaPlayer.Properties.TimePos, newValue.TotalSeconds);
                 }
             }
             else if (e.Property == VolumeProperty)
             {
                 if (view.MediaPlayer == null) return;
                 var value = (long)e.NewValue;
-                if (value != view.MediaPlayer.Volume)
+                if (value != view.MediaPlayer.GetPropertyLong(MPVMediaPlayer.AudioOpts.Volume))
                 {
-                    view.MediaPlayer.Volume = value;
+                    view.MediaPlayer.SetProperty(MPVMediaPlayer.AudioOpts.Volume, value);
                 }
             }
             else if (e.Property == AspectRatioProperty)
             {
                 if (view.MediaPlayer == null) return;
-                view.MediaPlayer.VideoAspectOverride = (string)e.NewValue;
+                view.MediaPlayer.SetProperty(MPVMediaPlayer.VideoOpts.VideoAspectOverride, (string)e.NewValue);
             }
         }
 
@@ -277,7 +277,8 @@ namespace LibMPVSharp.WPF.Demo
                 }
                 finally
                 {
-                    Playing = !MediaPlayer.Pause;
+                    var pause = MediaPlayer.GetPropertyBoolean(MPVMediaPlayer.PlaybackControlOpts.Pause);
+                    Playing = !pause;
                 }
             }
         }
@@ -285,21 +286,22 @@ namespace LibMPVSharp.WPF.Demo
         private void TryPlayPause()
         {
             if (MediaPlayer == null) return;
-            MediaPlayer.Pause = !MediaPlayer.Pause;
+            var pause = MediaPlayer.GetPropertyBoolean(MPVMediaPlayer.PlaybackControlOpts.Pause);
+            MediaPlayer.SetProperty(MPVMediaPlayer.PlaybackControlOpts.Pause, !pause);
         }
         private void TrySwitchSpeed()
         {
             if (MediaPlayer == null) return;
 
-            var speed = MediaPlayer.Speed;
+            var speed = MediaPlayer.GetPropertyDouble(MPVMediaPlayer.PlaybackControlOpts.Speed);
             speed++;
             if (speed > 2)
             {
-                MediaPlayer.Speed = 1;
+                MediaPlayer.SetProperty(MPVMediaPlayer.PlaybackControlOpts.Speed, 1d);
             }
             else
             {
-                MediaPlayer.Speed = speed;
+                MediaPlayer.SetProperty(MPVMediaPlayer.PlaybackControlOpts.Speed, speed);
             }
         }
 
