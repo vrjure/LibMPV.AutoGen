@@ -51,7 +51,7 @@ namespace LibMPVSharp.Avalonia.Demo
             set => SetValue(VolumeProperty, value);
         }
 
-        public static readonly StyledProperty<long> MaxVolumeProperty = AvaloniaProperty.Register<MediaPlayerView, long>(nameof(MaxVolume), MPVMediaPlayer.MaxVolumeValue);
+        public static readonly StyledProperty<long> MaxVolumeProperty = AvaloniaProperty.Register<MediaPlayerView, long>(nameof(MaxVolume), 1000L);
         public long MaxVolume
         {
             get => GetValue(MaxVolumeProperty);
@@ -150,9 +150,9 @@ namespace LibMPVSharp.Avalonia.Demo
                     var player = oldNew.newValue;
                     player.MpvEvent += MpvEvent;
                     
-                    SetCurrentValue(SpeedProperty, player.Speed);
-                    SetCurrentValue(VolumeProperty, player.Volume);
-                    SetCurrentValue(MaxVolumeProperty, player.VolumeMax);
+                    SetCurrentValue(SpeedProperty, player.GetPropertyDouble(MPVMediaPlayer.PlaybackControlOpts.Speed));
+                    SetCurrentValue(VolumeProperty, player.GetPropertyLong(MPVMediaPlayer.AudioOpts.Volume));
+                    SetCurrentValue(MaxVolumeProperty, player.GetPropertyLong(MPVMediaPlayer.AudioOpts.VolumeMax));
 
                 }
             }
@@ -162,22 +162,22 @@ namespace LibMPVSharp.Avalonia.Demo
                 var oldNew = change.GetOldAndNewValue<TimeSpan>();
                 if (Math.Abs(oldNew.newValue.TotalSeconds - oldNew.oldValue.TotalSeconds) > 1)
                 {
-                    MediaPlayer.TimePos = oldNew.newValue.TotalSeconds;
+                    MediaPlayer.SetProperty(MPVMediaPlayer.Properties.TimePos, oldNew.newValue.TotalSeconds);
                 }
             }
             else if (change.Property == VolumeProperty)
             {
                 if (MediaPlayer == null) return;
                 var value = change.GetNewValue<long>();
-                if (value != MediaPlayer.Volume)
+                if (value != MediaPlayer.GetPropertyLong(MPVMediaPlayer.AudioOpts.Volume))
                 {
-                    MediaPlayer.Volume = value;
+                    MediaPlayer.SetProperty(MPVMediaPlayer.AudioOpts.Volume, value);
                 }
             }
             else if (change.Property == AspectRatioProperty)
             {
                 if (MediaPlayer == null) return;
-                MediaPlayer.VideoAspectOverride = change.GetNewValue<string>();
+                MediaPlayer.SetProperty(MPVMediaPlayer.VideoOpts.VideoAspectOverride, change.GetNewValue<string>());
             }
         }
 
@@ -232,7 +232,7 @@ namespace LibMPVSharp.Avalonia.Demo
 
         private void MpvPropertyChanged(object? sender, MpvEventProperty property)
         {
-            if (property.name == "duration")
+            if (property.name == MPVMediaPlayer.Properties.Duration)
             {
                 DispatchSetCurrentValue(DurationProperty, TimeSpan.FromSeconds(property.ReadDoubleValue()));
             }
@@ -299,22 +299,23 @@ namespace LibMPVSharp.Avalonia.Demo
         private void TryPlayPause()
         {
             if (MediaPlayer == null) return;
-            MediaPlayer.Pause = !MediaPlayer.Pause;
+            var pause = MediaPlayer.GetPropertyBoolean(MPVMediaPlayer.PlaybackControlOpts.Pause);
+            MediaPlayer.SetProperty(MPVMediaPlayer.PlaybackControlOpts.Pause, !pause);
         }
 
         private void TrySwitchSpeed()
         {
             if (MediaPlayer == null) return;
 
-            var speed = MediaPlayer.Speed;
+            var speed = MediaPlayer.GetPropertyDouble(MPVMediaPlayer.PlaybackControlOpts.Speed);
             speed++;
             if (speed > 2)
             {
-                MediaPlayer.Speed = 1;
+                MediaPlayer.SetProperty(MPVMediaPlayer.PlaybackControlOpts.Speed, 1d);
             }
             else
             {
-                MediaPlayer.Speed = speed;
+                MediaPlayer.SetProperty(MPVMediaPlayer.PlaybackControlOpts.Speed, speed);
             }
         }
 

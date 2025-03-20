@@ -41,22 +41,21 @@ namespace LibMPVSharp
             CheckClientHandle();
 #if DEBUG
             var logPath = System.IO.Path.Combine(Environment.CurrentDirectory, "mpv.log");
-            LogFile = logPath;
-            SetProperty("log-file", logPath);
-            SetProperty("msg-level", "all=v");
+            SetProperty(ProgramBehaviorOpts.LogFile, logPath);
+            SetProperty(TerminalOpts.MsgLevel, "all=v");
 #endif
-            SetProperty("vo", "libmpv");
-            SetProperty("hwdec", "auto");
+            SetProperty(VideoOpts.Vo , "libmpv");
+            SetProperty(VideoOpts.Hwdec, "auto");
 
             var error = Client.MpvInitialize(_clientHandle);
             CheckError(error, nameof(Client.MpvInitialize));
 
-            ObservableProperty("pause", MpvFormat.MPV_FORMAT_FLAG);
-            ObservableProperty("duration", MpvFormat.MPV_FORMAT_DOUBLE);
-            ObservableProperty("time-pos", MpvFormat.MPV_FORMAT_DOUBLE);
-            ObservableProperty("volume", MpvFormat.MPV_FORMAT_INT64);
-            ObservableProperty("mute", MpvFormat.MPV_FORMAT_STRING);
-            ObservableProperty("speed", MpvFormat.MPV_FORMAT_DOUBLE);
+            ObservableProperty(PlaybackControlOpts.Pause, MpvFormat.MPV_FORMAT_FLAG);
+            ObservableProperty(Properties.Duration, MpvFormat.MPV_FORMAT_DOUBLE);
+            ObservableProperty(Properties.TimePos, MpvFormat.MPV_FORMAT_DOUBLE);
+            ObservableProperty(AudioOpts.Volume, MpvFormat.MPV_FORMAT_INT64);
+            ObservableProperty(AudioOpts.Mute, MpvFormat.MPV_FORMAT_STRING);
+            ObservableProperty(PlaybackControlOpts.Speed, MpvFormat.MPV_FORMAT_DOUBLE);
 
             _wakeupCallback = MPVWeakup;
             Client.MpvSetWakeupCallback(_clientHandle, _wakeupCallback, null);

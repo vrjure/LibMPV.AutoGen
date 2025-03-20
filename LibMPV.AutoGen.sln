@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibMPVSharp.Avalonia.Demo.M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibMPVSharp.Native.Desktop", "LibMPVSharp.Native.Desktop\LibMPVSharp.Native.Desktop.csproj", "{AF029455-5747-4535-ACD5-30E6A1B65C62}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibMPV.AutoGen.Properties", "LibMPV.AutoGen.Properties\LibMPV.AutoGen.Properties.csproj", "{9B2192A5-BF0A-48BB-AF13-F64D0D09D465}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -133,6 +135,14 @@ Global
 		{AF029455-5747-4535-ACD5-30E6A1B65C62}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AF029455-5747-4535-ACD5-30E6A1B65C62}.Release|x64.ActiveCfg = Release|Any CPU
 		{AF029455-5747-4535-ACD5-30E6A1B65C62}.Release|x64.Build.0 = Release|Any CPU
+		{9B2192A5-BF0A-48BB-AF13-F64D0D09D465}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B2192A5-BF0A-48BB-AF13-F64D0D09D465}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B2192A5-BF0A-48BB-AF13-F64D0D09D465}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9B2192A5-BF0A-48BB-AF13-F64D0D09D465}.Debug|x64.Build.0 = Debug|Any CPU
+		{9B2192A5-BF0A-48BB-AF13-F64D0D09D465}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B2192A5-BF0A-48BB-AF13-F64D0D09D465}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B2192A5-BF0A-48BB-AF13-F64D0D09D465}.Release|x64.ActiveCfg = Release|Any CPU
+		{9B2192A5-BF0A-48BB-AF13-F64D0D09D465}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

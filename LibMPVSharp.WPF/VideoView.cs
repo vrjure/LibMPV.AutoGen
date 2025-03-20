@@ -52,7 +52,7 @@ namespace LibMPVSharp.WPF
                 return;
             }
 
-            MediaPlayer.Pause = true;
+            MediaPlayer.SetProperty(MPVMediaPlayer.PlaybackControlOpts.Pause, true);
             MediaPlayer.ReleaseRenderContext();
             MediaPlayer.EnsureRenderContextCreated();
         }
