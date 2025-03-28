@@ -148,6 +148,14 @@ namespace LibMPVSharp.Avalonia.Demo
                 if (oldNew.newValue != null)
                 {
                     var player = oldNew.newValue;
+                    
+                    player.ObservableProperty(MPVMediaPlayer.PlaybackControlOpts.Pause, MpvFormat.MPV_FORMAT_FLAG);
+                    player.ObservableProperty(MPVMediaPlayer.Properties.Duration, MpvFormat.MPV_FORMAT_DOUBLE);
+                    player.ObservableProperty(MPVMediaPlayer.Properties.TimePos, MpvFormat.MPV_FORMAT_DOUBLE);
+                    player.ObservableProperty(MPVMediaPlayer.AudioOpts.Volume, MpvFormat.MPV_FORMAT_INT64);
+                    player.ObservableProperty(MPVMediaPlayer.AudioOpts.Mute, MpvFormat.MPV_FORMAT_STRING);
+                    player.ObservableProperty(MPVMediaPlayer.PlaybackControlOpts.Speed, MpvFormat.MPV_FORMAT_DOUBLE);
+                    
                     player.MpvEvent += MpvEvent;
                     
                     SetCurrentValue(SpeedProperty, player.GetPropertyDouble(MPVMediaPlayer.PlaybackControlOpts.Speed));

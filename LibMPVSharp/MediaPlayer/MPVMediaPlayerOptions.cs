@@ -10,5 +10,6 @@ namespace LibMPVSharp
     {
         public MpvOpenglInitParams_get_proc_addressCallback? GetProcAddress { get; set; }
         public MpvRenderUpdateFn? UpdateCallback { get; set; }
+        public Action<MPVMediaPlayer>? BeforeInitialize { get; set; }
     }
 }

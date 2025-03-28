@@ -27,10 +27,14 @@ namespace LibMPVSharp
             
         }
 
+        public MPVMediaPlayer(Action<MPVMediaPlayer> beforeInitialize) : this(new MPVMediaPlayerOptions{ BeforeInitialize = beforeInitialize })
+        {
+            
+        }
+
         public MPVMediaPlayer(MPVMediaPlayerOptions options) 
         {
             _options = options;
-
             Debug.WriteLine("Api version:{0}", Client.MpvClientApiVersion());
             _clientHandle = Client.MpvCreate();
             Initialize();
@@ -39,23 +43,12 @@ namespace LibMPVSharp
         private void Initialize()
         {
             CheckClientHandle();
-#if DEBUG
-            var logPath = System.IO.Path.Combine(Environment.CurrentDirectory, "mpv.log");
-            SetProperty(ProgramBehaviorOpts.LogFile, logPath);
-            SetProperty(TerminalOpts.MsgLevel, "all=v");
-#endif
             SetProperty(VideoOpts.Vo , "libmpv");
-            SetProperty(VideoOpts.Hwdec, "auto");
+            
+            _options.BeforeInitialize?.Invoke(this);
 
             var error = Client.MpvInitialize(_clientHandle);
             CheckError(error, nameof(Client.MpvInitialize));
-
-            ObservableProperty(PlaybackControlOpts.Pause, MpvFormat.MPV_FORMAT_FLAG);
-            ObservableProperty(Properties.Duration, MpvFormat.MPV_FORMAT_DOUBLE);
-            ObservableProperty(Properties.TimePos, MpvFormat.MPV_FORMAT_DOUBLE);
-            ObservableProperty(AudioOpts.Volume, MpvFormat.MPV_FORMAT_INT64);
-            ObservableProperty(AudioOpts.Mute, MpvFormat.MPV_FORMAT_STRING);
-            ObservableProperty(PlaybackControlOpts.Speed, MpvFormat.MPV_FORMAT_DOUBLE);
 
             _wakeupCallback = MPVWeakup;
             Client.MpvSetWakeupCallback(_clientHandle, _wakeupCallback, null);

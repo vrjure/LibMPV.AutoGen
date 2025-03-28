@@ -18,7 +18,7 @@ namespace LibMPVSharp
         {
             if (_eventLoopTask == null)
             {
-                _eventLoopTask = Task.Factory.StartNew(() =>
+                _eventLoopTask = Task.Run(() =>
                 {
                     while (!_disposed)
                     {
@@ -31,7 +31,7 @@ namespace LibMPVSharp
                             Debug.WriteLine(ex);
                         }
                     }
-                }, TaskCreationOptions.LongRunning);
+                });
             }
         }
 
