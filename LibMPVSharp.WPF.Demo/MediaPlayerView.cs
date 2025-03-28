@@ -105,6 +105,13 @@ namespace LibMPVSharp.WPF.Demo
 
                 if (newVlaue != null)
                 {
+                    newVlaue.ObservableProperty(MPVMediaPlayer.PlaybackControlOpts.Pause, MpvFormat.MPV_FORMAT_FLAG);
+                    newVlaue.ObservableProperty(MPVMediaPlayer.Properties.Duration, MpvFormat.MPV_FORMAT_DOUBLE);
+                    newVlaue.ObservableProperty(MPVMediaPlayer.Properties.TimePos, MpvFormat.MPV_FORMAT_DOUBLE);
+                    newVlaue.ObservableProperty(MPVMediaPlayer.AudioOpts.Volume, MpvFormat.MPV_FORMAT_INT64);
+                    newVlaue.ObservableProperty(MPVMediaPlayer.AudioOpts.Mute, MpvFormat.MPV_FORMAT_STRING);
+                    newVlaue.ObservableProperty(MPVMediaPlayer.PlaybackControlOpts.Speed, MpvFormat.MPV_FORMAT_DOUBLE);
+
                     newVlaue.MpvEvent += view.OnMpvEvent;
 
                     view.SetCurrentValue(VolumeProperty, newVlaue.GetPropertyLong(MPVMediaPlayer.AudioOpts.Volume));

@@ -14,8 +14,8 @@ namespace LibMPVSharp.WPF.Demo
     {
         public MainWindowViewModel()
         {
-            _mediaPlayer = new MPVMediaPlayer();
-            _mediaPlayer2 = new MPVMediaPlayer();
+            _mediaPlayer = new MPVMediaPlayer(BeforeInitialize);
+            _mediaPlayer2 = new MPVMediaPlayer(BeforeInitialize);
         }
 
         [ObservableProperty]
@@ -23,5 +23,10 @@ namespace LibMPVSharp.WPF.Demo
 
         [ObservableProperty]
         private MPVMediaPlayer _mediaPlayer2;
+
+        private void BeforeInitialize(MPVMediaPlayer player)
+        {
+            player.SetProperty(MPVMediaPlayer.VideoOpts.Hwdec, "auto");
+        }
     }
 }
