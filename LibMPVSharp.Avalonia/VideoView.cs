@@ -4,9 +4,11 @@ using Avalonia.OpenGL.Controls;
 using Avalonia.Threading;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Avalonia.Interactivity;
 
 namespace LibMPVSharp.Avalonia
 {
@@ -26,6 +28,34 @@ namespace LibMPVSharp.Avalonia
 
         private MpvOpenglInitParams_get_proc_addressCallback? _getProcAddress;
 
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            base.OnAttachedToVisualTree(e);
+            if (MediaPlayer != null)
+            {
+                MediaPlayer.Options.UpdateCallback = OpenGLUpdateCallback;
+                if (MediaPlayer.Options.SharedPlayer != null)
+                {
+                    MediaPlayer.Options.SharedPlayer.Options.UpdateCallback -= OpenGLUpdateCallback;
+                    MediaPlayer.Options.SharedPlayer.Options.UpdateCallback += OpenGLUpdateCallback;
+                }
+            }
+        }
+
+        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            base.OnDetachedFromVisualTree(e);
+            if (MediaPlayer != null)
+            {
+                MediaPlayer.Options.UpdateCallback = null;
+                if (MediaPlayer.Options.SharedPlayer != null)
+                {
+                    MediaPlayer.Options.SharedPlayer.Options.UpdateCallback -= OpenGLUpdateCallback;
+                }
+            }
+        }
+
+
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -37,12 +67,20 @@ namespace LibMPVSharp.Avalonia
                 {
                     oldNew.oldValue.Options.GetProcAddress = null;
                     oldNew.oldValue.Options.UpdateCallback = null;
+                    if (oldNew.newValue.Options.SharedPlayer != null)
+                    {
+                        oldNew.newValue.Options.SharedPlayer.Options.UpdateCallback -= OpenGLUpdateCallback;
+                    }
                 }
 
                 if (oldNew.newValue != null)
                 {
                     oldNew.newValue.Options.GetProcAddress = _getProcAddress;
                     oldNew.newValue.Options.UpdateCallback = OpenGLUpdateCallback;
+                    if (oldNew.newValue.Options.SharedPlayer != null)
+                    {
+                        oldNew.newValue.Options.SharedPlayer.Options.UpdateCallback += OpenGLUpdateCallback;
+                    }
                 }
             }
         }

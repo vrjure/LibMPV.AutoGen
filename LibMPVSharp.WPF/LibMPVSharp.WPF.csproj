@@ -16,6 +16,7 @@
     <RepositoryUrl>https://github.com/vrjure/LibMPV.AutoGen</RepositoryUrl>
     <PackageTags>mpv</PackageTags>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
   </PropertyGroup>
 
   <ItemGroup>

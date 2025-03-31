@@ -35,12 +35,20 @@ namespace LibMPVSharp.WPF
                 {
                     oldValue.Options.UpdateCallback = null;
                     oldValue.Options.GetProcAddress = null;
+                    if (newVlaue.Options.SharedPlayer != null)
+                    {
+                        newVlaue.Options.SharedPlayer.Options.UpdateCallback -= videoView.OpenGLUpdateCallback;
+                    }
                 }
 
                 if (newVlaue != null)
                 {
                     newVlaue.Options.GetProcAddress = videoView.GetProcAddress;
                     newVlaue.Options.UpdateCallback = videoView.OpenGLUpdateCallback;
+                    if (newVlaue.Options.SharedPlayer != null)
+                    {
+                        newVlaue.Options.SharedPlayer.Options.UpdateCallback += videoView.OpenGLUpdateCallback;
+                    }
                 }
             }
         }

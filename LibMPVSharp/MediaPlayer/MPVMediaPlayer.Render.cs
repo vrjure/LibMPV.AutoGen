@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -16,12 +17,18 @@ namespace LibMPVSharp
         public void EnsureRenderContextCreated()
         {
             CheckClientHandle();
-
+            
             if (_renderContext == null)
             {
+                if (_options.SharedPlayer != null)
+                {
+                    _renderContext = _options.SharedPlayer._renderContext;
+                    return;
+                }
+                
                 _glGetProcAddress = GLGetProcAddress;
                 _mpvRenderUpdate = MPVRenderUpdate;
-
+                
                 var MPV_RENDER_PARAM_API_TYPE_Data = Marshal.StringToHGlobalAnsi("opengl");
 
                 var openglInitParams = new MpvOpenglInitParams
@@ -61,7 +68,7 @@ namespace LibMPVSharp
 
         public void ReleaseRenderContext()
         {
-            if (_renderContext == null) return;
+            if (_renderContext == null || _options.SharedPlayer != null) return;
             Render.MpvRenderContextFree(_renderContext);
             _renderContext = null;
         }
@@ -80,7 +87,7 @@ namespace LibMPVSharp
 
         public void OpenGLRender(int width, int height, int fbo, int format = 0, int flipY = 0)
         {
-            if (_renderContext == null) return;
+            if (_renderContext == null || _disposed) return;
 
             var fboArray = new MpvOpenglFbo[]
             {

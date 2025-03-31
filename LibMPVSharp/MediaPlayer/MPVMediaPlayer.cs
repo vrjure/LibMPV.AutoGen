@@ -17,7 +17,6 @@ namespace LibMPVSharp
         private MpvSetWakeupCallback_cbCallback? _wakeupCallback;
         private MpvHandle* _clientHandle;
         private bool _disposed;
-        private Task? _eventLoopTask;
 
         public IntPtr MPVHandle => (IntPtr)_clientHandle;
         public MPVMediaPlayerOptions Options => _options;
@@ -36,22 +35,37 @@ namespace LibMPVSharp
         {
             _options = options;
             Debug.WriteLine("Api version:{0}", Client.MpvClientApiVersion());
-            _clientHandle = Client.MpvCreate();
-            Initialize();
+            if (_options.SharedPlayer == null)
+            {
+                _clientHandle = Client.MpvCreate();
+                Initialize();
+                return;
+            }
+            else if (_options.IsWeakReference)
+            {
+                _clientHandle = Client.MpvCreateWeakClient(_options.SharedPlayer._clientHandle, _options.SharePlayerName);
+            }
+            else
+            {
+                _clientHandle = Client.MpvCreateClient(_options.SharedPlayer._clientHandle, _options.SharePlayerName);
+            }
+            Initialize(false);
         }
 
-        private void Initialize()
+        private void Initialize(bool initialize = true)
         {
             CheckClientHandle();
-            SetProperty(VideoOpts.Vo , "libmpv");
+
+            if (initialize)
+            {
+                _options.BeforeInitialize?.Invoke(this);
+                var error = Client.MpvInitialize(_clientHandle);
+                CheckError(error, nameof(Client.MpvInitialize));
+            }
             
-            _options.BeforeInitialize?.Invoke(this);
-
-            var error = Client.MpvInitialize(_clientHandle);
-            CheckError(error, nameof(Client.MpvInitialize));
-
+            SetProperty(VideoOpts.Vo , "libmpv");
             _wakeupCallback = MPVWeakup;
-            Client.MpvSetWakeupCallback(_clientHandle, _wakeupCallback, null);
+            Client.MpvSetWakeupCallback(_clientHandle, _wakeupCallback, _clientHandle);
         }
 
         public void ObservableProperty(string name, MpvFormat format)
@@ -245,24 +259,71 @@ namespace LibMPVSharp
             CheckError(err, nameof(Client.MpvCommandString), args);
         }
 
+        public void RequestLogMessage(string min_level)
+        {
+            CheckClientHandle();
+            var error = Client.MpvRequestLogMessages(_clientHandle, min_level);
+            CheckError(error, nameof(Client.MpvRequestLogMessages), min_level);
+        }
+        public void RequestEvent(MpvEventId eventId, int enable)
+        {
+            CheckClientHandle();
+            var error = Client.MpvRequestEvent(_clientHandle, eventId, enable);
+            CheckError(error, nameof(Client.MpvRequestEvent), eventId.ToString(), enable.ToString());
+        }
+
+        public string GetClientName()
+        {
+            CheckClientHandle();
+            return Client.MpvClientName(_clientHandle);
+        }
+
+        public long GetClientId()
+        {
+            CheckClientHandle();
+            return Client.MpvClientId(_clientHandle);
+        }
+
+        public void LoadConfigFile(string filename)
+        {
+            CheckClientHandle();
+            var error = Client.MpvLoadConfigFile(_clientHandle, filename);
+            CheckError(error, nameof(Client.MpvLoadConfigFile), filename);
+        }
+
+        public long GetTimeNs()
+        {
+            CheckClientHandle();
+            return Client.MpvGetTimeNs(_clientHandle);
+        }
+
+        public long GetTimeUS()
+        {
+            CheckClientHandle();
+            return Client.MpvGetTimeUs(_clientHandle);
+        }
+
         public void FreeNode(MpvNodeWrap node) => Client.MpvFreeNodeContents(node.Native);
 
-        public void Dispose()
+        public void Dispose() => Dispose(false);
+
+        public void Dispose(bool terminate)
         {
             _disposed = true;
 
-            if (_renderContext != null)
-            {
-                Render.MpvRenderContextFree(_renderContext);
-                _renderContext = null;
-            }
+            ReleaseRenderContext();
 
-            if (_clientHandle != null)
+            if (_clientHandle == null) return;
+            if (terminate)
             {
                 Client.MpvTerminateDestroy(_clientHandle);
                 _clientHandle = null;
             }
-
+            else
+            {
+                Client.MpvDestroy(_clientHandle);
+                _clientHandle = null;
+            }
         }
 
         private IntPtr GetStringArrayPointer(string[] args, out IDisposable disposable)
@@ -298,7 +359,7 @@ namespace LibMPVSharp
             if (errorCode < 0)
             {
                 var error = (MpvError)errorCode;
-                var msg = $"{function}({string.Join(",", args)}) error:{error}";
+                var msg = $"{function}({string.Join(",", args)}) error:{Client.MpvErrorString(errorCode)}";
                 Debug.WriteLine(msg);
                 throw new LibMPVException(error, msg);
             }
@@ -306,7 +367,7 @@ namespace LibMPVSharp
 
         private void CheckClientHandle()
         {
-            if (_clientHandle == null) throw new LibMPVException(MpvError.MPV_ERROR_UNINITIALIZED, "Client handle is null");
+            if (_clientHandle == null || _disposed) throw new LibMPVException(MpvError.MPV_ERROR_UNINITIALIZED, "Client handle is null or disposed.");
         }
     }
 }

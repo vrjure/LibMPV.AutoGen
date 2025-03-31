@@ -7,5 +7,12 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LibMPVSharp.Avalonia.Demo.Views.MainView"
              x:DataType="vm:MainViewModel">
-	<demo:MediaPlayerView MediaPlayer="{Binding MediaPlayer}"/>
+	<Grid ColumnDefinitions="*,*"
+	      RowDefinitions="*,*">
+		<demo:MediaPlayerView MediaPlayer="{Binding MediaPlayer}"/>
+		<demo:MediaPlayerView Grid.Column="1" MediaPlayer="{Binding MediaPlayer2}"/>
+		<demo:MediaPlayerView Grid.Row="1" Grid.Column="0" MediaPlayer="{Binding MediaPlayer3}"/>
+		<demo:MediaPlayerView Grid.Row="1" Grid.Column="1" MediaPlayer="{Binding MediaPlayer4}"/>
+	</Grid>
+
 </UserControl>
