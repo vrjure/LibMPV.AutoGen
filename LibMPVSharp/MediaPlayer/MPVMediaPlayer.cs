@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LibMPVSharp
@@ -195,6 +196,39 @@ namespace LibMPVSharp
             }
         }
 
+        public Task ExecuteCommandAsync(string[] args, CancellationToken cancellation = default)
+        {
+            CheckClientHandle();
+            var rootPtr = GetStringArrayPointer(args, out var disposable);
+            TaskCompletionSource tcs = new TaskCompletionSource();
+            var handle = GCHandle.Alloc(tcs);
+            var userData = (ulong)GCHandle.ToIntPtr(handle);
+            cancellation.Register(() =>
+            {
+                Client.MpvAbortAsyncCommand(_clientHandle, userData);
+                tcs.TrySetCanceled();
+                if (handle.IsAllocated)
+                {
+                    handle.Free();
+                }
+            });
+            try
+            {
+                var err = Client.MpvCommandAsync(_clientHandle, userData, (char**)rootPtr);
+                CheckError(err, nameof(Client.MpvCommand), args);
+            }
+            catch (Exception ex)
+            {
+                handle.Free();
+                tcs.TrySetException(ex);
+            }
+            finally
+            {
+                disposable?.Dispose();
+            }
+            return tcs.Task;
+        }
+
         public MpvNodeWrap? ExecuteCommandNode(MpvNode args, ref MpvNode? result)
         {
             CheckClientHandle();
@@ -219,6 +253,52 @@ namespace LibMPVSharp
                     return null;
                 }
             }
+        }
+        
+        public Task<MpvNodeWrap?> ExecuteCommandNodeAsync(MpvNode args, ref MpvNode? result, CancellationToken cancellation = default)
+        {
+            CheckClientHandle();
+            var arr = new MpvNode[] { args };
+            int err = 0;
+            var tcs = new TaskCompletionSource<MpvNodeWrap?>();
+            var handle = GCHandle.Alloc(tcs);
+            var userData = (ulong)GCHandle.ToIntPtr(handle);
+            cancellation.Register(() =>
+            {
+                Client.MpvAbortAsyncCommand(_clientHandle, userData);
+                tcs.TrySetCanceled();
+                if (handle.IsAllocated)
+                {
+                    handle.Free();
+                }
+            });
+            
+            try
+            {
+                fixed (MpvNode* nodePtr = arr)
+                {
+                    if (result.HasValue)
+                    {
+                        var resultArray = new MpvNode[]{ result.Value };
+                        fixed (MpvNode* resultPtr = resultArray)
+                        {
+                            err = Client.MpvCommandNodeAsync(_clientHandle, userData, resultPtr);
+                            CheckError(err, nameof(Client.MpvCommandNode), "mpv node");
+                        }
+                    }
+                    else
+                    {
+                        err = Client.MpvCommandNodeAsync(_clientHandle, userData, null);
+                        CheckError(err, nameof(Client.MpvCommandNode), "mpv node");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                handle.Free();
+                tcs.TrySetException(e);
+            }
+            return tcs.Task;
         }
 
         public MpvNodeWrap? ExecuteCommandRet(ref MpvNode? result, params string[] args)
@@ -251,7 +331,7 @@ namespace LibMPVSharp
                 disposable.Dispose();
             }
         }
-
+        
         public void ExecuteCommandString(string args)
         {
             CheckClientHandle();

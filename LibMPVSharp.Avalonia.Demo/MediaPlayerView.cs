@@ -299,7 +299,7 @@ namespace LibMPVSharp.Avalonia.Demo
                 var path = App.Instance?.UriResolver?.GetRealPath(file.Path);
                 
                 MediaPlayer.EnsureRenderContextCreated();
-                MediaPlayer.ExecuteCommand("loadfile", path);
+                await MediaPlayer.ExecuteCommandAsync(["loadfile", path!]);
                 SetCurrentValue(PlayingProperty, true);
             }
         }
