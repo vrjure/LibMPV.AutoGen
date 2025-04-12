@@ -1,17 +1,8 @@
-﻿using Silk.NET.Core.Native;
-using Silk.NET.Direct3D9;
+﻿using Silk.NET.Direct3D9;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using Silk.NET.WGL.Extensions.NV;
-using Silk.NET.Windowing;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Interop;
-using System.Windows.Media;
 
 namespace LibMPVSharp.WPF
 {

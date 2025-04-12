@@ -1,23 +1,7 @@
-﻿using Silk.NET.OpenGL;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
-using System.Windows.Interop;
 using System.Windows.Media;
-using Silk.NET.Windowing;
-using Silk.NET.Core.Contexts;
-using Silk.NET.GLFW;
-using Silk.NET.Maths;
-using Silk.NET.WGL.Extensions.NV;
-using Silk.NET.WGL;
-using System.IO;
-using System.Diagnostics;
 using System.Windows.Threading;
-using System.Windows.Controls;
 
 namespace LibMPVSharp.WPF
 {
