@@ -297,9 +297,8 @@ namespace LibMPVSharp.Avalonia.Demo
             {
                 var file =  files[0];
                 var path = App.Instance?.UriResolver?.GetRealPath(file.Path);
-                
                 MediaPlayer.EnsureRenderContextCreated();
-                await MediaPlayer.ExecuteCommandAsync(["loadfile", path!]);
+                await MediaPlayer.ExecuteCommandAsync([MPVMediaPlayer.PlaylistManipulationCommands.Loadfile, path!]);
                 SetCurrentValue(PlayingProperty, true);
             }
         }
@@ -338,7 +337,7 @@ namespace LibMPVSharp.Avalonia.Demo
         private void TryGetVideoParams()
         {
             if (MediaPlayer == null) return;
-            var node = MediaPlayer.GetPropertyNode("video-params");
+            var node = MediaPlayer.GetPropertyNode(MPVMediaPlayer.Properties.VideoParams);
             using var sw = new StringWriter();
             using var writer = new IndentedTextWriter(sw);
             node.Node.ReadToWriter(writer);

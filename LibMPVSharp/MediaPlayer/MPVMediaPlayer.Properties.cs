@@ -928,5 +928,126 @@ namespace LibMPVSharp
             public static readonly string CurrentClipboardBackend = "current-clipboard-backend";
             public static readonly string Clock = "clock";
         }
+        public static class PlaybackControlCommands
+        {
+            public static readonly string Seek = "seek";
+            public static readonly string RevertSeek = "revert-seek";
+            public static readonly string SubSeek = "sub-seek";
+            public static readonly string FrameStep = "frame-step";
+            public static readonly string FrameBackStep = "frame-back-step";
+            public static readonly string Stop = "stop";
+        }
+        public static class PropertyManipulationCommands
+        {
+            public static readonly string Set = "set";
+            public static readonly string Del = "del";
+            public static readonly string Add = "add";
+            public static readonly string Multiply = "multiply";
+            public static readonly string Cycle = "cycle";
+            public static readonly string CycleValues = "cycle-values";
+            public static readonly string ChangeList = "change-list";
+        }
+        public static class PlaylistManipulationCommands
+        {
+            public static readonly string PlaylistNext = "playlist-next";
+            public static readonly string PlaylistPrev = "playlist-prev";
+            public static readonly string PlaylistNextPlaylist = "playlist-next-playlist";
+            public static readonly string PlaylistPrevPlaylist = "playlist-prev-playlist";
+            public static readonly string PlaylistPlayIndex = "playlist-play-index";
+            public static readonly string Loadfile = "loadfile";
+            public static readonly string Loadlist = "loadlist";
+            public static readonly string PlaylistClear = "playlist-clear";
+            public static readonly string PlaylistRemove = "playlist-remove";
+            public static readonly string PlaylistMove = "playlist-move";
+            public static readonly string PlaylistShuffle = "playlist-shuffle";
+            public static readonly string PlaylistUnshuffle = "playlist-unshuffle";
+        }
+        public static class TrackManipulationCommands
+        {
+            public static readonly string SubAdd = "sub-add";
+            public static readonly string SubRemove = "sub-remove";
+            public static readonly string SubReload = "sub-reload";
+            public static readonly string SubStep = "sub-step";
+            public static readonly string AudioAdd = "audio-add";
+            public static readonly string AudioRemove = "audio-remove";
+            public static readonly string AudioReload = "audio-reload";
+            public static readonly string VideoAdd = "video-add";
+            public static readonly string VideoRemove = "video-remove";
+            public static readonly string VideoReload = "video-reload";
+            public static readonly string RescanExternalFiles = "rescan-external-files";
+        }
+        public static class TextManipulationCommands
+        {
+            public static readonly string PrintText = "print-text";
+            public static readonly string ExpandText = "expand-text";
+            public static readonly string ExpandPath = "expand-path";
+            public static readonly string NormalizePath = "normalize-path";
+            public static readonly string EscapeAss = "escape-ass";
+        }
+        public static class ConfigurationCommands
+        {
+            public static readonly string ApplyProfile = "apply-profile";
+            public static readonly string LoadConfigFile = "load-config-file";
+            public static readonly string WriteWatchLaterConfig = "write-watch-later-config";
+            public static readonly string DeleteWatchLaterConfig = "delete-watch-later-config";
+        }
+        public static class OSDCommands
+        {
+            public static readonly string ShowText = "show-text";
+            public static readonly string ShowProgress = "show-progress";
+            public static readonly string OverlayAdd = "overlay-add";
+            public static readonly string OverlayRemove = "overlay-remove";
+            public static readonly string OsdOverlay = "osd-overlay";
+        }
+        public static class InputAndKeybindCommands
+        {
+            public static readonly string Mouse = "mouse";
+            public static readonly string Keypress = "keypress";
+            public static readonly string Keydown = "keydown";
+            public static readonly string Keyup = "keyup";
+            public static readonly string Keybind = "keybind";
+            public static readonly string EnableSection = "enable-section";
+            public static readonly string DisableSection = "disable-section";
+            public static readonly string DefineSection = "define-section";
+            public static readonly string LoadInputConf = "load-input-conf";
+        }
+        public static class ExecutionCommands
+        {
+            public static readonly string Run = "run";
+            public static readonly string Subprocess = "subprocess";
+            public static readonly string Quit = "quit";
+            public static readonly string QuitWatchLater = "quit-watch-later";
+        }
+        public static class ScriptingCommands
+        {
+            public static readonly string ScriptMessage = "script-message";
+            public static readonly string ScriptMessageTo = "script-message-to";
+            public static readonly string ScriptBinding = "script-binding";
+            public static readonly string LoadScript = "load-script";
+        }
+        public static class ScreenshotCommands
+        {
+            public static readonly string Screenshot = "screenshot";
+            public static readonly string ScreenshotToFile = "screenshot-to-file";
+            public static readonly string ScreenshotRaw = "screenshot-raw";
+        }
+        public static class FilterCommands
+        {
+            public static readonly string Af = "af";
+            public static readonly string Vf = "vf";
+            public static readonly string VfCommand = "vf-command";
+            public static readonly string AfCommand = "af-command";
+        }
+        public static class MiscellaneousCommands
+        {
+            public static readonly string Ignore = "ignore";
+            public static readonly string DropBuffers = "drop-buffers";
+            public static readonly string DumpCache = "dump-cache";
+            public static readonly string AbLoop = "ab-loop";
+            public static readonly string AbLoopDumpCache = "ab-loop-dump-cache";
+            public static readonly string AbLoopAlignCache = "ab-loop-align-cache";
+            public static readonly string BeginVoDragging = "begin-vo-dragging";
+            public static readonly string ContextMenu = "context-menu";
+        }
     }
 }

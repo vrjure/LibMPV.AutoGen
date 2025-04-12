@@ -3,6 +3,7 @@
 //https://mpv.io/manual/master/#options
 
 using System.CodeDom.Compiler;
+using System.Net;
 using System.Text;
 using System.Xml.XPath;
 using HtmlAgilityPack;
@@ -77,6 +78,28 @@ using (WriteBlock(writer))
                 }
             }
         }
+        
+        //List of input commands
+        var commandSections = nav.Select("//div[@id='list-of-input-commands']/div[@class='section']");
+        while (commandSections.MoveNext())
+        {
+            var current = commandSections.Current;
+            if (current == null) continue;
+            
+            var section = current.Select("./h3");
+            section.MoveNext();
+            writer.WriteLine($"public static class {ToPropertyName(WebUtility.HtmlDecode(section?.Current?.Value?.Replace("Commands","")))}Commands");
+            using (WriteBlock(writer))
+            {
+                var commands = current.Select("./dl/dt/tt");
+                while (commands.MoveNext())
+                {
+                    if (commands.Current == null) continue;
+                    
+                    writer.WriteLine($"public static readonly string {ToPropertyName(WebUtility.HtmlDecode(commands.Current?.Value))} = \"{ToPropertyValue(WebUtility.HtmlDecode(commands.Current?.Value))}\";");
+                }
+            }
+        }
     }
 }
 
@@ -107,7 +130,7 @@ string? ToPropertyName(string? name)
     bool nextUpper = false;
     for (int i = 0; i < span.Length; i++)
     {
-        if (span[i] == '-' || span[i] == '_')
+        if (span[i] == '-' || span[i] == '_' || span[i] == ' ')
         {
             nextUpper = true;
             continue;
@@ -116,7 +139,7 @@ string? ToPropertyName(string? name)
         {
             builder.Append(char.ToUpper(span[i]));
         }
-        else if (span[i] == '=' || span[i] == ',' || span[i] == '.' || span[i] == '/')
+        else if (span[i] == '=' || span[i] == ',' || span[i] == '.' || span[i] == '/' || span[i] == '<' || span[i] == '[')
         {
             break;
         }
@@ -147,7 +170,7 @@ string? ToPropertyValue(string? value)
         {
             continue;
         }
-        else if (span[i] == '=' || span[i] == ',' || span[i] == '.' || span[i] == '/')
+        else if (span[i] == '=' || span[i] == ',' || span[i] == '.' || span[i] == '/' || span[i] == ' ')
         {
             break;
         }
