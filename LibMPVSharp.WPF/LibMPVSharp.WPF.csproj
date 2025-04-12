@@ -8,7 +8,7 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <Platforms>AnyCPU;x64</Platforms>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>1.0.0</Version>
+    <Version>0.0.1-beta</Version>
     <Authors>vrjure</Authors>
     <Description>mpv wpf control</Description>
     <Copyright>Copyright © 2025 vrjure</Copyright>

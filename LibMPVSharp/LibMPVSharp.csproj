@@ -10,8 +10,9 @@
     <PackageProjectUrl>https://github.com/vrjure/LibMPV.AutoGen</PackageProjectUrl>
     <RepositoryUrl>https://github.com/vrjure/LibMPV.AutoGen</RepositoryUrl>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <Version>1.0.0</Version>
+    <Version>0.0.1-beta</Version>
     <Description>mpv  csharp binding code</Description>
+    <PackageTags>mpv</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'" />
