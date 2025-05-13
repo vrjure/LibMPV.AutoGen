@@ -19,6 +19,11 @@ namespace LibMPVSharp
         public IntPtr MPVHandle => (IntPtr)_clientHandle;
         public MPVMediaPlayerOptions Options => _options;
 
+        static MPVMediaPlayer()
+        {
+            LibraryName.DllImportResolver();
+        }
+
         public MPVMediaPlayer() : this(new MPVMediaPlayerOptions())
         {
             

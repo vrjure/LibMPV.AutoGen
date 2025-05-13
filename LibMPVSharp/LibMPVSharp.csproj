@@ -1,37 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net8.0-android;net8.0-macos</TargetFrameworks>
+    <TargetFramework>net8.0</TargetFramework>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>AnyCPU</Platforms>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>vrjure</Authors>
     <Copyright>Copyright © 2025 vrjure</Copyright>
     <PackageProjectUrl>https://github.com/vrjure/LibMPV.AutoGen</PackageProjectUrl>
     <RepositoryUrl>https://github.com/vrjure/LibMPV.AutoGen</RepositoryUrl>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <Version>0.0.1-beta</Version>
-    <Description>mpv  csharp binding code</Description>
+    <Version>0.0.2-beta</Version>
+    <Description>mpv csharp binding code</Description>
     <PackageTags>mpv</PackageTags>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'" />
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|ARM64'" />
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'" />
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|x64'" />
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|x64'" />
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'" />
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'" />
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|x64'" />
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|x64'" />
 
   <ItemGroup>
     <None Include="..\LICENSE.txt">

@@ -20,6 +20,17 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LibMPVSharp.Avalonia.Demo\LibMPVSharp.Avalonia.Demo.csproj" />
-    <ProjectReference Include="..\LibMPVSharp.Native.Desktop\LibMPVSharp.Native.Desktop.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="libluajit-5.1.2.dylib">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="libmpv.2.dylib">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="libmpv-2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
